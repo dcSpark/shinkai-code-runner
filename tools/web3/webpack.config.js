@@ -2,6 +2,43 @@ const path = require('path');
 const webpack = require('webpack');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
+class InjectInheritsPlugin {
+    apply(compiler) {
+        compiler.hooks.thisCompilation.tap('InjectInheritsPlugin', (compilation) => {
+            compilation.hooks.processAssets.tap(
+                {
+                    name: 'InjectInheritsPlugin',
+                    stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+                },
+                () => {
+                    compilation.emitAsset(
+                        'inherits-polyfill.js',
+                        new webpack.sources.RawSource(`
+                function inherits(ctor, superCtor) {
+                  if (superCtor) {
+                    ctor.super_ = superCtor;
+                    ctor.prototype = Object.create(superCtor.prototype, {
+                      constructor: {
+                        value: ctor,
+                        enumerable: false,
+                        writable: true,
+                        configurable: true
+                      }
+                    });
+                  }
+                }
+                if (typeof util === 'undefined') {
+                  var util = {};
+                }
+                util.inherits = inherits;
+              `)
+                    );
+                }
+            );
+        });
+    }
+}
+
 module.exports = {
     target: 'es6',
     entry: './src/index.ts',
@@ -40,7 +77,7 @@ module.exports = {
             "url": require.resolve("url/"),
             "util": require.resolve("util/"),
             "vm": require.resolve("vm-browserify"),
-            "zlib": require.resolve("browserify-zlib"),
+            "zlib": false,
             "net": false,
             "tls": false,
             "bufferutil": false,
@@ -61,6 +98,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             Buffer: ['buffer', 'Buffer'],
             process: 'process/browser',
+            util: ['util', 'default'],
         }),
         new webpack.NormalModuleReplacementPlugin(/node:/, (resource) => {
             const mod = resource.request.replace(/^node:/, "");
@@ -74,6 +112,12 @@ module.exports = {
                 default:
                     throw new Error(`Not found ${mod}`);
             }
+        }),
+        new InjectInheritsPlugin(),
+        new webpack.BannerPlugin({
+            banner: 'var global = this;',
+            raw: true,
+            entryOnly: true,
         }),
     ],
     optimization: {
