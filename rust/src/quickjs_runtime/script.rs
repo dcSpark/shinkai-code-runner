@@ -47,6 +47,7 @@ impl Script {
         let id = nanoid!();
         let id_clone = id.clone();
         println!("id:{} executing code:{}...", id.clone(), &js_code[..20.min(js_code.len())]);
+        let js_code_clone = js_code.clone(); // Clone js_code here
         let result = async_with!(self.context.clone().unwrap() => |ctx|{
             let globals = ctx.globals();
             let console = Object::new(ctx.clone()).unwrap();
@@ -58,12 +59,29 @@ impl Script {
 
             let result = eval_promise_result.unwrap().into_future::<Object>().await.map_err(|e| {
                 let exception = ctx.catch().try_into_exception();
-                if exception.is_ok() {
-                    let message = exception.clone().unwrap().message().unwrap();
-                    let stack = exception.clone().unwrap().stack();
-                    return ExecutionError::new(message, stack);
+                if let Ok(exception) = exception {
+                    let message = exception.message().unwrap_or_default();
+                    let stack = exception.stack().unwrap_or_default();
+                    
+                    // Extract line number from stack trace
+                    let line_number = stack.lines()
+                        .find_map(|line| line.split(':').nth(1))
+                        .and_then(|num| num.parse::<usize>().ok())
+                        .unwrap_or(0);
+                    
+                    // Get the problematic line of code
+                    let error_line = js_code_clone.lines().nth(line_number.saturating_sub(1))
+                        .unwrap_or("Unable to retrieve the exact line");
+                    
+                    println!("id:{} Error: {}", id.clone(), message);
+                    println!("Stack trace:\n{}", stack);
+                    println!("Problematic line ({}): {}", line_number, error_line);
+                    
+                    ExecutionError::new(message, Some(stack))
+                } else {
+                    println!("id:{} Error: {}", id.clone(), e);
+                    ExecutionError::new(e.to_string(), None)
                 }
-                return ExecutionError::new(e.to_string(), None);
             });
             match result {
                 Ok(wrapped_value) => {
