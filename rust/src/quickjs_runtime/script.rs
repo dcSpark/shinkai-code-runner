@@ -3,7 +3,7 @@ use crate::quickjs_runtime::context_globals::fetch::fetch;
 use crate::quickjs_runtime::context_globals::set_timeout::set_timeout_spawn;
 use crate::quickjs_runtime::execution_error::ExecutionError;
 use nanoid::nanoid;
-use rquickjs::{async_with, function::Func, AsyncContext, AsyncRuntime, FromJs, Object};
+use rquickjs::{async_with, function::Func, AsyncContext, AsyncRuntime, Ctx, FromJs, Function, Object, Value};
 use std::path::Path;
 pub struct Script {
     runtime: Option<AsyncRuntime>,
