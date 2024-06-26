@@ -17,8 +17,8 @@ type Params = {
 
 type Result = string;
 
-function getTokenFromSymbol(symbol: string): 'eth' | Token {
-  if (symbol.toLowerCase() === 'eth') return 'eth';
+function getTokenFromSymbol(symbol: string): "eth" | Token {
+  if (symbol.toLowerCase() === "eth") return "eth";
   const token = tokenFromSymbol(symbol);
   if (!token) throw new Error(`Unknown token symbol: ${symbol}`);
   return token as Token;
@@ -26,11 +26,11 @@ function getTokenFromSymbol(symbol: string): 'eth' | Token {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   async run(params: Params): Promise<string> {
-    console.log("Running tool");
+    // console.log("Running tool");
     const provider = new ArchiveNodeProvider({
       call: async (method: string, ...args: any[]) => {
         // console.log("Calling: " + method);
-        // console.log("Args: " + args.join(', '));
+        // console.log("Args: " + JSON.stringify(args, null, 2));
         const response = await fetch("https://eth.llamarpc.com", {
           method: "POST",
           headers: {
@@ -50,7 +50,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
         }
 
         const data = await response.json();
-        // console.log("Data: ", data);
+        // console.log("Data: " + data);
         if (data.error) {
           throw new Error(data.error.message);
         }
@@ -58,7 +58,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
         return data.result;
       },
     });
-    console.log("Provider created");
+    // console.log("Provider created");
 
     try {
       const fromToken = getTokenFromSymbol(params.fromToken);
@@ -75,8 +75,20 @@ export class Tool extends BaseTool<Config, Params, Result> {
       }
 
       const swapData = await swap.tx(params.fromAddress, params.toAddress);
+      // console.log("swapData: " + JSON.stringify(swapData, null, 2));
 
-      return `Swap data: Amount: ${swapData.amount}, Expected Amount: ${swapData.expectedAmount}, Allowance: ${swapData.allowance}`;
+      // Return all swapData as a JSON string
+      return JSON.stringify(
+        {
+          amount: swapData.amount,
+          address: swapData.address,
+          expectedAmount: swapData.expectedAmount,
+          data: swapData.data,
+          allowance: swapData.allowance || null,
+        },
+        null,
+        2
+      );
     } catch (error) {
       if (error instanceof Error) {
         return `Error: ${error.message}`;
