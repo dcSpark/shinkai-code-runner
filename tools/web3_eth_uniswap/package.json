@@ -1,0 +1,20 @@
+{
+    "type": "commonjs",
+    "scripts": {
+        "build": "webpack"
+    },
+    "devDependencies": {
+        "buffer": "^6.0.3",
+        "crypto-browserify": "^3.12.0",
+        "stream-browserify": "^3.0.0",
+        "text-encoding-utf-8": "^1.0.2",
+        "ts-loader": "^9.5.1",
+        "tsconfig-paths-webpack-plugin": "^4.1.0",
+        "typescript": "^5.4.5",
+        "webpack": "^5.92.0",
+        "webpack-cli": "^5.1.4"
+    },
+    "dependencies": {
+        "micro-eth-signer": "^0.10.0"
+    }
+}
