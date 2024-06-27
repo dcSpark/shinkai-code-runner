@@ -37,6 +37,7 @@
     "npm": "10.x.x"
   },
   "dependencies": {
+    "ajv": "^7.2.4",
     "micro-eth-signer": "^0.10.0"
   }
 }

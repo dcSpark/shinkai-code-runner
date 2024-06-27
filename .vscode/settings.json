@@ -1,4 +1,5 @@
 {
   "rust-analyzer.check.command": "clippy",
-  "rust-analyzer.cargo.features": ["built-in-tools"]
+  "rust-analyzer.cargo.features": ["built-in-tools"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
 }
