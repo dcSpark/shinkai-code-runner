@@ -7,8 +7,8 @@ async fn shinkai_tool_echo() {
     let code = get_tool("shinkai-tool-echo").unwrap();
     let mut tool = Tool::new();
     let _ = tool.load_from_code(code, "").await;
-    let run_result = tool.run("{ \"message\": \"valparaíso\" }").await;
-    assert_eq!(run_result.unwrap(), "echoing: valparaíso");
+    let run_result = tool.run("{ \"message\": \"valparaíso\" }").await.unwrap();
+    assert_eq!(run_result.data["message"], "echoing: valparaíso");
 }
 
 #[tokio::test]
@@ -50,7 +50,7 @@ async fn shinkai_tool_inline() {
             super(config);
         }
         async run(params) {
-            return `Hello, ${params.name}!`;
+            return { data: `Hello, ${params.name}!` };
         }
     }
 
@@ -58,8 +58,8 @@ async fn shinkai_tool_inline() {
 "#;
     let mut tool = Tool::new();
     let _ = tool.load_from_code(js_code, "").await;
-    let run_result = tool.run("{ \"name\": \"world\" }").await;
-    assert_eq!(run_result.unwrap(), "Hello, world!");
+    let run_result = tool.run("{ \"name\": \"world\" }").await.unwrap();
+    assert_eq!(run_result.data, "Hello, world!");
 }
 
 #[tokio::test]
