@@ -22,12 +22,9 @@
         "command": "cargo build"
       },
       "configurations": {
-        "development": {
-        },
+        "development": {},
         "production": {
-          "args": [
-            "--release"
-          ]
+          "args": ["--release"]
         }
       }
     },
@@ -41,12 +38,9 @@
         "command": "cargo test --features=built-in-tools"
       },
       "configurations": {
-        "development": {
-        },
+        "development": {},
         "production": {
-          "args": [
-            "--release"
-          ]
+          "args": ["--release"]
         }
       }
     },
@@ -59,10 +53,21 @@
         "command": "cargo clippy"
       },
       "configurations": {
-        "development": {
-        },
-        "production": {
-        }
+        "development": {},
+        "production": {}
+      }
+    },
+    "publish": {
+      "dependsOn": ["build-tools"],
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "command": "cargo publish -p shinkai_tools_runner --allow-dirty"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
       }
     }
   }
