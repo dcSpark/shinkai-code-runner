@@ -9,6 +9,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "parallel": false,
         "commands": [
           "nx run-many -t build --projects=tag:tool",
           "npx copyfiles --up 2 --verbose dist/apps/shinkai-tool-*/definition.json libs/shinkai-tools-runner/tools"
