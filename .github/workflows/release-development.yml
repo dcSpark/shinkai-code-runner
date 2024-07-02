@@ -61,7 +61,7 @@ jobs:
 
       - name: Setup cargo version from npm
         run: |
-          cargo install cargo-edit
+          cargo install cargo-edit --force
           cargo set-version ${{ needs.prebuild.outputs.version }}-dev.${{github.run_number}}
       - name: Run NX publish
         run: npx nx run-many -t publish --skip-nx-cache --verbose
