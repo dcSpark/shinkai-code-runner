@@ -2,7 +2,7 @@ name: Release development
 
 on:
   push:
-    branches: [main, agallardol/publish-cargo-package]
+    branches: [main]
 
 defaults:
   run:
