@@ -28,6 +28,9 @@ serde = { version = "1.0.188", features = ["derive"] }
 serde_json = "1.0.117"
 tokio = { version = "1.36.0", features = ["full"] }
 lazy_static = "1.5.0"
+tokio-util = "0.7.11"
+derive_more = "0.99.18"
+derivative = "2.2.0"
 
 [features]
 built-in-tools = []

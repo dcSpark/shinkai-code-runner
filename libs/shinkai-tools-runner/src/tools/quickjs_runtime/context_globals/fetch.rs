@@ -5,9 +5,9 @@ use reqwest::{
     header::{HeaderMap, HeaderName, HeaderValue},
     Method,
 };
-use rquickjs::{Ctx, Function, IntoJs, Object, Promise, Result};
+use rquickjs::{function::Func, Ctx, Function, IntoJs, Object, Promise, Result};
 
-pub fn fetch<'js>(ctx: Ctx<'js>, url: String, options: Object<'js>) -> Result<Promise<'js>> {
+fn fetch<'js>(ctx: Ctx<'js>, url: String, options: Object<'js>) -> Result<Promise<'js>> {
     let (promise, resolve, reject) = ctx.promise()?;
     let ctx_clone = ctx.clone();
     ctx.spawn(async move {
@@ -68,7 +68,8 @@ pub fn fetch<'js>(ctx: Ctx<'js>, url: String, options: Object<'js>) -> Result<Pr
                         let body_clone = body.clone();
                         let json_fn = Function::new(ctx_clone.clone(), move || {
                             Ok::<_, rquickjs::Error>(body_clone.clone())
-                        }).unwrap();
+                        })
+                        .unwrap();
                         response_to_js.set("json", json_fn).unwrap();
 
                         let _ = resolve.call::<_, ()>((response_to_js,));
@@ -84,4 +85,10 @@ pub fn fetch<'js>(ctx: Ctx<'js>, url: String, options: Object<'js>) -> Result<Pr
         }
     });
     Ok(promise)
+}
+
+pub fn init(ctx: &Ctx<'_>) -> Result<()> {
+    let globals = ctx.globals();
+    let _ = globals.set("fetch", Func::from(fetch));
+    Ok(())
 }
