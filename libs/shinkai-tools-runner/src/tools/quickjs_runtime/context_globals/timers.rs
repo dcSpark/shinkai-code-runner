@@ -3,6 +3,7 @@ use std::time::Duration;
 use derivative::Derivative;
 use derive_more::Into;
 use derive_more::{Deref, DerefMut, From};
+use rquickjs::function::Opt;
 use rquickjs::{class::Trace, function::Func, Ctx, Function, Result};
 
 use tokio_util::sync::CancellationToken;
@@ -26,7 +27,7 @@ fn clear_timeout(_: Ctx, token: CancellationTokenWrapper) -> Result<()> {
 fn set_timeout<'js>(
     ctx: Ctx<'js>,
     callback: Function<'js>,
-    delay_ms: Option<u64>,
+    delay_ms: Opt<u64>,
 ) -> Result<CancellationTokenWrapper> {
     let cancellation_token = CancellationToken::new();
     let cancellation_token_clone = cancellation_token.clone();

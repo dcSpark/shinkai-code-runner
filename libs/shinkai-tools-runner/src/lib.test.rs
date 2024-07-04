@@ -1,5 +1,4 @@
 use crate::built_in_tools::get_tool;
-use crate::tools::run_result;
 use crate::tools::tool::Tool;
 
 #[tokio::test]
@@ -110,8 +109,8 @@ async fn shinkai_tool_download_page() {
     let run_result = tool
         .run(
             r#"{
-    "url": "https://shinkai.com"
-}"#,
+                "url": "https://shinkai.com"
+            }"#,
         )
         .await;
     assert!(run_result.is_ok());
@@ -153,6 +152,47 @@ async fn set_timeout() {
     let _ = tool.run("").await.unwrap();
     let elapsed_time = start_time.elapsed();
     assert!(elapsed_time.as_millis() > 3000);
+}
+
+#[tokio::test]
+async fn set_timeout_no_delay_param() {
+    let js_code = r#"
+    class BaseTool {
+        constructor(config) {
+            this.config = config;
+        }
+        setConfig(value) {
+            this.config = value;
+            return this.config;
+        }
+        getConfig() {
+            return this.config;
+        }
+    }
+    class Tool extends BaseTool {
+        constructor(config) {
+            super(config);
+        }
+        async run() {
+            let value = null;
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    value = 1;
+                    resolve();
+                });
+            });
+            return { data: value };
+        }
+    }
+    globalThis.tool = { Tool };
+"#;
+    let mut tool = Tool::new();
+    let _ = tool.load_from_code(js_code, "").await;
+    let start_time = std::time::Instant::now();
+    let run_result = tool.run("").await.unwrap();
+    let elapsed_time = start_time.elapsed();
+    assert!(elapsed_time.as_millis() <= 50);
+    assert_eq!(run_result.data, 1);
 }
 
 #[tokio::test]
