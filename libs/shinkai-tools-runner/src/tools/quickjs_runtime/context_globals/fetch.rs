@@ -1,14 +1,91 @@
+use derivative::Derivative;
+use derive_more::From;
+use derive_more::Into;
 use reqwest::{
     self,
     header::{HeaderMap, HeaderName, HeaderValue},
     Method,
 };
 use rquickjs::function::Opt;
-use rquickjs::{function::Func, Ctx, Object, Promise, Result};
+use rquickjs::{class::Trace, function::Func, Ctx, Object, Promise, Result};
 use std::collections::HashMap;
 use std::str::FromStr;
 
+#[derive(Trace, Derivative, From, Into)]
+#[derivative(Clone, Debug)]
+#[rquickjs::class(rename = "Response")]
+pub struct Response {
+    #[qjs(get)]
+    pub headers: HashMap<String, String>,
+
+    #[qjs(get)]
+    pub ok: bool,
+
+    #[qjs(get)]
+    pub status: u16,
+
+    #[qjs(rename = "statusText")]
+    pub status_text: String,
+
+    // nyi
+    // type: ResponseType,
+    #[qjs(get)]
+    pub url: String,
+
+    #[qjs(get)]
+    pub redirected: bool,
+
+    #[qjs(get)]
+    pub body: Option<Vec<u8>>,
+
+    #[qjs(get)]
+    #[qjs(rename = "bodyUsed")]
+    pub body_used: bool,
+}
+
+#[rquickjs::methods]
+impl Response {
+    pub fn json<'js>(&self, ctx: Ctx<'js>) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        if let Some(body) = self.body.clone() {
+            let body_string = String::from_utf8_lossy(&body);
+            match ctx.json_parse(&*body_string) {
+                Ok(json_value) => resolve.call((json_value,)),
+                Err(_) => reject.call::<_, ()>(("No body to parse as JSON",)),
+            }?;
+        } else {
+            reject.call::<_, ()>(("Empty body",))?;
+        }
+        Ok(promise)
+    }
+
+    pub fn text<'js>(&self, ctx: Ctx<'js>) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        if let Some(body) = self.body.clone() {
+            let body_string = String::from_utf8_lossy(&body);
+            resolve.call::<_, ()>((&*body_string,))?;
+        } else {
+            reject.call::<_, ()>(("Empty body",))?;
+        }
+        Ok(promise)
+    }
+
+    // NYI
+    // fn array_buffer(&self) -> Promise<ArrayBuffer> {
+    //     // Implementation here
+    // }
+
+    // fn blob(&self) -> Promise<Blob> {
+    //     // Implementation here
+    // }
+
+    // fn formData(&self) -> Promise<FormData> {
+    //     // Implementation here
+    // }
+}
+
 fn fetch<'js>(ctx: Ctx<'js>, url: String, options: Opt<Object<'js>>) -> Result<Promise<'js>> {
+    let url_clone = url.clone();
     let (promise, resolve, reject) = ctx.promise()?;
     let ctx_clone = ctx.clone();
     let options = if options.0.is_some() {
@@ -62,39 +139,21 @@ fn fetch<'js>(ctx: Ctx<'js>, url: String, options: Opt<Object<'js>>) -> Result<P
                 let ok = response.status().is_success();
                 let status = response.status().as_u16();
                 let status_text = response.status().as_str().to_string();
+                let redirected = response.status().is_redirection();
                 let body = response.bytes().await.ok().map(|b| b.to_vec()).unwrap();
-                let body_clone = body.clone();
-                let body_clone2 = body.clone();
 
-                let response_to_js = Object::new(ctx_clone.clone()).unwrap();
-
-                response_to_js.set("status", status).unwrap();
-                response_to_js.set("statusText", status_text).unwrap();
-                response_to_js.set("ok", ok).unwrap();
-                response_to_js.set("headers", headers.clone()).unwrap();
-                response_to_js.set("body", body).unwrap();
-                response_to_js
-                    .set(
-                        "json",
-                        Func::new(move || {
-                            let body_string = String::from_utf8_lossy(&body_clone);
-                            let json_value = ctx_clone.clone().json_parse(&*body_string).unwrap();
-                            Ok::<_, rquickjs::Error>(json_value)
-                        }),
-                    )
+                resolve
+                    .call::<(_,), ()>((Response {
+                        headers,
+                        ok,
+                        status,
+                        status_text,
+                        url: url_clone,
+                        redirected,
+                        body: Some(body),
+                        body_used: true,
+                    },))
                     .unwrap();
-
-                response_to_js
-                    .set(
-                        "text",
-                        Func::new(move || {
-                            let body_string = String::from_utf8_lossy(&body_clone2);
-                            Ok::<_, rquickjs::Error>(body_string.to_string())
-                        }),
-                    )
-                    .unwrap();
-
-                resolve.call::<(_,), ()>((response_to_js,)).unwrap();
             }
             Err(error) => {
                 reject.call::<_, ()>((error.to_string(),)).unwrap();
