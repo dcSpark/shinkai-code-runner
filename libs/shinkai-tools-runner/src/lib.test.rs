@@ -389,3 +389,21 @@ async fn max_execution_time() {
     assert!(elapsed_time.as_millis() <= 10050);
     assert!(run_result.err().unwrap().message().contains("time reached"));
 }
+
+#[tokio::test]
+async fn shinkai_tool_download_page_stack_overflow() {
+    let tool_definition = get_tool("shinkai-tool-download-page").unwrap();
+    let mut tool = Tool::new();
+    let _ = tool
+        .load_from_code(&tool_definition.code.clone().unwrap(), "")
+        .await;
+    let run_result = tool
+        .run(
+            r#"{
+                "url": "https://en.wikipedia.org/wiki/Prospect_Park_(Brooklyn)"
+            }"#,
+            None,
+        )
+        .await;
+    assert!(run_result.is_ok());
+}

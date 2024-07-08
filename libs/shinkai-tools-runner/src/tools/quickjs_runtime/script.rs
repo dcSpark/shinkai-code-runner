@@ -1,10 +1,10 @@
 use std::time::Duration;
 
-use super::context_globals::init_globals;
+use super::{context_globals::init_globals, modules::init_modules};
 use super::execution_error::ExecutionError;
 
 use nanoid::nanoid;
-use rquickjs::{async_with, AsyncContext, AsyncRuntime, Object, Value};
+use rquickjs::{async_with, qjs::size_t, AsyncContext, AsyncRuntime, Module, Object, Value};
 
 pub struct Script {
     runtime: Option<AsyncRuntime>,
@@ -35,14 +35,16 @@ impl Script {
 
     async fn build_runtime(&self) -> (AsyncRuntime, AsyncContext) {
         let runtime: AsyncRuntime = AsyncRuntime::new().unwrap();
-        runtime.set_memory_limit(1024 * 1024 * 1024).await; // 1 GB
+        runtime.set_memory_limit(2048 * 1024 * 1024).await; // 1 GB
         runtime.set_max_stack_size(1024 * 1024).await; // 1 MB
         let context = AsyncContext::full(&runtime).await;
         context
             .as_ref()
             .unwrap()
             .with(|ctx| {
+                
                 let _ = init_globals(&ctx);
+                let _ = init_modules(&ctx);
             })
             .await;
         (runtime, context.unwrap())
@@ -74,9 +76,11 @@ impl Script {
         let js_code_clone = js_code.clone(); // Clone js_code here
         let context_clone = self.context.clone().unwrap();
         let result = async_with!(context_clone => |ctx|{
-            let eval_promise_result = ctx.eval_promise::<_>(js_code);
+            let eval_promise_result = ctx.eval_promise::<_>(js_code).map_err(|e| {
+                ExecutionError::new(e.to_string(), None)
+            })?;
 
-            let result = eval_promise_result.unwrap().into_future::<Object>().await.map_err(|e| {
+            let result = eval_promise_result.into_future::<Object>().await.map_err(|e| {
                 let exception = ctx.catch().try_into_exception();
                 if let Ok(exception) = exception {
                     let message = exception.message().unwrap_or_default();

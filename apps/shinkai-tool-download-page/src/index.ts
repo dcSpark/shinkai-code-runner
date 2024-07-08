@@ -9,7 +9,6 @@ type Params = {
 
 type Result = { markdown: string };
 
-
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-download-page',
@@ -41,8 +40,12 @@ export class Tool extends BaseTool<Config, Params, Result> {
   async run(params: Params): Promise<RunResult<Result>> {
     const response = await fetch(params.url);
     const html = await response.text();
-    const turndownService = new TurndownService();
-    const markdown = turndownService.turndown(html);
+    // const turndownService = new TurndownService();
+    // const markdown = turndownService.turndown(html);
+    const { html2Markdown } = await import('shinkai/utils');
+
+    const markdown = html2Markdown(html);
+    console.log(5);
     return Promise.resolve({ data: { markdown } });
   }
 }

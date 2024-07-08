@@ -23,7 +23,10 @@
       "@shinkai_protocol/shinkai-tools-bundler": [
         "libs/shinkai-tools-bundler/src/index.ts"
       ],
-    }
+      "shinkai/utils": [
+        "libs/shinkai-tools-builder/src/types/shinkai-utils.d.ts"
+      ],
+    },
   },
   "exclude": [
     "node_modules",

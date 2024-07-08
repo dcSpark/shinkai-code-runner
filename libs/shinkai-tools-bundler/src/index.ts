@@ -16,7 +16,8 @@ export const withToolWebpackConfig = ({
   const outputDefinitionFilename = 'definition.json';
   return {
     target: 'es2020',
-    externals: [],
+    externals: ['shinkai/utils'],
+    externalsType: 'commonjs',
     entry: entry,
     module: {
       rules: [
