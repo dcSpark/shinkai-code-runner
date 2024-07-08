@@ -4,7 +4,7 @@ use super::{context_globals::init_globals, modules::init_modules};
 use super::execution_error::ExecutionError;
 
 use nanoid::nanoid;
-use rquickjs::{async_with, qjs::size_t, AsyncContext, AsyncRuntime, Module, Object, Value};
+use rquickjs::{async_with, AsyncContext, AsyncRuntime, Object, Value};
 
 pub struct Script {
     runtime: Option<AsyncRuntime>,
@@ -35,7 +35,7 @@ impl Script {
 
     async fn build_runtime(&self) -> (AsyncRuntime, AsyncContext) {
         let runtime: AsyncRuntime = AsyncRuntime::new().unwrap();
-        runtime.set_memory_limit(2048 * 1024 * 1024).await; // 1 GB
+        runtime.set_memory_limit(1024 * 1024 * 1024).await; // 1 GB
         runtime.set_max_stack_size(1024 * 1024).await; // 1 MB
         let context = AsyncContext::full(&runtime).await;
         context
