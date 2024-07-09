@@ -392,9 +392,7 @@ async fn max_execution_time() {
 
 #[tokio::test]
 async fn shinkai_tool_download_page_stack_overflow() {
-    let managed_thread = std::thread::Builder::new()
-        .name("managed-thread".to_string())
-        .stack_size(8 * 1024 * 1024);
+    let managed_thread = std::thread::Builder::new().stack_size(8 * 1024 * 1024);
     let run_result = managed_thread
         .spawn(move || {
             let managed_runtime =
