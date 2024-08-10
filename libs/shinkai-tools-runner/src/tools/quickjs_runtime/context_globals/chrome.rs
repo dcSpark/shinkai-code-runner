@@ -1,43 +1,82 @@
-use headless_chrome::{Browser, LaunchOptionsBuilder};
-use rquickjs::{
-    class::Trace, function::Func, Class, Ctx, Object, Promise, Result, String as RQString, Value,
-};
-use std::io;
+use headless_chrome::{Browser, LaunchOptionsBuilder, Tab};
+use rquickjs::IntoJs;
+use rquickjs::{class::Trace, Class, Ctx, Object, Promise, Result, String as RQString, Value};
+use std::{borrow::Borrow, io, sync::Arc, time::Duration};
+use tokio::sync::Mutex;
 
 #[derive(Trace)]
 #[rquickjs::class(rename = "HeadlessChrome")]
 pub struct HeadlessChrome {
     #[qjs(skip_trace)]
-    browser: Browser,
+    browser: Arc<Mutex<Browser>>,
+}
+
+#[derive(Clone, Trace)]
+#[rquickjs::class(rename = "TabWrapper")]
+pub struct TabWrapper {
+    #[qjs(skip_trace)]
+    tab: Arc<Mutex<Arc<Tab>>>,
 }
 
 #[rquickjs::methods]
 impl HeadlessChrome {
     #[qjs(constructor)]
-    pub fn new() -> Result<Self> {
-        let launch_options = LaunchOptionsBuilder::default()
-            .headless(true)
-            .build()
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
+    pub fn new(chrome_path: Option<String>) -> Result<Self> {
+        let launch_options = if let Some(path) = chrome_path {
+            LaunchOptionsBuilder::default()
+                .path(Some(std::path::PathBuf::from(path)))
+                .headless(true)
+                .devtools(false) // Ensure devtools is set to false
+                .build()
+                .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?
+        } else {
+            LaunchOptionsBuilder::default()
+                .headless(true)
+                .devtools(false) // Ensure devtools is set to false
+                .build()
+                .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?
+        };
 
         let browser = Browser::new(launch_options)
             .map_err(|e| io::Error::new(io::ErrorKind::Other, e.to_string()))?;
 
-        Ok(HeadlessChrome { browser })
+        Ok(HeadlessChrome {
+            browser: Arc::new(Mutex::new(browser)),
+        })
     }
 
-    pub fn navigate<'js>(&self, ctx: Ctx<'js>, url: String) -> Result<Promise<'js>> {
+    pub fn create_new_tab<'js>(&self, ctx: Ctx<'js>) -> Result<Promise<'js>> {
         let (promise, resolve, reject) = ctx.promise()?;
-        let browser = self.browser.clone();
         let ctx_clone = ctx.clone(); // Clone ctx here
+        let browser = Arc::clone(&self.browser); // Clone Arc to share ownership
         ctx.spawn(async move {
-            let tab = match browser.new_tab() {
-                Ok(tab) => tab,
-                Err(e) => {
-                    reject.call::<(String,), ()>((e.to_string(),)).unwrap();
-                    return;
+            let browser = browser.lock().await; // Await the lock
+            match browser.new_tab() {
+                Ok(tab) => {
+                    let tab_wrapper = TabWrapper {
+                        tab: Arc::new(Mutex::new(tab)),
+                    };
+                    let tab_wrapper_value = tab_wrapper.into_js(&ctx_clone).unwrap();
+                    let tab_wrapper_object: Object = tab_wrapper_value.into_object().unwrap();
+                    resolve
+                        .call::<(Object,), ()>((tab_wrapper_object,))
+                        .unwrap();
                 }
-            };
+                Err(e) => reject.call::<(String,), ()>((e.to_string(),)).unwrap(),
+            }
+        });
+        Ok(promise)
+    }
+}
+
+#[rquickjs::methods]
+impl TabWrapper {
+    pub fn navigate_to<'js>(&self, ctx: Ctx<'js>, url: String) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        let ctx_clone = ctx.clone(); // Clone ctx here
+        let tab = Arc::clone(&self.tab); // Clone Arc to share ownership
+        ctx.spawn(async move {
+            let tab = tab.lock().await; // Await the lock
             if let Err(e) = tab.navigate_to(&url) {
                 reject.call::<(String,), ()>((e.to_string(),)).unwrap();
                 return;
@@ -46,10 +85,21 @@ impl HeadlessChrome {
                 reject.call::<(String,), ()>((e.to_string(),)).unwrap();
                 return;
             }
+            resolve
+                .call::<(Value,), ()>((Value::new_undefined(ctx_clone),))
+                .unwrap(); // Return undefined value
+        });
+        Ok(promise)
+    }
+
+    pub fn get_content<'js>(&self, ctx: Ctx<'js>) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        let tab = Arc::clone(&self.tab); // Clone Arc to share ownership
+        ctx.spawn(async move {
+            let tab = tab.lock().await; // Await the lock
             match tab.get_content() {
                 Ok(content) => {
-                    let js_string = RQString::from_str(ctx_clone.clone(), &content).unwrap();
-                    resolve.call::<(Value,), ()>((js_string.into(),)).unwrap();
+                    resolve.call::<(String,), ()>((content,)).unwrap();
                 }
                 Err(e) => {
                     reject.call::<(String,), ()>((e.to_string(),)).unwrap();
@@ -69,10 +119,6 @@ pub fn init(ctx: &Ctx<'_>) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use crate::tools::tool::Tool;
-
-    use super::init;
-    use rquickjs::{Context, Promise, Runtime, String as RQString, Value};
-    use tokio::runtime::Runtime as TokioRuntime;
 
     #[tokio::test]
     async fn shinkai_tool_inline() {
@@ -95,9 +141,18 @@ mod tests {
                 super(config);
             }
             async run(params) {
-                const browser = new HeadlessChrome();
-                const content = await browser.navigate('https://example.com');
+              try {
+                const browser = new HeadlessChrome('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome');
+                console.log("Browser created", browser);
+                // const browser = new HeadlessChrome(null);
+                 const tab = await browser.create_new_tab();
+                 console.log("tab:", tab);
+                await tab.navigate_to('https://example.com');
+                const content = await tab.get_content();
                 return { data: `Hello, ${params.name}! Content: ${content}` };
+              } catch (error) {
+                return { error: error.message };
+              }
             }
         }
 
