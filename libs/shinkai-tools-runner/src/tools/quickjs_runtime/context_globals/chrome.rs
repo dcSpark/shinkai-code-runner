@@ -184,6 +184,63 @@ impl TabWrapper {
         });
         Ok(promise)
     }
+
+    pub fn wait_for_element<'js>(&self, ctx: Ctx<'js>, selector: String) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        let tab = Arc::clone(&self.tab);
+        ctx.spawn(async move {
+            let tab = tab.lock().await;
+            match tab.wait_for_element(&selector) {
+                Ok(_) => {
+                    resolve.call::<(String,), ()>((selector,)).unwrap();
+                }
+                Err(e) => {
+                    reject.call::<(String,), ()>((e.to_string(),)).unwrap();
+                }
+            }
+        });
+        Ok(promise)
+    }
+
+    pub fn wait_for_xpath<'js>(&self, ctx: Ctx<'js>, selector: String) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        let tab = Arc::clone(&self.tab);
+        ctx.spawn(async move {
+            let tab = tab.lock().await;
+            match tab.wait_for_xpath(&selector) {
+                Ok(_) => {
+                    resolve.call::<(String,), ()>((selector,)).unwrap();
+                }
+                Err(e) => {
+                    reject.call::<(String,), ()>((e.to_string(),)).unwrap();
+                }
+            }
+        });
+        Ok(promise)
+    }
+
+    pub fn wait_for_element_with_custom_timeout<'js>(
+        &self,
+        ctx: Ctx<'js>,
+        selector: String,
+        timeout: u64,
+    ) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        let tab = Arc::clone(&self.tab);
+        ctx.spawn(async move {
+            let tab = tab.lock().await;
+            let duration = std::time::Duration::from_secs(timeout);
+            match tab.wait_for_element_with_custom_timeout(&selector, duration) {
+                Ok(_) => {
+                    resolve.call::<(String,), ()>((selector,)).unwrap();
+                }
+                Err(e) => {
+                    reject.call::<(String,), ()>((e.to_string(),)).unwrap();
+                }
+            }
+        });
+        Ok(promise)
+    }
 }
 
 pub fn init(ctx: &Ctx<'_>) -> Result<()> {
@@ -219,10 +276,10 @@ mod tests {
             async run(params) {
               try {
                 const browser = new HeadlessChrome('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome');
-                console.log("Browser created", browser);
+                // console.log("Browser created", browser);
                 // const browser = new HeadlessChrome(null);
                 const tab = await browser.create_new_tab();
-                console.log("tab:", tab);
+                // console.log("tab:", tab);
                 const tabWrapper = await tab.navigate_to('https://example.com');
                 await tabWrapper.wait_until_navigated();
                 const content = await tabWrapper.get_content();
@@ -246,5 +303,51 @@ mod tests {
         let run_result = tool.run("{ \"name\": \"world\" }", None).await.unwrap();
         eprintln!("{:?}", run_result);
         // assert!(run_result.data.contains("Hello, world!"));
+    }
+
+    #[tokio::test]
+    async fn test_navigate_and_get_content() {
+        let js_code = r#"
+        class BaseTool {
+            constructor(config) {
+                this.config = config;
+            }
+            setConfig(value) {
+                this.config = value;
+                return this.config;
+            }
+            getConfig() {
+                return this.config;
+            }
+        }
+
+        class Tool extends BaseTool {
+            constructor(config) {
+                super(config);
+            }
+            async run(params) {
+              try {
+                const browser = new HeadlessChrome('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome');
+                const tab = await browser.create_new_tab();
+                const tabWrapper = await tab.navigate_to('https://en.wikipedia.org/wiki/WebKit');
+                await tabWrapper.wait_until_navigated();
+                await tabWrapper.wait_for_element('#mw-content-text > div > table.infobox.vevent');
+                const content = await tabWrapper.get_content();
+
+                return { data: `Content: ${content}` };
+              } catch (error) {
+                return { error: error.message };
+              }
+            }
+        }
+
+        globalThis.tool = { Tool };
+        "#;
+
+        let mut tool = Tool::new();
+        let _ = tool.load_from_code(js_code, "").await;
+        let run_result = tool.run("{}", None).await.unwrap();
+        let content = run_result.data.as_str().unwrap();
+        assert!(content.contains("Origyn Web Browser for MorphOS"));
     }
 }
