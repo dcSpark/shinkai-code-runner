@@ -116,10 +116,21 @@ lazy_static! {
             )))
             .unwrap(),
         )),
-    );
+      );
+      m.insert(
+          "shinkai-tool-internet-search-perplexity",
+          &*Box::leak(Box::new(
+              serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                  env!("CARGO_MANIFEST_DIR"),
+                  "/tools/shinkai-tool-internet-search-perplexity/definition.json"
+              )))
+              .unwrap(),
+          )),
+        );
+
         // ntim: New tools will be inserted here, don't remove this comment
         m
-    };
+      };
 }
 
 pub fn get_tool(name: &str) -> Option<&&ToolDefinition> {

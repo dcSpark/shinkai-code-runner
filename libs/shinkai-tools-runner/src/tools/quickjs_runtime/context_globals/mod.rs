@@ -1,6 +1,8 @@
 use rquickjs::{Ctx, Result};
+use llrt_core::modules::http;
+use llrt_core::modules::console;
 
-mod console;
+// mod console;
 mod fetch;
 mod timers;
 mod text_encoder;
@@ -13,5 +15,6 @@ pub fn init_globals(ctx: &Ctx<'_>) -> Result<()> {
     timers::init(ctx)?;
     text_encoder::init(ctx)?;
     text_decoder::init(ctx)?;
+    http::init(ctx)?;
     Ok(())
 }

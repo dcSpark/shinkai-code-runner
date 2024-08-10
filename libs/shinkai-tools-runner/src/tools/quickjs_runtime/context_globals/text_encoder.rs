@@ -27,11 +27,9 @@ impl TextEncoder {
         if let Some(string) = string.0 {
             if let Some(string) = string.as_string() {
                 let string = string.to_string()?;
-                eprintln!("String to encode: {}", string);
                 return TypedArray::new(ctx.clone(), string.as_bytes())
                     .map(|m: TypedArray<'_, u8>| m.into_value());
             } else if !string.is_undefined() {
-                eprintln!("The \"string\" argument must be a string.");
                 return Err(Exception::throw_message(
                     &ctx,
                     "The \"string\" argument must be a string.",
@@ -39,7 +37,6 @@ impl TextEncoder {
             }
         }
 
-        eprintln!("Encoding empty string");
         TypedArray::new(ctx.clone(), []).map(|m: TypedArray<'_, u8>| m.into_value())
     }
 

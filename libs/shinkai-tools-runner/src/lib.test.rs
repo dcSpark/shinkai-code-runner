@@ -472,3 +472,32 @@ async fn shinkai_tool_duckduckgo_search() {
     assert!(search_results[0].get("url").is_some());
     assert!(search_results[0].get("description").is_some());
 }
+
+#[tokio::test]
+async fn shinkai_tool_perplexity_search() {
+    let managed_thread = std::thread::Builder::new().stack_size(8 * 1024 * 1024);
+    let run_result = managed_thread
+        .spawn(move || {
+            let managed_runtime =
+                tokio::runtime::Runtime::new().expect("Failed to create Tokio runtime");
+            managed_runtime.block_on(async {
+                let tool_definition = get_tool("shinkai-tool-perplexity-search").unwrap();
+                let mut tool = Tool::new();
+                let _ = tool
+                    .load_from_code(&tool_definition.code.clone().unwrap(), "")
+                    .await;
+                tool.run(
+                    r#"{
+                        "query": "minecraft"
+                    }"#,
+                    None,
+                )
+                .await
+            })
+        })
+        .unwrap()
+        .join()
+        .unwrap();
+    assert!(run_result.is_ok());
+    println!("Result: {:?}", run_result.unwrap().data);
+}
