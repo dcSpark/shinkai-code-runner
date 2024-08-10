@@ -2,8 +2,8 @@ use base64::engine::general_purpose;
 use base64::Engine;
 use headless_chrome::protocol::cdp::Page::{self};
 use headless_chrome::{Browser, LaunchOptionsBuilder, Tab};
-use rquickjs::IntoJs;
 use rquickjs::{class::Trace, Class, Ctx, Object, Promise, Result};
+use rquickjs::{IntoJs, Value};
 use std::{io, sync::Arc};
 use tokio::sync::Mutex;
 
@@ -219,6 +219,7 @@ impl TabWrapper {
         Ok(promise)
     }
 
+    // TODO: it should actually return an ElementWrapper (needs to be created)
     pub fn wait_for_element_with_custom_timeout<'js>(
         &self,
         ctx: Ctx<'js>,
@@ -233,6 +234,84 @@ impl TabWrapper {
             match tab.wait_for_element_with_custom_timeout(&selector, duration) {
                 Ok(_) => {
                     resolve.call::<(String,), ()>((selector,)).unwrap();
+                }
+                Err(e) => {
+                    reject.call::<(String,), ()>((e.to_string(),)).unwrap();
+                }
+            }
+        });
+        Ok(promise)
+    }
+
+    pub fn set_user_agent<'js>(
+        &self,
+        ctx: Ctx<'js>,
+        user_agent: String,
+        accept_language: Option<String>,
+        platform: Option<String>,
+    ) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        let ctx_clone = ctx.clone(); // Clone ctx here
+        let tab = Arc::clone(&self.tab); // Clone Arc to share ownership
+        ctx.spawn(async move {
+            let tab = tab.lock().await; // Await the lock
+            match tab.set_user_agent(&user_agent, accept_language.as_deref(), platform.as_deref()) {
+                Ok(_) => {
+                    let tab_wrapper = TabWrapper {
+                        tab: Arc::new(Mutex::new(Arc::clone(&tab))),
+                    };
+                    let tab_wrapper_value = tab_wrapper.into_js(&ctx_clone).unwrap();
+                    let tab_wrapper_object: Object = tab_wrapper_value.into_object().unwrap();
+                    resolve
+                        .call::<(Object,), ()>((tab_wrapper_object,))
+                        .unwrap();
+                }
+                Err(e) => {
+                    reject.call::<(String,), ()>((e.to_string(),)).unwrap();
+                }
+            }
+        });
+        Ok(promise)
+    }
+
+    pub fn set_default_timeout<'js>(&self, ctx: Ctx<'js>, timeout: u64) -> Result<Promise<'js>> {
+        let (promise, resolve, _reject) = ctx.promise()?;
+        let ctx_clone = ctx.clone(); // Clone ctx here
+        let tab = Arc::clone(&self.tab); // Clone Arc to share ownership
+        ctx.spawn(async move {
+            let tab = tab.lock().await; // Await the lock
+            let duration = std::time::Duration::from_secs(timeout);
+            tab.set_default_timeout(duration);
+            let tab_wrapper = TabWrapper {
+                tab: Arc::new(Mutex::new(Arc::clone(&tab))),
+            };
+            let tab_wrapper_value = tab_wrapper.into_js(&ctx_clone).unwrap();
+            let tab_wrapper_object: Object = tab_wrapper_value.into_object().unwrap();
+            resolve
+                .call::<(Object,), ()>((tab_wrapper_object,))
+                .unwrap();
+        });
+        Ok(promise)
+    }
+
+    pub fn evaluate_expression<'js>(
+        &self,
+        ctx: Ctx<'js>,
+        expression: String,
+        await_promise: bool,
+    ) -> Result<Promise<'js>> {
+        let (promise, resolve, reject) = ctx.promise()?;
+        let ctx_clone = ctx.clone(); // Clone ctx here
+        let tab = Arc::clone(&self.tab); // Clone Arc to share ownership
+        ctx.spawn(async move {
+            let tab = tab.lock().await; // Await the lock
+            match tab.evaluate(&expression, await_promise) {
+                Ok(result) => {
+                    // Convert the result to a JSON string
+                    let result_json = serde_json::to_string(&result).unwrap();
+                    // Convert the JSON string to a rquickjs Value
+                    let result_value: Value = ctx_clone.eval(&*result_json).unwrap(); // Use cloned ctx
+                    resolve.call::<(Value,), ()>((result_value,)).unwrap();
                 }
                 Err(e) => {
                     reject.call::<(String,), ()>((e.to_string(),)).unwrap();
