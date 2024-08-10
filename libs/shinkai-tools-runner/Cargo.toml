@@ -32,6 +32,7 @@ tokio-util = "0.7.11"
 derive_more = "0.99.18"
 derivative = "2.2.0"
 llrt_core = { path = "../../../llrt/llrt_core" }
+base64 = "0.22.1"
 
 [features]
 built-in-tools = []
