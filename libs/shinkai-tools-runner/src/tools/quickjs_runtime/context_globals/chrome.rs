@@ -85,9 +85,14 @@ impl TabWrapper {
                 reject.call::<(String,), ()>((e.to_string(),)).unwrap();
                 return;
             }
+            let tab_wrapper = TabWrapper {
+                tab: Arc::new(Mutex::new(Arc::clone(&tab))),
+            };
+            let tab_wrapper_value = tab_wrapper.into_js(&ctx_clone).unwrap();
+            let tab_wrapper_object: Object = tab_wrapper_value.into_object().unwrap();
             resolve
-                .call::<(Value,), ()>((Value::new_undefined(ctx_clone),))
-                .unwrap(); // Return undefined value
+                .call::<(Object,), ()>((tab_wrapper_object,))
+                .unwrap();
         });
         Ok(promise)
     }
@@ -147,8 +152,8 @@ mod tests {
                 // const browser = new HeadlessChrome(null);
                  const tab = await browser.create_new_tab();
                  console.log("tab:", tab);
-                await tab.navigate_to('https://example.com');
-                const content = await tab.get_content();
+                const tabWrapper = await tab.navigate_to('https://example.com');
+                const content = await tabWrapper.get_content();
                 return { data: `Hello, ${params.name}! Content: ${content}` };
               } catch (error) {
                 return { error: error.message };
