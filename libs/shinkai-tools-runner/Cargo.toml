@@ -11,6 +11,7 @@ readme = { workspace = true }
 
 [dependencies]
 futures = "0.3.30"
+headless_chrome = "1.0.12"
 nanoid = "0.4.0"
 patch = "0.7.0"
 reqwest = { version = "0.11.26", features = ["blocking"] }

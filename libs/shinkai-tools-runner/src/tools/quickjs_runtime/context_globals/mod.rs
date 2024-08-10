@@ -8,6 +8,7 @@ mod timers;
 mod text_encoder;
 mod text_decoder;
 mod utils;
+mod chrome;
 
 pub fn init_globals(ctx: &Ctx<'_>) -> Result<()> {
     console::init(ctx)?;
@@ -16,5 +17,6 @@ pub fn init_globals(ctx: &Ctx<'_>) -> Result<()> {
     text_encoder::init(ctx)?;
     text_decoder::init(ctx)?;
     http::init(ctx)?;
+    chrome::init(ctx)?;
     Ok(())
 }
