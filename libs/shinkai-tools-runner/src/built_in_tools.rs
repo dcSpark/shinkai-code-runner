@@ -108,15 +108,25 @@ lazy_static! {
           )),
       );
       m.insert(
-        "shinkai-tool-duckduckgo-search",
-        &*Box::leak(Box::new(
-            serde_json::from_str::<ToolDefinition>(include_str!(concat!(
-                env!("CARGO_MANIFEST_DIR"),
-                "/tools/shinkai-tool-duckduckgo-search/definition.json"
-            )))
-            .unwrap(),
-        )),
-    );
+          "shinkai-tool-duckduckgo-search",
+          &*Box::leak(Box::new(
+              serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                  env!("CARGO_MANIFEST_DIR"),
+                  "/tools/shinkai-tool-duckduckgo-search/definition.json"
+              )))
+              .unwrap(),
+          )),
+      );
+        m.insert(
+          "shinkai-tool-perplexity-api",
+          &*Box::leak(Box::new(
+              serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                  env!("CARGO_MANIFEST_DIR"),
+                  "/tools/shinkai-tool-perplexity-api/definition.json"
+              )))
+              .unwrap(),
+          )),
+        );
         // ntim: New tools will be inserted here, don't remove this comment
         m
     };
