@@ -1,0 +1,44 @@
+{
+  "name": "@shinkai_protocol/shinkai-tools-backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/shinkai-tools-backend/src",
+  "projectType": "app",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "production",
+      "options": {
+        "commands": [
+          "npx esbuild ./apps/shinkai-tools-backend/src/index.ts --bundle --platform=node --target=node22.16 --outfile=./dist/apps/shinkai-tools-backend/index.js",
+          "npx cpy ./apps/shinkai-tools-backend/sea-config.json ./dist/",
+          "cd ./dist/apps/shinkai-tools-backend && node --experimental-sea-config sea-config.json",
+          "cd ./dist/apps/shinkai-tools-backend && node -e \"require('fs').copyFileSync(process.execPath, 'shinkai-tools-backend.exe')\"",
+          "cd ./dist/apps/shinkai-tools-backend && npx postject shinkai-tools-backend.exe NODE_SEA_BLOB index.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2"
+        ],
+        "parallel": false
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "./apps/shinkai-tools-backend",
+        "command": "npx nest start --debug --watch"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/shinkai-tools-backend/**/*.ts",
+          "apps/shinkai-tools-backend/package.json"
+        ]
+      }
+    }
+  }
+}

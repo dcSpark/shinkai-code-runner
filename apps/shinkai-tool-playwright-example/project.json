@@ -1,7 +1,7 @@
 {
-  "name": "@shinkai_protocol/shinkai-tool-echo",
+  "name": "@shinkai_protocol/shinkai-tool-playwright-example",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shinkai-tool-echo/src",
+  "sourceRoot": "apps/shinkai-tool-playwright-example/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-echo/src/index.ts --outputFolder ./dist/apps/shinkai-tool-echo"
+        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-playwright-example/src/index.ts --outputFolder ./dist/apps/shinkai-tool-playwright-example"
       },
       "configurations": {
         "development": {},
@@ -21,8 +21,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "apps/shinkai-tool-echo/**/*.ts",
-          "apps/shinkai-tool-echo/package.json"
+          "apps/shinkai-tool-playwright-example/**/*.ts",
+          "apps/shinkai-tool-playwright-example/package.json"
         ]
       }
     }

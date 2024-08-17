@@ -10,7 +10,7 @@ module.exports = composePlugins(withNx(), (config, { options, context }) => {
     config,
     withToolWebpackConfig({
       entry: path.join(__dirname, 'src/index.ts'),
-      outputPath: path.join(__dirname, '../../dist/apps/shinkai-tool-math-exp'),
+      outputPath: path.join(__dirname, '../../dist/apps/shinkai-tool-playwright-example'),
       tsConfigFile: path.join(__dirname, 'tsconfig.app.json'),
     }),
   );
