@@ -84,20 +84,49 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const page = await context.newPage();
     await page.goto(params.url);
 
-    // Inject the Viem library
-    await context.addInitScript({
-      path: path.join(__dirname, 'node_modules', 'viem', 'dist', 'viem.js')
+    // Inject the Viem library from the local viem-bundle.js file
+  const viemPath = path.join(__dirname, 'viem-bundle.js');
+
+    // Inject the Viem library from the local viem-bundle.js file
+    try {
+      await page.addScriptTag({ path: viemPath });
+      console.log('Viem library injected');
+    } catch (error) {
+      console.error('Failed to inject Viem library:', error);
+      throw error;
+    }
+
+  console.log('Viem library injected');
+
+      // Debugging: Check if the script tag is added correctly
+      const scriptContent = await page.evaluate(() => {
+        const script = document.querySelector('script[src*="viem-bundle.js"]');
+        return script ? script.outerHTML : 'Script not found';
+      });
+      console.log('Script tag content:', scriptContent);
+
+    // Ensure the viem library is loaded
+  await page.waitForFunction(() => !!(window as any).viem);
+  console.log('Viem library loaded');
+
+  // Inject the wallet setup script
+  await page.evaluate(() => {
+    const { createWalletClient, http, parseEther, privateKeyToAccount, mainnet } = (window as any).viem;
+
+    const client = createWalletClient({
+      chain: mainnet,
+      transport: http()
     });
 
-    /*
-    // or use
-    // Inject the viem library
-    await page.addScriptTag({ url: 'https://unpkg.com/viem@latest/dist/viem.umd.js' });
-    */
+    console.log('Viem client created');
+    const account = privateKeyToAccount('your-private-key-here'); // Replace with your actual private key
 
-    // Inject the wallet setup script
-    const walletSetupScript = fs.readFileSync(path.join(__dirname, 'wallet-setup.js'), 'utf8');
-    await page.evaluate(walletSetupScript);
+    // Expose the client and account to the window object
+    (window as any).viemClient = client;
+    (window as any).viemAccount = account;
+
+    console.log('Viem wallet client and account injected');
+  });
 
     // Replace MetaMask with viem
     await page.evaluate(() => {
