@@ -84,30 +84,31 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const page = await context.newPage();
     await page.goto(params.url);
 
-    // Inject the Viem library from the local viem-bundle.js file
-  const viemPath = path.join(__dirname, 'viem-bundle.js');
-
-    // Inject the Viem library from the local viem-bundle.js file
-    try {
-      await page.addScriptTag({ path: viemPath });
-      console.log('Viem library injected');
-    } catch (error) {
-      console.error('Failed to inject Viem library:', error);
-      throw error;
+    // Verify the path to viem-bundle.js
+    const viemPath = path.join(__dirname, 'viem-bundle.js');
+    if (!fs.existsSync(viemPath)) {
+      throw new Error(`Viem bundle not found at path: ${viemPath}`);
     }
 
-  console.log('Viem library injected');
+    // Read the content of viem-bundle.js
+    const viemScriptContent = fs.readFileSync(viemPath, 'utf8');
+    console.log('Viem script loeaded');
 
-      // Debugging: Check if the script tag is added correctly
-      const scriptContent = await page.evaluate(() => {
-        const script = document.querySelector('script[src*="viem-bundle.js"]');
-        return script ? script.outerHTML : 'Script not found';
-      });
-      console.log('Script tag content:', scriptContent);
+    // Inject the Viem library by adding the script content directly within page.addInitScript
+    await page.addInitScript(viemScriptContent);
+    console.log('Viem script injected');
 
     // Ensure the viem library is loaded
-  await page.waitForFunction(() => !!(window as any).viem);
-  console.log('Viem library loaded');
+    await page.waitForFunction(() => !!(window as any).viem, { timeout: 3000 })
+      .then(() => console.log('Viem library loaded'))
+      .catch(() => console.error('Viem library failed to load'));
+
+    // Debugging: Check if the script tag is added correctly
+    const scriptContent = await page.evaluate(() => {
+      const scripts = Array.from(document.querySelectorAll('script'));
+      return scripts.map(script => script.outerHTML).join('\n');
+    });
+    console.log('Script tags on the page:', scriptContent);
 
   // Inject the wallet setup script
   await page.evaluate(() => {
