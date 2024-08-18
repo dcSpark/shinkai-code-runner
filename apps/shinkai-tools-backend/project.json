@@ -13,8 +13,8 @@
           "npx esbuild ./apps/shinkai-tools-backend/src/index.ts --bundle --platform=node --target=node22.16 --outfile=./dist/apps/shinkai-tools-backend/index.js",
           "npx cpy ./apps/shinkai-tools-backend/sea-config.json ./dist/",
           "cd ./dist/apps/shinkai-tools-backend && node --experimental-sea-config sea-config.json",
-          "cd ./dist/apps/shinkai-tools-backend && node -e \"require('fs').copyFileSync(process.execPath, 'shinkai-tools-backend.exe')\"",
-          "cd ./dist/apps/shinkai-tools-backend && npx postject shinkai-tools-backend.exe NODE_SEA_BLOB index.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2"
+          "cd ./dist/apps/shinkai-tools-backend && node -e \"require('fs').copyFileSync(process.execPath, 'shinkai-tools-backend')\"",
+          "cd ./dist/apps/shinkai-tools-backend && npx postject shinkai-tools-backend NODE_SEA_BLOB index.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2"
         ],
         "parallel": false
       },
@@ -27,7 +27,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "./apps/shinkai-tools-backend",
-        "command": "npx nest start --debug --watch"
+        "command": "npx ts-node-dev --debug --respawn src/index.ts"
       }
     },
     "lint": {

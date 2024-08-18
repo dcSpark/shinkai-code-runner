@@ -1,12 +1,13 @@
 import { BaseTool, RunResult } from '@shinkai_protocol/shinkai-tools-builder';
 import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
 import * as playwright from 'playwright';
+import * as chromePaths from 'chrome-paths';
 
 type Config = {};
 type Params = {
   url: string;
 };
-type Result = { message: string };
+type Result = { title: string };
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-playwright-example',
@@ -29,23 +30,21 @@ export class Tool extends BaseTool<Config, Params, Result> {
     result: {
       type: 'object',
       properties: {
-        message: { type: 'string' },
+        title: { type: 'string' },
       },
-      required: ['message'],
+      required: ['title'],
     },
   };
 
   async run(params: Params): Promise<RunResult<Result>> {
-    const browser = await playwright['chromium'].launch();
+    const browser = await playwright['chromium'].launch({
+      executablePath: chromePaths.chrome,
+    });
     const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(params.url);
-    await page.screenshot({
-      path: `nodejs_${'chromium'}.png`,
-      fullPage: true,
-    });
-    await page.waitForTimeout(1000);
+    const title = await page.title();
     await browser.close();
-    return Promise.resolve({ data: { message: 'ok' } });
+    return Promise.resolve({ data: { title } });
   }
 }

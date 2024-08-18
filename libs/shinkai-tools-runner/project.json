@@ -11,13 +11,24 @@
       "options": {
         "parallel": false,
         "commands": [
-          "nx run-many -t build --projects=tag:tool",
+          "npx nx run-many -t build --projects=tag:tool",
           "npx copyfiles --up 2 --verbose dist/apps/shinkai-tool-*/definition.json libs/shinkai-tools-runner/tools"
         ]
       }
     },
+    "build-shinkai-tools-backend": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "parallel": false,
+        "commands": [
+          "npx nx build @shinkai_protocol/shinkai-tools-backend",
+          "npx copyfiles --up 3 --verbose dist/apps/shinkai-tools-backend/shinkai-tools-backend libs/shinkai-tools-runner/shinka-tools-runner-resources/"
+        ]
+      }
+    },
     "build": {
-      "dependsOn": ["build-tools"],
+      "dependsOn": ["build-tools", "build-shinkai-tools-backend"],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",

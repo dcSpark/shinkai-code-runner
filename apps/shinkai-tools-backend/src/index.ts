@@ -29,10 +29,35 @@ fastify.withTypeProvider<ZodTypeProvider>().route({
 
 fastify.withTypeProvider<ZodTypeProvider>().route({
   method: 'POST',
+  url: '/tool/definition',
+  schema: {
+    body: z.object({
+      code: z.string(),
+    }),
+    response: {
+      200: z.any(),
+    },
+  },
+  bodyLimit: 10485760, // 10 MiB to heavy tools
+  handler: async function (request, reply) {
+    const code = `
+        ${request.body.code}
+        const toolInstance = new Tool();
+        toolInstance;
+    `;
+    const tool: BaseTool<any, any, any> = eval(code);
+    const definition = await tool.getDefinition();
+    console.log('tool definition', definition);
+    return definition;
+  },
+});
+
+fastify.withTypeProvider<ZodTypeProvider>().route({
+  method: 'POST',
   url: '/tool/run',
   schema: {
     body: z.object({
-      tool: z.any(),
+      code: z.any(),
       configurations: z.any(),
       parameters: z.any(),
     }),
@@ -40,7 +65,7 @@ fastify.withTypeProvider<ZodTypeProvider>().route({
   bodyLimit: 10485760, // 10 MiB to heavy tools
   handler: async function (request, reply) {
     const code = `
-        ${request.body.tool.code}
+        ${request.body.code}
         const toolInstance = new Tool(${JSON.stringify(request.body.configurations)});
         toolInstance;
     `;
