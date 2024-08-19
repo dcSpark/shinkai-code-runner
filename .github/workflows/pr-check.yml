@@ -23,7 +23,7 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           check-latest: false
-          cache: "npm"
+          cache: 'npm'
           cache-dependency-path: package-lock.json
 
       - name: Cache cargo assets
@@ -43,10 +43,14 @@ jobs:
           npm cache verify
           npm ci --no-audit --prefer-offline
 
-      - uses: browser-actions/setup-chrome@v1
+      - name: Setup Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: 120
           install-chromedriver: true
 
       - name: Run NX lint & test
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: npx nx run-many -t lint,test --verbose
