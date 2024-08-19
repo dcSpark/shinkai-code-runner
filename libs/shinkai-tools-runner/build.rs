@@ -1,6 +1,5 @@
 use std::env;
 use std::fs;
-use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
 fn main() {
@@ -23,19 +22,14 @@ fn main() {
 
     let backend_path = target_path.join("shinkai-tools-backend");
 
-    if backend_path.exists() {
-        #[cfg(unix)]
-        {
-            let mut permissions = fs::metadata(&backend_path).unwrap().permissions();
-            permissions.set_mode(0o755); // Set executable permissions for Unix
-        }
-        #[cfg(windows)]
-        {
-            let metadata = fs::metadata(&backend_path).unwrap();
-            let readonly = metadata.permissions().readonly();
-            if readonly {
-                fs::set_permissions(&backend_path, metadata.permissions()).unwrap();
-            }
+    if !cfg!(target_os = "windows") {
+        let output = std::process::Command::new("chmod")
+            .arg("+x")
+            .arg(&backend_path)
+            .output()
+            .expect("Failed to execute chmod command");
+        if !output.status.success() {
+            panic!("chmod command failed: {}", String::from_utf8_lossy(&output.stderr));
         }
     }
 }

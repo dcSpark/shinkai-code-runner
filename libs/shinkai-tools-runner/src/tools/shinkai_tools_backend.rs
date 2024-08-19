@@ -33,7 +33,7 @@ impl ShinkaiToolsBackend {
         let client = reqwest::Client::new();
 
         // Wait for the /health endpoint to respond with 200
-        let health_check_url = "http://localhost:3000/health";
+        let health_check_url = "http://127.0.0.1:3000/health";
         let mut retries = 5;
         while retries > 0 {
             match client.get(health_check_url).send().await {
@@ -42,8 +42,7 @@ impl ShinkaiToolsBackend {
                     break;
                 }
                 Err(e) => {
-                    println!("Health check failed: {}", e);
-                    return Err(std::io::Error::new(std::io::ErrorKind::Other, e));
+                    println!("Health check failed: {}, retrying...", e);
                 }
                 _ => {
                     println!(

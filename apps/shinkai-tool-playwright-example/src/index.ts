@@ -3,7 +3,9 @@ import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
 import * as playwright from 'playwright';
 import * as chromePaths from 'chrome-paths';
 
-type Config = {};
+type Config = {
+  chromePath?: string;
+};
 type Params = {
   url: string;
 };
@@ -17,7 +19,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
     keywords: ['playwright-example', 'shinkai'],
     configurations: {
       type: 'object',
-      properties: {},
+      properties: {
+        chromePath: { type: 'string', nullable: true },
+      },
       required: [],
     },
     parameters: {
@@ -38,7 +42,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
   async run(params: Params): Promise<RunResult<Result>> {
     const browser = await playwright['chromium'].launch({
-      executablePath: chromePaths.chrome,
+      executablePath: this.config?.chromePath || chromePaths.chrome,
     });
     const context = await browser.newContext();
     const page = await context.newPage();
