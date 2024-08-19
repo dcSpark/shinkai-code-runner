@@ -13,8 +13,8 @@ type Params = {
   url: string;
 };
 type Result = {
-  assetsToSupply: { asset: string, apy: string }[],
-  assetsToBorrow: { asset: string, apy: string }[]
+  assetsToSupply: { asset: string; apy: string }[];
+  assetsToBorrow: { asset: string; apy: string }[];
 };
 
 // Extend the Window interface to include ethereum
@@ -28,7 +28,8 @@ export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-playwright-example',
     name: 'Shinkai: Aave Market Extractor',
-    description: 'Tool for extracting Aave market data including assets to supply and borrow with their APYs',
+    description:
+      'Tool for extracting Aave market data including assets to supply and borrow with their APYs',
     author: 'Shinkai',
     keywords: ['aave', 'market', 'extractor', 'shinkai'],
     configurations: {
@@ -52,10 +53,10 @@ export class Tool extends BaseTool<Config, Params, Result> {
             type: 'object',
             properties: {
               asset: { type: 'string' },
-              apy: { type: 'string' }
+              apy: { type: 'string' },
             },
-            required: ['asset', 'apy']
-          }
+            required: ['asset', 'apy'],
+          },
         },
         assetsToBorrow: {
           type: 'array',
@@ -63,11 +64,11 @@ export class Tool extends BaseTool<Config, Params, Result> {
             type: 'object',
             properties: {
               asset: { type: 'string' },
-              apy: { type: 'string' }
+              apy: { type: 'string' },
             },
-            required: ['asset', 'apy']
-          }
-        }
+            required: ['asset', 'apy'],
+          },
+        },
       },
       required: ['assetsToSupply', 'assetsToBorrow'],
     },
@@ -83,8 +84,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const page = await context.newPage();
     await page.goto(params.url);
 
-    // Verify the path to viem-bundle.js
-    const viemPath = path.join(__dirname, 'viem-bundle.js');
+    const viemPath = path.join(__dirname, 'bundled-resources/shinkai-viem.js');
     if (!fs.existsSync(viemPath)) {
       throw new Error(`Viem bundle not found at path: ${viemPath}`);
     }
@@ -104,40 +104,46 @@ export class Tool extends BaseTool<Config, Params, Result> {
     // await page.addInitScript(viemScriptContent);
     // console.log('Viem script injected');
 
-      // Pause for 5 minutes (300,000 milliseconds)
-  await new Promise(resolve => setTimeout(resolve, 300000));
-
+    // Pause for 5 minutes (300,000 milliseconds)
+    await new Promise((resolve) => setTimeout(resolve, 300000));
 
     // Ensure the viem library is loaded
-    await page.waitForFunction(() => !!(window as any).viem, { timeout: 3000 })
+    await page
+      .waitForFunction(() => !!(window as any).viem, { timeout: 3000 })
       .then(() => console.log('Viem library loaded'))
       .catch(() => console.error('Viem library failed to load'));
 
     // Debugging: Check if the script tag is added correctly
     const scriptContent = await page.evaluate(() => {
       const scripts = Array.from(document.querySelectorAll('script'));
-      return scripts.map(script => script.outerHTML).join('\n');
+      return scripts.map((script) => script.outerHTML).join('\n');
     });
     console.log('Script tags on the page:', scriptContent);
 
-  // Inject the wallet setup script
-  await page.evaluate(() => {
-    const { createWalletClient, http, parseEther, privateKeyToAccount, mainnet } = (window as any).viem;
+    // Inject the wallet setup script
+    await page.evaluate(() => {
+      const {
+        createWalletClient,
+        http,
+        parseEther,
+        privateKeyToAccount,
+        mainnet,
+      } = (window as any).viem;
 
-    const client = createWalletClient({
-      chain: mainnet,
-      transport: http()
+      const client = createWalletClient({
+        chain: mainnet,
+        transport: http(),
+      });
+
+      console.log('Viem client created');
+      const account = privateKeyToAccount('your-private-key-here'); // Replace with your actual private key
+
+      // Expose the client and account to the window object
+      (window as any).viemClient = client;
+      (window as any).viemAccount = account;
+
+      console.log('Viem wallet client and account injected');
     });
-
-    console.log('Viem client created');
-    const account = privateKeyToAccount('your-private-key-here'); // Replace with your actual private key
-
-    // Expose the client and account to the window object
-    (window as any).viemClient = client;
-    (window as any).viemAccount = account;
-
-    console.log('Viem wallet client and account injected');
-  });
 
     // Replace MetaMask with viem
     await page.evaluate(() => {
@@ -146,7 +152,13 @@ export class Tool extends BaseTool<Config, Params, Result> {
       });
 
       window.ethereum = {
-        request: async ({ method, params }: { method: string, params?: any[] }) => {
+        request: async ({
+          method,
+          params,
+        }: {
+          method: string;
+          params?: any[];
+        }) => {
           switch (method) {
             case 'eth_requestAccounts':
               return client.getAccounts();
@@ -159,18 +171,22 @@ export class Tool extends BaseTool<Config, Params, Result> {
       };
     });
 
-    const assetsToSupply = await page.$$eval('.assets-to-supply .asset-row', rows =>
-      rows.map(row => ({
-        asset: row.querySelector('.asset-name')?.textContent?.trim() ?? 'N/A',
-        apy: row.querySelector('.apy')?.textContent?.trim() ?? 'N/A'
-      }))
+    const assetsToSupply = await page.$$eval(
+      '.assets-to-supply .asset-row',
+      (rows) =>
+        rows.map((row) => ({
+          asset: row.querySelector('.asset-name')?.textContent?.trim() ?? 'N/A',
+          apy: row.querySelector('.apy')?.textContent?.trim() ?? 'N/A',
+        })),
     );
 
-    const assetsToBorrow = await page.$$eval('.assets-to-borrow .asset-row', rows =>
-      rows.map(row => ({
-        asset: row.querySelector('.asset-name')?.textContent?.trim() ?? 'N/A',
-        apy: row.querySelector('.apy')?.textContent?.trim() ?? 'N/A'
-      }))
+    const assetsToBorrow = await page.$$eval(
+      '.assets-to-borrow .asset-row',
+      (rows) =>
+        rows.map((row) => ({
+          asset: row.querySelector('.asset-name')?.textContent?.trim() ?? 'N/A',
+          apy: row.querySelector('.apy')?.textContent?.trim() ?? 'N/A',
+        })),
     );
 
     // Example transaction using the injected Viem wallet client
@@ -178,11 +194,13 @@ export class Tool extends BaseTool<Config, Params, Result> {
       const client = window.ethereum;
       return await client.request({
         method: 'eth_sendTransaction',
-        params: [{
-          from: '0xYourAddress',
-          to: '0xa5cc3c03994DB5b0d9A5eEdD10CabaB0813678AC',
-          value: parseEther('0.001').toString()
-        }]
+        params: [
+          {
+            from: '0xYourAddress',
+            to: '0xa5cc3c03994DB5b0d9A5eEdD10CabaB0813678AC',
+            value: parseEther('0.001').toString(),
+          },
+        ],
       });
     });
 
