@@ -6,7 +6,7 @@ test('exists definition', async () => {
   expect(definition).toBeInstanceOf(Object);
 });
 
-test('run definition', async () => {
+test('run', async () => {
   const tool = new Tool({
     chromePath: process.env?.CHROME_PATH,
   });

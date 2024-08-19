@@ -7,7 +7,7 @@ import {
 import z from 'zod';
 import { BaseTool } from '@shinkai_protocol/shinkai-tools-builder';
 
-const fastify = Fastify({
+export const fastify = Fastify({
   logger: true,
 });
 
