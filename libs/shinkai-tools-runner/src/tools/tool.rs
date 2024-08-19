@@ -20,7 +20,7 @@ impl Tool {
 
     pub fn new(code: String, configurations: Value) -> Self {
         Tool {
-            tool_backend_url: "http://localhost:3000".to_string(),
+            tool_backend_url: "http://127.0.0.1:3000".to_string(),
             code,
             configurations,
             http_client: Self::build_http_client(),
