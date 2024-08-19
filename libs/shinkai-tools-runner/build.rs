@@ -22,12 +22,14 @@ fn main() {
 
     let backend_path = target_path.join("shinkai-tools-backend");
 
-    let output = std::process::Command::new("chmod")
-        .arg("+x")
-        .arg(&backend_path)
-        .output()
-        .expect("Failed to execute chmod command");
-    if !output.status.success() {
-        panic!("chmod command failed: {}", String::from_utf8_lossy(&output.stderr));
+    if !cfg!(target_os = "windows") {
+        let output = std::process::Command::new("chmod")
+            .arg("+x")
+            .arg(&backend_path)
+            .output()
+            .expect("Failed to execute chmod command");
+        if !output.status.success() {
+            panic!("chmod command failed: {}", String::from_utf8_lossy(&output.stderr));
+        }
     }
 }
