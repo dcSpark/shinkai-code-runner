@@ -53,4 +53,6 @@ jobs:
       - name: Run NX lint & test
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-        run: npx nx run-many -t lint,test --verbose
+        run: |
+          npx nx run-many -t lint --verbose
+          npx nx run-many -t test --verbose
