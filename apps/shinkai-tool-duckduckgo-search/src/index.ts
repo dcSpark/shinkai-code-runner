@@ -1,5 +1,8 @@
-import { BaseTool, RunResult } from '@shinkai_protocol/shinkai-tools-builder';
-import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
+import {
+  BaseTool,
+  RunResult,
+  ToolDefinition,
+} from '@shinkai_protocol/shinkai-tools-builder';
 import { URL } from 'whatwg-url';
 
 type Config = {};
@@ -17,7 +20,9 @@ interface SearchResult {
 // Custom function to build query string
 function buildQueryString(params: Record<string, string>): string {
   return Object.keys(params)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .map(
+      (key) => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`,
+    )
     .join('&');
 }
 
@@ -90,12 +95,15 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
     // Extract search results
     const results: SearchResult[] = jsonData
-    .map((item: any) => ({
-      title: item.t,
-      description: item.a,
-      url: item.u,
-    }))
-    .filter((result: SearchResult) => result.title && result.description && result.url);
+      .map((item: any) => ({
+        title: item.t,
+        description: item.a,
+        url: item.u,
+      }))
+      .filter(
+        (result: SearchResult) =>
+          result.title && result.description && result.url,
+      );
 
     // console.log('results: ', results);
     // Convert to JSON string

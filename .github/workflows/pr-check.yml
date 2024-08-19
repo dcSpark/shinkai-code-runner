@@ -44,5 +44,10 @@ jobs:
           npm cache verify
           npm ci --no-audit --prefer-offline
 
-      - name: Run NX publish
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 120
+          install-chromedriver: true
+
+      - name: Run NX lint & test
         run: npx nx run-many -t lint,test --verbose
