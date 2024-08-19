@@ -50,9 +50,14 @@ jobs:
           chrome-version: 120
           install-chromedriver: true
 
-      - name: Run NX lint & test
+      - name: Run NX lint
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
           npx nx run-many -t lint --verbose
+          
+      - name: Run NX test
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: |
           npx nx run-many -t test --verbose
