@@ -3,8 +3,6 @@ import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
 import * as playwright from 'playwright';
 import * as chromePaths from 'chrome-paths';
 import { createWalletClient, http, parseEther } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { mainnet } from 'viem/chains';
 
 // Remove later. It's for debugging.
 import * as fs from 'fs';
@@ -78,6 +76,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
   async run(params: Params): Promise<RunResult<Result>> {
     const browser = await playwright['chromium'].launch({
       executablePath: chromePaths.chrome,
+      headless: false,
     });
     const context = await browser.newContext();
 
@@ -92,11 +91,22 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
     // Read the content of viem-bundle.js
     const viemScriptContent = fs.readFileSync(viemPath, 'utf8');
-    console.log('Viem script loeaded');
+    console.log('Viem script loaded');
 
-    // Inject the Viem library by adding the script content directly within page.addInitScript
-    await page.addInitScript(viemScriptContent);
-    console.log('Viem script injected');
+    await page.evaluate((scriptContent) => {
+      const script = document.createElement('script');
+      script.textContent = scriptContent;
+      document.head.appendChild(script);
+      console.log('Viem script injected');
+    }, viemScriptContent);
+
+    // // Inject the Viem library by adding the script content directly within page.addInitScript
+    // await page.addInitScript(viemScriptContent);
+    // console.log('Viem script injected');
+
+      // Pause for 5 minutes (300,000 milliseconds)
+  await new Promise(resolve => setTimeout(resolve, 300000));
+
 
     // Ensure the viem library is loaded
     await page.waitForFunction(() => !!(window as any).viem, { timeout: 3000 })
