@@ -2,6 +2,10 @@ import * as esbuild from 'esbuild';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
 
+const singleAppBinaryName =
+  process.platform === 'win32'
+    ? 'shinkai-tools-backend.exe'
+    : 'shinkai-tools-backend';
 async function bundle() {
   try {
     console.log('Starting bundling process...');
@@ -34,17 +38,17 @@ async function bundle() {
     // Step: Copy the Node.js executable to create our custom executable
     console.log('Step: Copying Node.js executable...');
     const nodePath = process.execPath;
-    fs.copyFileSync(nodePath, 'shinkai-tools-backend');
+    fs.copyFileSync(nodePath, singleAppBinaryName);
     console.log('Node.js executable copied successfully.');
 
     // Step: Remove code signature on macOS or Windows
     // This is necessary because we're modifying the executable
     console.log('Step: Removing code signature if necessary...');
     if (process.platform === 'darwin') {
-      await execSync('codesign --remove-signature shinkai-tools-backend');
+      execSync(`codesign --remove-signature ${singleAppBinaryName}`);
       console.log('Code signature removed successfully on macOS.');
     } else if (process.platform === 'win32') {
-      await execSync('signtool remove /s shinkai-tools-backend');
+      // await execSync('signtool remove /s shinkai-tools-backend');
       console.log('Code signature removed successfully on Windows.');
     } else {
       console.log('Code signature removal not required on this platform.');
@@ -53,25 +57,24 @@ async function bundle() {
     // Step: Inject the SEA blob into our custom executable
     // The command differs slightly between macOS and other platforms
     console.log('Step: Injecting SEA blob...');
+    const additionalArgs: string[] = [];
     if (process.platform === 'darwin') {
-      execSync(
-        'npx postject shinkai-tools-backend NODE_SEA_BLOB index.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 --macho-segment-name NODE_SEA',
-      );
-    } else {
-      execSync(
-        'npx postject shinkai-tools-backend NODE_SEA_BLOB index.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
-      );
+      additionalArgs.push('--macho-segment-name NODE_SEA');
     }
+    execSync(
+      `npx postject ${singleAppBinaryName} NODE_SEA_BLOB index.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 ${additionalArgs.join(' ')}`,
+    );
     console.log('SEA blob injected successfully.');
 
     // Step: Code sign the executable on macOS
-    console.log('Step: Code signing the executable on macOS...');
     if (process.platform === 'darwin') {
       try {
-        execSync('codesign --sign - shinkai-tools-backend');
+        console.log('Step: Code signing the executable on macOS...');
+        execSync(`codesign --sign - ${singleAppBinaryName}`);
         console.log('Executable successfully code signed on macOS.');
       } catch (error) {
         console.error('Failed to code sign the executable:', error);
+        throw error;
       }
     } else {
       console.log('Code signing not required on this platform.');

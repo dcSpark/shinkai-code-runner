@@ -77,10 +77,10 @@ fastify.withTypeProvider<ZodTypeProvider>().route({
   },
 });
 
-fastify.listen({ port: 3000 }, function (err, address) {
+const port = parseInt(process.env.PORT || '') || 3000;
+fastify.listen({ port }, function (err, address) {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
   }
-  // Server is now listening on ${address}
 });
