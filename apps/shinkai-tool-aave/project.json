@@ -1,15 +1,21 @@
 {
-  "name": "@shinkai_protocol/shinkai-tool-playwright-example",
+  "name": "@shinkai_protocol/shinkai-tool-aave",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shinkai-tool-playwright-example/src",
+  "sourceRoot": "apps/shinkai-tool-aave/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {
     "build": {
+      "dependsOn": [
+        { "projects": "@shinkai_protocol/shinkai-viem", "target": "build" }
+      ],
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-playwright-example/src/index.ts --outputFolder ./dist/apps/shinkai-tool-playwright-example"
+        "commands": [
+          "npx copyfiles --up 3 --verbose dist/libs/shinkai-viem/* apps/shinkai-tool-aave/src/bundled-resources/",
+          "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-aave/src/index.ts --outputFolder ./dist/apps/shinkai-tool-aave"
+        ]
       },
       "configurations": {
         "development": {},
@@ -17,12 +23,15 @@
       }
     },
     "lint": {
+      "dependsOn": [
+        { "projects": "@shinkai_protocol/shinkai-viem", "target": "build" }
+      ],
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "apps/shinkai-tool-playwright-example/**/*.ts",
-          "apps/shinkai-tool-playwright-example/package.json"
+          "apps/shinkai-tool-aave/**/*.ts",
+          "apps/shinkai-tool-aave/package.json"
         ]
       }
     }
