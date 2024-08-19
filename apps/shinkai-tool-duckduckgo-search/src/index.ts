@@ -79,8 +79,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
   private static parseDuckDuckGoResponse(response: string): SearchResult[] {
     // Regex to extract the JSON content
-    const jsonPattern =
-      /DDG\.inject\('DDG\.Data\.languages\.adLanguages', \{\}\);if \(DDG\.pageLayout\) DDG\.pageLayout\.load\('d',\[(.*?)\]\);DDG\.duckbar\.load\('images'\);DDG\.duckbar\.load\('news'\);/s;
+    const jsonPattern = /DDG\.pageLayout\.load\('d',(\[\{\"a\".*?\}\])\);/;
     const match = response.match(jsonPattern);
 
     if (!match) {
@@ -88,7 +87,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     }
 
     // Extracted JSON content as string
-    const jsonString = `[${match[1]}]`;
+    const jsonString = match[1];
 
     // Parse JSON string
     const jsonData = JSON.parse(jsonString);
