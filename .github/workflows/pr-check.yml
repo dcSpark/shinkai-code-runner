@@ -60,4 +60,4 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
-          npx nx run-many -t test --verbose
+          npx nx run-many -t test --parallel=false --skip-nx-cache
