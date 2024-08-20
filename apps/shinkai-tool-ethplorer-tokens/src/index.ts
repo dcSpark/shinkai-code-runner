@@ -48,9 +48,12 @@ type Result = {
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-ethplorer-tokens',
-    name: 'Shinkai: Ethplorer Tokens',
+    name: 'Token Information for EVM Address (ETHPLORER)',
     description:
-      'Fetches Ethplorer page for an address and returns detailed token information',
+      'Fetches Ethplorer page for an address and returns detailed token information. ' +
+      'Example output: ' +
+      '{ "address": "0x123...", "ETH": { "balance": 1.23, "rawBalance": "1230000000000000000" }, ' +
+      '"tokens": [ { "balance": 100, "rawBalance": "100000000000000000000", "tokenInfo": { "name": "TokenName", "symbol": "TKN", "decimals": "18" } } ] }',
     author: 'Shinkai',
     keywords: ['ethplorer', 'address', 'tokens', 'shinkai'],
     configurations: {
@@ -107,13 +110,26 @@ export class Tool extends BaseTool<Config, Params, Result> {
       tokens?: Array<{
         balance: number;
         rawBalance: string;
+        tokenInfo: {
+          name: string;
+          symbol: string;
+          decimals: string;
+        };
       }>;
     };
 
     const result: Result = {
       address: params.address,
       ETH: data.ETH,
-      tokens: data.tokens,
+      tokens: data.tokens?.map((token) => ({
+        balance: token.balance,
+        rawBalance: token.rawBalance,
+        tokenInfo: {
+          name: token.tokenInfo.name,
+          symbol: token.tokenInfo.symbol,
+          decimals: token.tokenInfo.decimals,
+        },
+      })),
     };
 
     return Promise.resolve({ data: result });
