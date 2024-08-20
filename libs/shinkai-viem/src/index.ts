@@ -21,7 +21,7 @@ class ViemProvider {
       chain: chain || chains.arbitrumSepolia,
       transport: viem.http(),
     });
-    this.selectedAddress = null;
+    this.selectedAddress = this.client.getAddresses()[0];
   }
 
   async enable() {

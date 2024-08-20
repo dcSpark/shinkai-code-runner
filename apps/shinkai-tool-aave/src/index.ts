@@ -100,76 +100,49 @@ export class Tool extends BaseTool<Config, Params, Result> {
       console.log('Viem script injected');
     }, viemScriptContent);
 
-    // // Inject the Viem library by adding the script content directly within page.addInitScript
-    // await page.addInitScript(viemScriptContent);
-    // console.log('Viem script injected');
+    // // Inject the wallet setup script
+    // await page.evaluate(() => {
+    //   const {
+    //     createWalletClient,
+    //     http,
+    //     parseEther,
+    //     privateKeyToAccount,
+    //     mainnet,
+    //   } = (window as any).viem;
 
-    // Pause for 5 minutes (300,000 milliseconds)
-    await new Promise((resolve) => setTimeout(resolve, 300000));
+    //   const client = createWalletClient({
+    //     chain: mainnet,
+    //     transport: http(),
+    //   });
 
-    // Ensure the viem library is loaded
-    await page
-      .waitForFunction(() => !!(window as any).viem, { timeout: 3000 })
-      .then(() => console.log('Viem library loaded'))
-      .catch(() => console.error('Viem library failed to load'));
+    //   console.log('Viem client created');
+    //   const account = privateKeyToAccount('your-private-key-here'); // Replace with your actual private key
 
-    // Debugging: Check if the script tag is added correctly
-    const scriptContent = await page.evaluate(() => {
-      const scripts = Array.from(document.querySelectorAll('script'));
-      return scripts.map((script) => script.outerHTML).join('\n');
-    });
-    console.log('Script tags on the page:', scriptContent);
+    //   // Expose the client and account to the window object
+    //   (window as any).viemClient = client;
+    //   (window as any).viemAccount = account;
 
-    // Inject the wallet setup script
-    await page.evaluate(() => {
-      const {
-        createWalletClient,
-        http,
-        parseEther,
-        privateKeyToAccount,
-        mainnet,
-      } = (window as any).viem;
+    //   console.log('Viem wallet client and account injected');
+    // });
 
-      const client = createWalletClient({
-        chain: mainnet,
-        transport: http(),
-      });
+    // Click the "Opt-out" button
+    // Wait for the "Opt-out" button to appear and click it
+    await page.waitForSelector('#rcc-decline-button > p');
+    await page.click('#rcc-decline-button > p');
 
-      console.log('Viem client created');
-      const account = privateKeyToAccount('your-private-key-here'); // Replace with your actual private key
+    // Click the wallet button
+    await page.waitForSelector('#wallet-button');
+    await page.click('#wallet-button');
 
-      // Expose the client and account to the window object
-      (window as any).viemClient = client;
-      (window as any).viemAccount = account;
-
-      console.log('Viem wallet client and account injected');
-    });
-
-    // Replace MetaMask with viem
-    await page.evaluate(() => {
-      const client = (window as any).viem.createClient({
-        // configuration matching the network MetaMask is connected to
-      });
-
-      window.ethereum = {
-        request: async ({
-          method,
-          params,
-        }: {
-          method: string;
-          params?: any[];
-        }) => {
-          switch (method) {
-            case 'eth_requestAccounts':
-              return client.getAccounts();
-            case 'eth_sendTransaction':
-              return client.sendTransaction(params![0]);
-            default:
-              throw new Error(`Method ${method} is not supported`);
-          }
-        },
-      };
-    });
+    // Click the "Browser wallet" button
+    const browserWalletButton = page
+      .locator('button', { hasText: 'Browser wallet' })
+      .first();
+    await browserWalletButton.waitFor({ state: 'visible' });
+    console.log('Browser wallet button is visible');
+    // Wait for one second
+    await page.waitForTimeout(4000);
+    await browserWalletButton.click();
 
     const assetsToSupply = await page.$$eval(
       '.assets-to-supply .asset-row',
