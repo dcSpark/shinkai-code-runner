@@ -20,7 +20,11 @@ fn main() {
         }
     }
 
-    let backend_path = target_path.join("./shinkai-tools-backend");
+    let backend_path = target_path.join("shinkai-tools-backend");
+    println!("OUT_DIR: {:?}", env::var("OUT_DIR").unwrap());
+    println!("resources_path: {:?}", resources_path.display());
+    println!("target_path: {:?}", target_path.display());
+    println!("backend_path: {:?}", backend_path.display());
 
     if !cfg!(target_os = "windows") {
         let output = std::process::Command::new("chmod")
