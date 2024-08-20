@@ -29,7 +29,7 @@
     },
     "test": {
       "dependsOn": [
-        { "projects": ["tag:tool", "@shinkai_protocol/shinkai-tools-backend"], "target": "build" }
+        "^build"
       ],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
@@ -63,7 +63,7 @@
     },
     "publish": {
       "dependsOn": [
-        { "projects": ["tag:tool", "@shinkai_protocol/shinkai-tools-backend"], "target": "build" }
+        "^build"
       ],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
