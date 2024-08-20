@@ -48,11 +48,11 @@ type Result = {
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-ethplorer-tokens',
-    name: 'Token Information for EVM Address (ETHPLORER)',
+    name: 'Token Balance for EVM Ethereum Address - based on ETHPLORER',
     description:
-      'Fetches Ethplorer page for an address like 0x123... and returns detailed token information. ' +
+      'Fetches the balance for an Ethereum EVM address like 0x123... and returns detailed token information. ' +
       'Example output: ' +
-      '{ "address": "0x123...", "ETH": { "balance": 1.23, "rawBalance": "1230000000000000000" }, ' +
+      '{ "address": "0x123...", "ETH": { "balance": 1.23, "rawBalance": "12300000000000000000" }, ' +
       '"tokens": [ { "balance": 100, "rawBalance": "100000000000000000000", "tokenInfo": { "name": "TokenName", "symbol": "TKN", "decimals": "18" } } ] }',
     author: 'Shinkai',
     keywords: ['ethplorer', 'address', 'tokens', 'shinkai'],
