@@ -7,7 +7,12 @@ test('exists definition', async () => {
 });
 
 test('run definition', async () => {
-  const tool = new Tool({});
-  const run_result = await tool.run({ inputValue: '0.005', assetSymbol: 'ETH' });
+  const tool = new Tool({
+    chromePath: process.env?.CHROME_PATH,
+  });
+  const run_result = await tool.run({
+    inputValue: '0.005',
+    assetSymbol: 'ETH',
+  });
   console.log(run_result);
 }, 25000);
