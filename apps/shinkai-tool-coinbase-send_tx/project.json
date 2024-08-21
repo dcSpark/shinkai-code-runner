@@ -1,7 +1,7 @@
 {
-  "name": "@shinkai_protocol/shinkai-tool-coinbase-mpc",
+  "name": "@shinkai_protocol/shinkai-tool-coinbase-send_tx",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shinkai-tool-coinbase-mpc/src",
+  "sourceRoot": "apps/shinkai-tool-coinbase-send_tx/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-coinbase-mpc/src/index.ts --outputFolder ./dist/apps/shinkai-tool-coinbase-mpc"
+        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-coinbase-send_tx/src/index.ts --outputFolder ./dist/apps/shinkai-tool-coinbase-send_tx"
       },
       "configurations": {
         "development": {},
@@ -21,8 +21,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "apps/shinkai-tool-coinbase-mpc/**/*.ts",
-          "apps/shinkai-tool-coinbase-mpc/package.json"
+          "apps/shinkai-tool-coinbase-send_tx/**/*.ts",
+          "apps/shinkai-tool-coinbase-send_tx/package.json"
         ]
       }
     }

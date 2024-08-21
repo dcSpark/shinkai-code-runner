@@ -1,4 +1,4 @@
-﻿apps/**/node_modules
+apps/**/node_modules
 libs/**/node_modules
 
 libs/shinkai-tools-runner/target
@@ -14,3 +14,4 @@ libs/shinkai-tools-runner/tools
 libs/shinkai-tools-runner/shinkai-tools-runner-resources
 apps/shinkai-tool-aave/src/bundled-resources
 apps/shinkai-tool-aave/src/bundled-resources
+launch.json

@@ -137,6 +137,56 @@ lazy_static! {
                 .unwrap(),
             )),
         );
+        m.insert(
+          "shinkai-tool-aave",
+          &*Box::leak(Box::new(
+              serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                  env!("CARGO_MANIFEST_DIR"),
+                  "/tools/shinkai-tool-aave/definition.json"
+              )))
+              .unwrap(),
+          )),
+      );
+      m.insert(
+        "shinkai-tool-coinbase-call_faucet",
+        &*Box::leak(Box::new(
+            serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                env!("CARGO_MANIFEST_DIR"),
+                "/tools/shinkai-tool-coinbase-call_faucet/definition.json"
+            )))
+            .unwrap(),
+        )),
+    );
+    m.insert(
+      "shinkai-tool-coinbase-create_wallet",
+      &*Box::leak(Box::new(
+          serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+              env!("CARGO_MANIFEST_DIR"),
+              "/tools/shinkai-tool-coinbase-create_wallet/definition.json"
+          )))
+          .unwrap(),
+      )),
+  );
+  m.insert(
+    "shinkai-tool-coinbase-get_balance",
+    &*Box::leak(Box::new(
+        serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/tools/shinkai-tool-coinbase-get_balance/definition.json"
+        )))
+        .unwrap(),
+    )),
+);
+m.insert(
+  "shinkai-tool-coinbase-send_tx",
+  &*Box::leak(Box::new(
+      serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+          env!("CARGO_MANIFEST_DIR"),
+          "/tools/shinkai-tool-coinbase-send_tx/definition.json"
+      )))
+      .unwrap(),
+  )),
+);
         // ntim: New tools will be inserted here, don't remove this comment
         m
     };

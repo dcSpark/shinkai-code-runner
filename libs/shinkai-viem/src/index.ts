@@ -190,7 +190,13 @@ class ViemProvider {
     if (address !== this.selectedAddress) {
       throw new Error('Address mismatch');
     }
-    return this.client.signTypedData({ account: address, typedData });
+    return this.client.signTypedData({
+      account: address,
+      domain: typedData.domain,
+      types: typedData.types,
+      message: typedData.message,
+      primaryType: typedData.primaryType,
+    });
   }
 
   async getChainId() {

@@ -7,13 +7,9 @@ import { createWalletClient, http, parseEther } from 'viem';
 // Remove later. It's for debugging.
 import * as fs from 'fs';
 import * as path from 'path';
-import { viemScriptContent } from './bundled-resources/shinkai-viem';
 
 type Config = {};
-type Params = {
-  inputValue: string;
-  assetSymbol: string;
-};
+type Params = {};
 type Result = {
   assetsToSupply: { asset: string; apy: string }[];
   assetsToBorrow: { asset: string; apy: string }[];
@@ -28,8 +24,8 @@ declare global {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-aave-loan-requester',
-    name: 'Shinkai: Aave Loan Requester',
+    id: 'shinkai-tool-get-loan-state',
+    name: 'Shinkai: Current Aave Loan State',
     description:
       'Tool for requesting a loan on Aave, including selecting assets to supply and borrow with their APYs',
     author: 'Shinkai',
@@ -41,11 +37,8 @@ export class Tool extends BaseTool<Config, Params, Result> {
     },
     parameters: {
       type: 'object',
-      properties: {
-        inputValue: { type: 'string' },
-        assetSymbol: { type: 'string' },
-      },
-      required: ['inputValue', 'assetSymbol'],
+      properties: {},
+      required: [],
     },
     result: {
       type: 'object',
@@ -90,6 +83,13 @@ export class Tool extends BaseTool<Config, Params, Result> {
       'https://staging.aave.com/?marketName=proto_arbitrum_sepolia_v3',
     );
 
+    const viemPath = path.join(__dirname, 'bundled-resources/shinkai-viem.js');
+    if (!fs.existsSync(viemPath)) {
+      throw new Error(`Viem bundle not found at path: ${viemPath}`);
+    }
+
+    // Read the content of viem-bundle.js
+    const viemScriptContent = fs.readFileSync(viemPath, 'utf8');
     console.log('Viem script loaded');
 
     await page.evaluate((scriptContent) => {
@@ -97,7 +97,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
       script.textContent = scriptContent;
       document.head.appendChild(script);
       console.log('Viem script injected');
-    }, Buffer.from(viemScriptContent, 'base64').toString('utf-8'));
+    }, viemScriptContent);
 
     // Click the "Opt-out" button
     // Wait for the "Opt-out" button to appear and click it
@@ -117,39 +117,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
     console.log('Browser wallet button is visible');
     await browserWalletButton.click();
 
-    const assetSymbolUpper = params.assetSymbol.toUpperCase();
-
-    // Find the div with data-cy="dashboardSupplyListItem_ETH" and click the first button inside the 5th internal div
-    const assetSupplyListItem = page.locator(
-      `div[data-cy="dashboardSupplyListItem_${assetSymbolUpper}"]`,
-    );
-    const buttonInFifthDiv = assetSupplyListItem
-      .locator('div:nth-child(5) button')
-      .first();
-    await buttonInFifthDiv.waitFor({ state: 'visible' });
-    await buttonInFifthDiv.click();
-    console.log(
-      `First button inside the 5th internal div for ${assetSymbolUpper} clicked`,
-    );
-
-    // Input a value of 0.1 into the specified input field
-    const inputField = page.locator(
-      'div.MuiModal-root div.MuiPaper-root div.MuiBox-root div.MuiBox-root div.MuiBox-root div.MuiInputBase-root input',
-    );
-    await inputField.waitFor({ state: 'visible' });
-    await inputField.fill(params.inputValue);
-    console.log('Input field filled with value 0.1');
-
-    // Click the button with data-cy="actionButton"
-    const actionButton = page.locator('button[data-cy="actionButton"]');
-    await actionButton.waitFor({ state: 'visible' });
-    await actionButton.click();
-    console.log('Action button clicked');
-
-    // Wait for the specified selector with a more flexible approach
-    await page.waitForSelector(
-      'body > div.MuiModal-root > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1 > div.MuiBox-root > h2',
-    );
+    // Wait for 120 seconds
+    await page.waitForTimeout(120000);
+    console.log('Waited for 120 seconds');
 
     // Take a screenshot and save it to ./tmp/
     const screenshotPath = path.join(__dirname, 'tmp', 'screenshot.png');
