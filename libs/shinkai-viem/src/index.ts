@@ -9,19 +9,28 @@ import { privateKeyToAccount } from 'viem/accounts';
 
 // EIP-1193 Provider Implementation
 class ViemProvider {
-  client: any;
-  selectedAddress: string | null;
+  client;
+  selectedAddress: viem.Address | undefined;
 
   constructor(chain: any, sk: viem.Hex | null) {
-    const privateKey: viem.Hex = sk || '0xf4c1c6d9231a5f08aa8d9824a142c4fc5a663ca1a6ecd61126e54a0d7501df82';
+    const privateKey: viem.Hex =
+      sk ||
+      '0xf4c1c6d9231a5f08aa8d9824a142c4fc5a663ca1a6ecd61126e54a0d7501df82';
     const account = privateKeyToAccount(privateKey);
 
     this.client = createWalletClient({
       account,
       chain: chain || chains.arbitrumSepolia,
-      transport: viem.http(),
+      transport: viem.http(
+        'https://arbitrum-sepolia.blockpi.network/v1/rpc/public',
+      ),
+    }).extend(viem.publicActions);
+
+    // Update to await the promise
+    this.client.getAddresses().then((addresses) => {
+      console.log('addresses', addresses);
+      this.selectedAddress = addresses[0];
     });
-    this.selectedAddress = this.client.getAddresses()[0];
   }
 
   async enable() {
@@ -47,14 +56,63 @@ class ViemProvider {
         return this.getChainId();
       case 'net_version':
         return this.getNetworkId();
-      // Add more methods as needed
+      case 'eth_blockNumber':
+        return this.getBlockNumber();
+      case 'eth_getTransactionCount':
+        return this.getTransactionCount(params[0]);
+      case 'eth_getTransactionByHash':
+        return this.getTransaction(params[0]);
+      case 'eth_getTransactionReceipt':
+        return this.getTransactionReceipt(params[0]);
       default:
         throw new Error(`Unsupported method: ${method}`);
     }
   }
 
+  async getTransaction(hash: viem.Hex) {
+    const transaction = await this.client.getTransaction({ hash });
+    console.log('getTransaction', transaction);
+
+    // Modify the type field if it says eip1559
+    if (transaction.type === 'eip1559') {
+      transaction.type = '0x2';
+    }
+
+    return transaction;
+  }
+
+  async getTransactionReceipt(hash: viem.Hex) {
+    const receipt = await this.client.getTransactionReceipt({ hash });
+    console.log('getTransactionReceipt', receipt);
+
+    // Modify the type field if it says eip1559
+    if (receipt.type === 'eip1559') {
+      receipt.type = '0x2';
+    }
+
+    // Modify the status field if it says "success"
+    if (receipt.status === 'success') {
+      receipt.status = '0x1';
+    }
+
+    return receipt;
+  }
+
+  async getTransactionCount(address: viem.Address) {
+    const transactionCount = await this.client.getTransactionCount({ address });
+    console.log('transactionCount', transactionCount);
+    return transactionCount;
+  }
+
+  async getBlockNumber() {
+    const blockNumber = await this.client.getBlockNumber();
+    console.log('blockNumber', blockNumber);
+    return blockNumber;
+  }
+
   async requestAccounts() {
     const [address] = await this.client.getAddresses();
+    console.log('requestAccounts', address);
     this.selectedAddress = address;
     return [address];
   }
@@ -67,32 +125,68 @@ class ViemProvider {
     if (!this.selectedAddress) {
       throw new Error('No accounts available');
     }
-    const hash = await this.client.sendTransaction({
-      account: this.selectedAddress,
+    // Validate transaction parameters
+    if (!tx.to || !tx.value || !tx.gas) {
+      throw new Error('Missing required transaction parameters');
+    }
+
+    console.log('sendTransaction tx: ', tx);
+    console.log('Transaction gasPrice: ', tx.gasPrice);
+    console.log('Transaction gas: ', tx.gas);
+
+    // Convert value from wei to ETH and print it
+    const value = BigInt(tx.value);
+    const valueInEth = Number(value) / 10 ** 18;
+    console.log(`Transaction value in ETH: ${valueInEth}`);
+
+    const transactionContent = {
       to: tx.to,
-      value: parseEther(tx.value),
-      gas: tx.gas,
-      gasPrice: tx.gasPrice,
+      value: value,
       data: tx.data,
-    });
-    return hash;
+      chain: this.client.chain,
+    };
+    console.log('sendTransaction', transactionContent);
+    // const hash = await this.client.sendTransaction(transactionContent);
+
+    try {
+      // Prepare the transaction request
+      const request: any =
+        await this.client.prepareTransactionRequest(transactionContent);
+      console.log('Prepared transaction request:', request);
+
+      // Sign the transaction
+      const serializedTransaction = await this.client.signTransaction(request);
+      console.log('Serialized transaction:', serializedTransaction);
+
+      // Send the raw transaction
+      const hash = await this.client.sendRawTransaction({
+        serializedTransaction,
+      });
+      console.log('sendTransaction hash', hash);
+      return hash;
+    } catch (error) {
+      console.error('sendTransaction error', error);
+      throw error; // Re-throw the error if you want it to propagate
+    }
+
+    // return hash;
   }
 
-  async sign(address: string, message: string) {
+  async sign(address: viem.Hex, message: string) {
     if (address !== this.selectedAddress) {
       throw new Error('Address mismatch');
     }
     return this.client.signMessage({ account: address, message });
   }
 
-  async personalSign(message: string, address: string) {
+  async personalSign(message: string, address: viem.Hex) {
     if (address !== this.selectedAddress) {
       throw new Error('Address mismatch');
     }
     return this.client.signMessage({ account: address, message });
   }
 
-  async signTypedData(address: string, typedData: any) {
+  async signTypedData(address: viem.Hex, typedData: any) {
     if (address !== this.selectedAddress) {
       throw new Error('Address mismatch');
     }
@@ -100,7 +194,9 @@ class ViemProvider {
   }
 
   async getChainId() {
-    return this.client.getChainId();
+    const chainId = await this.client.getChainId();
+    console.log('getChainId', chainId);
+    return chainId;
   }
 
   async getNetworkId() {
@@ -169,10 +265,14 @@ function initializeViemProvider(chain: any, providerInfo: EIP6963ProviderInfo) {
       console.warn('send is deprecated. Use request instead.');
       return provider.request({ method, params });
     },
-    sendAsync: (payload: any, callback: (error: any, response: any) => void) => {
+    sendAsync: (
+      payload: any,
+      callback: (error: any, response: any) => void,
+    ) => {
       // Legacy method, should use request instead
       console.warn('sendAsync is deprecated. Use request instead.');
-      provider.request({ method: payload.method, params: payload.params })
+      provider
+        .request({ method: payload.method, params: payload.params })
         .then((result) => callback(null, { result }))
         .catch((error) => callback(error, null));
     },

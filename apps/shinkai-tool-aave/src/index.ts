@@ -135,55 +135,51 @@ export class Tool extends BaseTool<Config, Params, Result> {
     await page.click('#wallet-button');
 
     // Click the "Browser wallet" button
-    const browserWalletButton = page
-      .locator('button', { hasText: 'Browser wallet' })
-      .first();
+    const browserWalletButton = page.locator(
+      'body > div:nth-child(20) > div[class*="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1"] > div[class*="MuiBox-root"] > button:nth-child(2)',
+    );
+
     await browserWalletButton.waitFor({ state: 'visible' });
     console.log('Browser wallet button is visible');
-    // Wait for one second
-    await page.waitForTimeout(4000);
     await browserWalletButton.click();
 
-    const assetsToSupply = await page.$$eval(
-      '.assets-to-supply .asset-row',
-      (rows) =>
-        rows.map((row) => ({
-          asset: row.querySelector('.asset-name')?.textContent?.trim() ?? 'N/A',
-          apy: row.querySelector('.apy')?.textContent?.trim() ?? 'N/A',
-        })),
+    // Find the div with data-cy="dashboardSupplyListItem_ETH" and click the first button inside the 5th internal div
+    const ethSupplyListItem = page.locator(
+      'div[data-cy="dashboardSupplyListItem_ETH"]',
     );
+    const buttonInFifthDiv = ethSupplyListItem
+      .locator('div:nth-child(5) button')
+      .first();
+    await buttonInFifthDiv.waitFor({ state: 'visible' });
+    await buttonInFifthDiv.click();
+    console.log('First button inside the 5th internal div clicked');
 
-    const assetsToBorrow = await page.$$eval(
-      '.assets-to-borrow .asset-row',
-      (rows) =>
-        rows.map((row) => ({
-          asset: row.querySelector('.asset-name')?.textContent?.trim() ?? 'N/A',
-          apy: row.querySelector('.apy')?.textContent?.trim() ?? 'N/A',
-        })),
+    // Input a value of 0.1 into the specified input field
+    const inputField = page.locator(
+      'div.MuiModal-root div.MuiPaper-root div.MuiBox-root div.MuiBox-root div.MuiBox-root div.MuiInputBase-root input',
     );
+    await inputField.waitFor({ state: 'visible' });
+    await inputField.fill('0.005');
+    console.log('Input field filled with value 0.1');
 
-    // Example transaction using the injected Viem wallet client
-    const hash = await page.evaluate(async () => {
-      const client = window.ethereum;
-      return await client.request({
-        method: 'eth_sendTransaction',
-        params: [
-          {
-            from: '0xYourAddress',
-            to: '0xa5cc3c03994DB5b0d9A5eEdD10CabaB0813678AC',
-            value: parseEther('0.001').toString(),
-          },
-        ],
-      });
-    });
+    // Click the button with data-cy="actionButton"
+    const actionButton = page.locator('button[data-cy="actionButton"]');
+    await actionButton.waitFor({ state: 'visible' });
+    await actionButton.click();
+    console.log('Action button clicked');
 
-    console.log('Transaction hash:', hash);
+    // Wait for the specified selector with a more flexible approach
+    await page.waitForSelector(
+      'body > div.MuiModal-root > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1 > div.MuiBox-root > h2',
+    );
 
     // Take a screenshot and save it to ./tmp/
     const screenshotPath = path.join(__dirname, 'tmp', 'screenshot.png');
     await page.screenshot({ path: screenshotPath });
 
     await browser.close();
-    return Promise.resolve({ data: { assetsToSupply, assetsToBorrow } });
+    return Promise.resolve({
+      data: { assetsToSupply: [], assetsToBorrow: [] },
+    });
   }
 }
