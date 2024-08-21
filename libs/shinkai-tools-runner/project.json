@@ -7,7 +7,10 @@
   "targets": {
     "build": {
       "dependsOn": [
-        { "projects": ["tag:tool", "@shinkai_protocol/shinkai-tools-backend"], "target": "build" }
+        {
+          "projects": ["tag:tool", "@shinkai_protocol/shinkai-tools-backend"],
+          "target": "build"
+        }
       ],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
@@ -28,9 +31,7 @@
       }
     },
     "test": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "development",
@@ -46,9 +47,7 @@
       }
     },
     "lint": {
-      "dependsOn": [
-        { "projects": ["tag:tool", "@shinkai_protocol/shinkai-tools-backend"], "target": "build" }
-      ],
+      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
@@ -62,9 +61,7 @@
       }
     },
     "publish": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
