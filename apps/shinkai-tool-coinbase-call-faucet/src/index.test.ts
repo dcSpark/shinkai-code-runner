@@ -1,4 +1,4 @@
-import { Tool } from '../src/index';
+import { Tool } from './index';
 
 test('exists definition', async () => {
   const tool = new Tool({});
