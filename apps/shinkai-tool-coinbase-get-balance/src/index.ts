@@ -16,7 +16,7 @@ type Result = {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-coinbase-get_balance',
+    id: 'shinkai-tool-coinbase-get-balance',
     name: 'Shinkai: Coinbase Balance Getter',
     description: 'Tool for getting the balance of a Coinbase wallet after restoring it',
     author: 'Shinkai',

@@ -1,7 +1,7 @@
 {
-  "name": "@shinkai_protocol/shinkai-tool-coinbase-create_wallet",
+  "name": "@shinkai_protocol/shinkai-tool-coinbase-get-balance",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shinkai-tool-coinbase-create_wallet/src",
+  "sourceRoot": "apps/shinkai-tool-coinbase-get-balance/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-coinbase-create_wallet/src/index.ts --outputFolder ./dist/apps/shinkai-tool-coinbase-create_wallet"
+        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-coinbase-get-balance/src/index.ts --outputFolder ./dist/apps/shinkai-tool-coinbase-get-balance"
       },
       "configurations": {
         "development": {},
@@ -21,8 +21,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "apps/shinkai-tool-coinbase-create_wallet/**/*.ts",
-          "apps/shinkai-tool-coinbase-create_wallet/package.json"
+          "apps/shinkai-tool-coinbase-get-balance/**/*.ts",
+          "apps/shinkai-tool-coinbase-get-balance/package.json"
         ]
       }
     }

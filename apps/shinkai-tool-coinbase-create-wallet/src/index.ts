@@ -13,7 +13,7 @@ type Result = {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-coinbase-create_wallet',
+    id: 'shinkai-tool-coinbase-create-wallet',
     name: 'Shinkai: Coinbase Wallet Creator',
     description: 'Tool for creating a Coinbase wallet',
     author: 'Shinkai',

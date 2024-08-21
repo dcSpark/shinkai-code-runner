@@ -16,7 +16,7 @@ type Result = {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-coinbase-faucet',
+    id: 'shinkai-tool-coinbase-call-faucet',
     name: 'Shinkai: Coinbase Faucet Caller',
     description: 'Tool for calling a faucet on Coinbase',
     author: 'Shinkai',

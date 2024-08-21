@@ -1,7 +1,7 @@
 {
-  "name": "@shinkai_protocol/shinkai-tool-coinbase-call_faucet",
+  "name": "@shinkai_protocol/shinkai-tool-coinbase-call-faucet",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shinkai-tool-coinbase-call_faucet/src",
+  "sourceRoot": "apps/shinkai-tool-coinbase-call-faucet/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-coinbase-call_faucet/src/index.ts --outputFolder ./dist/apps/shinkai-tool-coinbase-call_faucet"
+        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-coinbase-call-faucet/src/index.ts --outputFolder ./dist/apps/shinkai-tool-coinbase-call-faucet"
       },
       "configurations": {
         "development": {},
@@ -21,8 +21,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "apps/shinkai-tool-coinbase-call_faucet/**/*.ts",
-          "apps/shinkai-tool-coinbase-call_faucet/package.json"
+          "apps/shinkai-tool-coinbase-call-faucet/**/*.ts",
+          "apps/shinkai-tool-coinbase-call-faucet/package.json"
         ]
       }
     }

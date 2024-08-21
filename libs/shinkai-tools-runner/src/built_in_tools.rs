@@ -148,31 +148,31 @@ lazy_static! {
           )),
       );
       m.insert(
-        "shinkai-tool-coinbase-call_faucet",
+        "shinkai-tool-coinbase-call-faucet",
         &*Box::leak(Box::new(
             serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                 env!("CARGO_MANIFEST_DIR"),
-                "/tools/shinkai-tool-coinbase-call_faucet/definition.json"
+                "/tools/shinkai-tool-coinbase-call-faucet/definition.json"
             )))
             .unwrap(),
         )),
     );
     m.insert(
-      "shinkai-tool-coinbase-create_wallet",
+      "shinkai-tool-coinbase-create-wallet",
       &*Box::leak(Box::new(
           serde_json::from_str::<ToolDefinition>(include_str!(concat!(
               env!("CARGO_MANIFEST_DIR"),
-              "/tools/shinkai-tool-coinbase-create_wallet/definition.json"
+              "/tools/shinkai-tool-coinbase-create-wallet/definition.json"
           )))
           .unwrap(),
       )),
   );
   m.insert(
-    "shinkai-tool-coinbase-get_balance",
+    "shinkai-tool-coinbase-get-balance",
     &*Box::leak(Box::new(
         serde_json::from_str::<ToolDefinition>(include_str!(concat!(
             env!("CARGO_MANIFEST_DIR"),
-            "/tools/shinkai-tool-coinbase-get_balance/definition.json"
+            "/tools/shinkai-tool-coinbase-get-balance/definition.json"
         )))
         .unwrap(),
     )),
