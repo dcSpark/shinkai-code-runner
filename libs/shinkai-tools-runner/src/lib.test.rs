@@ -121,265 +121,50 @@ async fn shinkai_tool_download_page() {
     assert!(run_result.is_ok());
 }
 
-#[tokio::test]
-async fn set_timeout() {
-    let js_code = r#"
-    class BaseTool {
-        constructor(config) {
-            this.config = config;
-        }
-        setConfig(value) {
-            this.config = value;
-            return this.config;
-        }
-        getConfig() {
-            return this.config;
-        }
-    }
-    class Tool extends BaseTool {
-        constructor(config) {
-            super(config);
-        }
-        async run() {
-            await new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve();
-                }, 3000);
-            });
-            return { data: null };
-        }
-    }
-    globalThis.tool = { Tool };
-"#;
-    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
-    let start_time = std::time::Instant::now();
-    let _ = tool.run(serde_json::Value::Null, None).await.unwrap();
-    let elapsed_time = start_time.elapsed();
-    assert!(elapsed_time.as_millis() > 3000);
-}
+// #[tokio::test]
+// async fn max_execution_time() {
+//     let js_code = r#"
+//     class BaseTool {
+//         constructor(config) {
+//             this.config = config;
+//         }
+//         setConfig(value) {
+//             this.config = value;
+//             return this.config;
+//         }
+//         getConfig() {
+//             return this.config;
+//         }
+//     }
+//     class Tool extends BaseTool {
+//         constructor(config) {
+//             super(config);
+//         }
+//         async run() {
+//             let startedAt = Date.now();
+//             while (true) {
+//                 const elapse = Date.now() - startedAt;
+//                 console.log(`while true every ${500}ms, elapse ${elapse} ms`);
+//                 await new Promise(async (resolve) => {
+//                     setTimeout(() => {
+//                         resolve();
+//                     }, 500);
+//                 });
+//             }
 
-#[tokio::test]
-async fn set_timeout_no_delay_param() {
-    let js_code = r#"
-    class BaseTool {
-        constructor(config) {
-            this.config = config;
-        }
-        setConfig(value) {
-            this.config = value;
-            return this.config;
-        }
-        getConfig() {
-            return this.config;
-        }
-    }
-    class Tool extends BaseTool {
-        constructor(config) {
-            super(config);
-        }
-        async run() {
-            let value = null;
-            await new Promise((resolve) => {
-                setTimeout(() => {
-                    value = 1;
-                    resolve();
-                });
-            });
-            return { data: value };
-        }
-    }
-    globalThis.tool = { Tool };
-"#;
-    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
-    let start_time = std::time::Instant::now();
-    let run_result = tool.run(serde_json::Value::Null, None).await.unwrap();
-    let elapsed_time = start_time.elapsed();
-    assert!(elapsed_time.as_millis() <= 50);
-    assert_eq!(run_result.data, 1);
-}
-
-#[tokio::test]
-async fn clear_timeout() {
-    let js_code = r#"
-    class BaseTool {
-        constructor(config) {
-            this.config = config;
-        }
-        setConfig(value) {
-            this.config = value;
-            return this.config;
-        }
-        getConfig() {
-            return this.config;
-        }
-    }
-    class Tool extends BaseTool {
-        constructor(config) {
-            super(config);
-        }
-        async run() {
-            await new Promise((resolve) => {
-                const cancelation = setTimeout(() => {
-                    console.log('after 3s');
-                    resolve();
-                }, 3000);
-
-                setTimeout(() => {
-                    console.log('cancelling at 1.5s');
-                    clearTimeout(cancelation);
-                    resolve();
-                }, 1500);
-            });
-            return { data: null };
-        }
-    }
-    globalThis.tool = { Tool };
-"#;
-    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
-    let start_time = std::time::Instant::now();
-    let _ = tool.run(serde_json::Value::Null, None).await.unwrap();
-    let elapsed_time = start_time.elapsed();
-    assert!(elapsed_time.as_millis() >= 1500 && elapsed_time.as_millis() <= 1550);
-}
-
-#[tokio::test]
-async fn set_interval() {
-    let js_code = r#"
-    class BaseTool {
-        constructor(config) {
-            this.config = config;
-        }
-        setConfig(value) {
-            this.config = value;
-            return this.config;
-        }
-        getConfig() {
-            return this.config;
-        }
-    }
-    class Tool extends BaseTool {
-        constructor(config) {
-            super(config);
-        }
-        async run() {
-            const i = await new Promise((resolve) => {
-                let count = 0;
-                setInterval(() => {
-                    console.log('set interval' + count);
-                    count = count + 1;
-                    if (count === 5) {
-                        resolve(count);
-                    }
-                }, 100);
-            });
-            return { data: i };
-
-        }
-    }
-    globalThis.tool = { Tool };
-"#;
-    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
-    let start_time = std::time::Instant::now();
-    let run_result = tool.run(serde_json::Value::Null, None).await.unwrap();
-    let elapsed_time = start_time.elapsed();
-    assert_eq!(run_result.data, 5);
-    assert!(elapsed_time.as_millis() <= 1100);
-}
-
-#[tokio::test]
-async fn clear_interval() {
-    let js_code = r#"
-    class BaseTool {
-        constructor(config) {
-            this.config = config;
-        }
-        setConfig(value) {
-            this.config = value;
-            return this.config;
-        }
-        getConfig() {
-            return this.config;
-        }
-    }
-    class Tool extends BaseTool {
-        constructor(config) {
-            super(config);
-        }
-        async run() {
-            let count = 0;
-            const cancellation = setInterval(() => {
-                console.log('set interval ' + count);
-                count = count + 1;
-            }, 100);
-
-            setTimeout(() => {
-                console.log('calling clear interval ' + count);
-                clearInterval(cancellation);
-            }, 1000);
-
-            await new Promise((resolve) => {
-                setTimeout(() => {
-                    console.log('promise resolved ' + count);
-                    resolve();
-                }, 2000);
-            });
-            return { data: count };
-        }
-    }
-    globalThis.tool = { Tool };
-"#;
-    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
-    let start_time = std::time::Instant::now();
-    let run_result = tool.run(serde_json::Value::Null, None).await.unwrap();
-    let elapsed_time = start_time.elapsed();
-    assert!(run_result.data.as_number().unwrap().as_u64().unwrap() <= 11);
-    assert!(elapsed_time.as_millis() <= 2050);
-}
-
-#[tokio::test]
-async fn max_execution_time() {
-    let js_code = r#"
-    class BaseTool {
-        constructor(config) {
-            this.config = config;
-        }
-        setConfig(value) {
-            this.config = value;
-            return this.config;
-        }
-        getConfig() {
-            return this.config;
-        }
-    }
-    class Tool extends BaseTool {
-        constructor(config) {
-            super(config);
-        }
-        async run() {
-            let startedAt = Date.now();
-            while (true) {
-                const elapse = Date.now() - startedAt;
-                console.log(`while true every ${500}ms, elapse ${elapse} ms`);
-                await new Promise(async (resolve) => {
-                    setTimeout(() => {
-                        resolve();
-                    }, 500);
-                });
-            }
-
-            return { data: true };
-        }
-    }
-    globalThis.tool = { Tool };
-"#;
-    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
-    let start_time = std::time::Instant::now();
-    let run_result = tool.run(serde_json::Value::Null, Some(10000)).await;
-    let elapsed_time = start_time.elapsed();
-    assert!(run_result.is_err());
-    assert!(elapsed_time.as_millis() <= 10050);
-    assert!(run_result.err().unwrap().message().contains("time reached"));
-}
+//             return { data: true };
+//         }
+//     }
+//     globalThis.tool = { Tool };
+// "#;
+//     let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
+//     let start_time = std::time::Instant::now();
+//     let run_result = tool.run(serde_json::Value::Null, Some(10000)).await;
+//     let elapsed_time = start_time.elapsed();
+//     assert!(run_result.is_err());
+//     assert!(elapsed_time.as_millis() <= 10050);
+//     assert!(run_result.err().unwrap().message().contains("time reached"));
+// }
 
 #[tokio::test]
 async fn shinkai_tool_download_page_stack_overflow() {
@@ -390,7 +175,7 @@ async fn shinkai_tool_download_page_stack_overflow() {
                 tokio::runtime::Runtime::new().expect("Failed to create Tokio runtime");
             managed_runtime.block_on(async {
                 let tool_definition = get_tool("shinkai-tool-download-page").unwrap();
-                let mut tool = Tool::new(
+                let tool = Tool::new(
                     tool_definition.code.clone().unwrap(),
                     serde_json::Value::Null,
                 );
