@@ -8,6 +8,6 @@ test('exists definition', async () => {
 
 test('run definition', async () => {
   const tool = new Tool({});
-  const run_result = await tool.run({ url: 'https://staging.aave.com/?marketName=proto_arbitrum_sepolia_v3' });
+  const run_result = await tool.run({ inputValue: '0.005', assetSymbol: 'ETH' });
   console.log(run_result);
 }, 25000);

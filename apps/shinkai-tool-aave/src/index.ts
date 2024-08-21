@@ -10,7 +10,8 @@ import * as path from 'path';
 
 type Config = {};
 type Params = {
-  url: string;
+  inputValue: string;
+  assetSymbol: string;
 };
 type Result = {
   assetsToSupply: { asset: string; apy: string }[];
@@ -27,9 +28,9 @@ declare global {
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-playwright-example',
-    name: 'Shinkai: Aave Market Extractor',
+    name: 'Shinkai: Aave Loan Requester',
     description:
-      'Tool for extracting Aave market data including assets to supply and borrow with their APYs',
+      'Tool for requesting a loan on Aave, including selecting assets to supply and borrow with their APYs',
     author: 'Shinkai',
     keywords: ['aave', 'market', 'extractor', 'shinkai'],
     configurations: {
@@ -40,9 +41,10 @@ export class Tool extends BaseTool<Config, Params, Result> {
     parameters: {
       type: 'object',
       properties: {
-        url: { type: 'string' },
+        inputValue: { type: 'string' },
+        assetSymbol: { type: 'string' },
       },
-      required: ['url'],
+      required: ['inputValue', 'assetSymbol'],
     },
     result: {
       type: 'object',
@@ -82,7 +84,8 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const context = await browser.newContext();
 
     const page = await context.newPage();
-    await page.goto(params.url);
+    // await page.goto(params.url);
+    await page.goto('https://staging.aave.com/?marketName=proto_arbitrum_sepolia_v3');
 
     const viemPath = path.join(__dirname, 'bundled-resources/shinkai-viem.js');
     if (!fs.existsSync(viemPath)) {
@@ -99,31 +102,6 @@ export class Tool extends BaseTool<Config, Params, Result> {
       document.head.appendChild(script);
       console.log('Viem script injected');
     }, viemScriptContent);
-
-    // // Inject the wallet setup script
-    // await page.evaluate(() => {
-    //   const {
-    //     createWalletClient,
-    //     http,
-    //     parseEther,
-    //     privateKeyToAccount,
-    //     mainnet,
-    //   } = (window as any).viem;
-
-    //   const client = createWalletClient({
-    //     chain: mainnet,
-    //     transport: http(),
-    //   });
-
-    //   console.log('Viem client created');
-    //   const account = privateKeyToAccount('your-private-key-here'); // Replace with your actual private key
-
-    //   // Expose the client and account to the window object
-    //   (window as any).viemClient = client;
-    //   (window as any).viemAccount = account;
-
-    //   console.log('Viem wallet client and account injected');
-    // });
 
     // Click the "Opt-out" button
     // Wait for the "Opt-out" button to appear and click it
@@ -143,23 +121,25 @@ export class Tool extends BaseTool<Config, Params, Result> {
     console.log('Browser wallet button is visible');
     await browserWalletButton.click();
 
+    const assetSymbolUpper = params.assetSymbol.toUpperCase();
+
     // Find the div with data-cy="dashboardSupplyListItem_ETH" and click the first button inside the 5th internal div
-    const ethSupplyListItem = page.locator(
-      'div[data-cy="dashboardSupplyListItem_ETH"]',
+    const assetSupplyListItem = page.locator(
+      `div[data-cy="dashboardSupplyListItem_${assetSymbolUpper}"]`,
     );
-    const buttonInFifthDiv = ethSupplyListItem
+    const buttonInFifthDiv = assetSupplyListItem
       .locator('div:nth-child(5) button')
       .first();
     await buttonInFifthDiv.waitFor({ state: 'visible' });
     await buttonInFifthDiv.click();
-    console.log('First button inside the 5th internal div clicked');
+    console.log(`First button inside the 5th internal div for ${assetSymbolUpper} clicked`);
 
     // Input a value of 0.1 into the specified input field
     const inputField = page.locator(
       'div.MuiModal-root div.MuiPaper-root div.MuiBox-root div.MuiBox-root div.MuiBox-root div.MuiInputBase-root input',
     );
     await inputField.waitFor({ state: 'visible' });
-    await inputField.fill('0.005');
+    await inputField.fill(params.inputValue);
     console.log('Input field filled with value 0.1');
 
     // Click the button with data-cy="actionButton"
