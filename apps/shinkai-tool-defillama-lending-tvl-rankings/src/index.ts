@@ -46,9 +46,14 @@ export class Tool extends BaseTool<Config, Params, Result> {
   async run(params: Params): Promise<RunResult<Result>> {
     const DEFILLAMA_URL = 'https://defillama.com/protocols/lending';
     const browser = await playwright['chromium'].launch({
-      executablePath: this.config?.chromePath || chromePaths.chrome
+      executablePath: this.config?.chromePath || chromePaths.chrome,
+      // headless: false,
     });
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+      viewport: { width: 1280, height: 800 }, // Set viewport size
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36', // Set Mac user agent
+    });
+
     const page = await context.newPage();
     await page.goto(DEFILLAMA_URL);
     await page.waitForLoadState('networkidle');
