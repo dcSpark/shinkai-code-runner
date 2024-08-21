@@ -19,7 +19,7 @@ type Result = {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-coinbase-send_tx',
+    id: 'shinkai-tool-coinbase-send-tx',
     name: 'Shinkai: Coinbase Transaction Sender',
     description:
       'Tool for restoring a Coinbase wallet and sending a transaction',
