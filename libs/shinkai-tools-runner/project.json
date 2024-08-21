@@ -21,7 +21,8 @@
           "npx copyfiles --up 2 --verbose dist/apps/shinkai-tool-*/definition.json libs/shinkai-tools-runner/tools",
           "npx copyfiles --up 3 --verbose dist/apps/shinkai-tools-backend/shinkai-tools-backend* libs/shinkai-tools-runner/shinka-tools-runner-resources/",
           "cargo build"
-        ]
+        ],
+        "parallel": false
       },
       "configurations": {
         "development": {},
