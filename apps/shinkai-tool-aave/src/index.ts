@@ -7,6 +7,7 @@ import { createWalletClient, http, parseEther } from 'viem';
 // Remove later. It's for debugging.
 import * as fs from 'fs';
 import * as path from 'path';
+import { viemScriptContent } from './bundled-resources/shinkai-viem';
 
 type Config = {};
 type Params = {
@@ -85,15 +86,10 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
     const page = await context.newPage();
     // await page.goto(params.url);
-    await page.goto('https://staging.aave.com/?marketName=proto_arbitrum_sepolia_v3');
+    await page.goto(
+      'https://staging.aave.com/?marketName=proto_arbitrum_sepolia_v3',
+    );
 
-    const viemPath = path.join(__dirname, 'bundled-resources/shinkai-viem.js');
-    if (!fs.existsSync(viemPath)) {
-      throw new Error(`Viem bundle not found at path: ${viemPath}`);
-    }
-
-    // Read the content of viem-bundle.js
-    const viemScriptContent = fs.readFileSync(viemPath, 'utf8');
     console.log('Viem script loaded');
 
     await page.evaluate((scriptContent) => {
@@ -101,7 +97,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
       script.textContent = scriptContent;
       document.head.appendChild(script);
       console.log('Viem script injected');
-    }, viemScriptContent);
+    }, Buffer.from(viemScriptContent, 'base64').toString('utf-8'));
 
     // Click the "Opt-out" button
     // Wait for the "Opt-out" button to appear and click it
@@ -132,7 +128,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
       .first();
     await buttonInFifthDiv.waitFor({ state: 'visible' });
     await buttonInFifthDiv.click();
-    console.log(`First button inside the 5th internal div for ${assetSymbolUpper} clicked`);
+    console.log(
+      `First button inside the 5th internal div for ${assetSymbolUpper} clicked`,
+    );
 
     // Input a value of 0.1 into the specified input field
     const inputField = page.locator(

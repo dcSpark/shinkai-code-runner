@@ -13,9 +13,10 @@
       "defaultConfiguration": "production",
       "options": {
         "commands": [
-          "npx copyfiles --up 3 --verbose dist/libs/shinkai-viem/* apps/shinkai-tool-aave/src/bundled-resources/",
+          "npx ts-node apps/shinkai-tool-aave/generate-shinkai-viem-export.ts",
           "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-aave/src/index.ts --outputFolder ./dist/apps/shinkai-tool-aave"
-        ]
+        ],
+        "parallel": false
       },
       "configurations": {
         "development": {},
@@ -23,9 +24,7 @@
       }
     },
     "lint": {
-      "dependsOn": [
-        { "projects": "@shinkai_protocol/shinkai-viem", "target": "build" }
-      ],
+      "dependsOn": ["build"],
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
