@@ -1,7 +1,7 @@
 {
   "name": "@shinkai_protocol/shinkai-tool-aave-state",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shinkai-tool-aave/src",
+  "sourceRoot": "apps/shinkai-tool-aave-state/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {

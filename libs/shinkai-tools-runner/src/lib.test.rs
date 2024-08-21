@@ -365,7 +365,7 @@ async fn shinkai_tool_defillama_lending_tvl_rankings() {
 }
 
 #[tokio::test]
-async fn shinkai_tool_aave() {
+async fn shinkai_tool_aave_loan_requester() {
     let tool_definition = get_tool("shinkai-tool-aave-loan-requester").unwrap();
     let tool = Tool::new(
         tool_definition.code.clone().unwrap(),
@@ -379,3 +379,4 @@ async fn shinkai_tool_aave() {
         .await;
     assert!(run_result.is_ok());
 }
+
