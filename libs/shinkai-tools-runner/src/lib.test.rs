@@ -339,7 +339,43 @@ async fn shinkai_tool_playwright_example() {
         .await;
     assert!(run_result.is_ok());
     assert_eq!(
-        run_result.unwrap().data["title"].as_str().unwrap().to_string(),
+        run_result.unwrap().data["title"]
+            .as_str()
+            .unwrap()
+            .to_string(),
         "Shinkai | Fully Local AI (Models, Files and Agents)".to_string()
     );
+}
+
+#[tokio::test]
+async fn shinkai_tool_defillama_lending_tvl_rankings() {
+    let tool_definition = get_tool("shinkai-tool-defillama-lending-tvl-rankings").unwrap();
+    let tool = Tool::new(
+        tool_definition.code.clone().unwrap(),
+        serde_json::Value::Null,
+    );
+    let run_result = tool
+        .run(
+            serde_json::json!({ "all": true }),
+            None,
+        )
+        .await;
+    assert!(run_result.is_ok());
+    assert_eq!(run_result.unwrap().data["rowsCount"], 405);
+}
+
+#[tokio::test]
+async fn shinkai_tool_aave() {
+    let tool_definition = get_tool("shinkai-tool-aave-loan-requester").unwrap();
+    let tool = Tool::new(
+        tool_definition.code.clone().unwrap(),
+        serde_json::Value::Null,
+    );
+    let run_result = tool
+        .run(
+            serde_json::json!({ "inputValue": "0.005", "assetSymbol": "ETH" }),
+            None,
+        )
+        .await;
+    assert!(run_result.is_ok());
 }

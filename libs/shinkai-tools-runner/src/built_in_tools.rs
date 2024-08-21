@@ -138,7 +138,7 @@ lazy_static! {
             )),
         );
         m.insert(
-          "shinkai-tool-aave",
+          "shinkai-tool-aave-loan-requester",
           &*Box::leak(Box::new(
               serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                   env!("CARGO_MANIFEST_DIR"),

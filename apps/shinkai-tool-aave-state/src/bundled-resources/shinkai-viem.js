@@ -1009,7 +1009,7 @@
   var version2;
   var init_version2 = __esm({
     "node_modules/viem/_esm/errors/version.js"() {
-      version2 = "2.19.7";
+      version2 = "2.19.8";
     }
   });
 
@@ -44955,7 +44955,13 @@ zurdo`.split("\n");
       if (address !== this.selectedAddress) {
         throw new Error("Address mismatch");
       }
-      return this.client.signTypedData({ account: address, typedData });
+      return this.client.signTypedData({
+        account: address,
+        domain: typedData.domain,
+        types: typedData.types,
+        message: typedData.message,
+        primaryType: typedData.primaryType
+      });
     }
     async getChainId() {
       const chainId = await this.client.getChainId();

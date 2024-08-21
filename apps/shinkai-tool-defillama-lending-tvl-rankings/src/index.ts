@@ -46,7 +46,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
   async run(params: Params): Promise<RunResult<Result>> {
     const DEFILLAMA_URL = 'https://defillama.com/protocols/lending';
     const browser = await playwright['chromium'].launch({
-      executablePath: this.config?.chromePath || chromePaths.chrome,
+      executablePath: this.config?.chromePath || chromePaths.chrome
     });
     const context = await browser.newContext();
     const page = await context.newPage();
