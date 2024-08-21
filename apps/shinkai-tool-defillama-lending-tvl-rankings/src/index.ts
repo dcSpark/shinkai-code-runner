@@ -106,8 +106,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
       })
     );
     let table = Array.from(rows.values());
-    table = params.all ? table : table.slice(0, 10);
-    const tableCsv = [headers, ...table].map((row) => row.join(',')).join('\n');
+    // table = params.all ? table : table.slice(0, 10); // allow it later
+    table = table.slice(0, 10);
+    const tableCsv = [headers, ...table].map((row) => row.join(';')).join('\n');
     await browser.close();
     return Promise.resolve({
       data: { tableCsv, rowsCount: table.length, columnsCount: headers.length },
