@@ -88,7 +88,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
       });
       await page.evaluate(
         ({ partialRows }) => {
-          document.scrollingElement?.scrollBy(0, 50 * (partialRows.length - 1));
+          document.scrollingElement?.scrollBy(0, 25 * (partialRows.length));
         },
         { partialRows },
       );
