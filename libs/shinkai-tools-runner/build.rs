@@ -5,9 +5,10 @@ use std::path::Path;
 fn main() {
     println!("cargo:rerun-if-changed=resources/*");
 
-    let resources_path = Path::new("shinka-tools-runner-resources");
+    let resources_path =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("shinkai-tools-runner-resources");
     let target_path =
-        Path::new(&env::var("OUT_DIR").unwrap()).join("shinka-tools-runner-resources");
+        Path::new(&env::var("OUT_DIR").unwrap()).join("shinkai-tools-runner-resources");
 
     if resources_path.exists() {
         fs::create_dir_all(&target_path).unwrap();
@@ -29,7 +30,10 @@ fn main() {
             .output()
             .expect("Failed to execute chmod command");
         if !output.status.success() {
-            panic!("chmod command failed: {}", String::from_utf8_lossy(&output.stderr));
+            panic!(
+                "chmod command failed: {}",
+                String::from_utf8_lossy(&output.stderr)
+            );
         }
     }
 }
