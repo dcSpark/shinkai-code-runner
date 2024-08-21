@@ -93,7 +93,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
     return {
       data: {
-        data: `Balances: ${JSON.stringify(balances)}`,
+        data: `Balances: ${balances.toString()}`,
       },
     };
   }
