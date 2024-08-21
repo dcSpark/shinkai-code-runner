@@ -77,7 +77,6 @@ export class Tool extends BaseTool<Config, Params, Result> {
   async run(params: Params): Promise<RunResult<Result>> {
     const browser = await playwright['chromium'].launch({
       executablePath: this.config?.chromePath || chromePaths.chrome,
-      headless: false,
     });
     const context = await browser.newContext();
 
