@@ -123,8 +123,8 @@ export class Tool extends BaseTool<Config, Params, Result> {
     await browserWalletButton.click();
 
     // Wait for 120 seconds
-    await page.waitForTimeout(120000);
-    console.log('Waited for 120 seconds');
+    await page.waitForTimeout(3000);
+    console.log('Waited for 3 seconds');
 
     // Take a screenshot and save it to ./tmp/
     const screenshotPath = path.join(__dirname, 'tmp', 'screenshot.png');
