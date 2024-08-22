@@ -78,7 +78,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const browser = await playwright['chromium'].launch({
       executablePath: this.config?.chromePath || chromePaths.chrome,
     });
-    const context = await browser.newContext();
+    const context = await browser.newContext({
+      viewport: { width: 1280, height: 800 }, // Set viewport size
+    });
 
     const page = await context.newPage();
     // await page.goto(params.url);
