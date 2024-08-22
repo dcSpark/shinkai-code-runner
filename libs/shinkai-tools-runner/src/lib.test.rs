@@ -327,7 +327,7 @@ async fn shinkai_tool_playwright_example() {
     let tool_definition = get_tool("shinkai-tool-playwright-example").unwrap();
     let tool = Tool::new(
         tool_definition.code.clone().unwrap(),
-        serde_json::Value::Null,
+        serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
     );
     let run_result = tool
         .run(
@@ -352,7 +352,7 @@ async fn shinkai_tool_defillama_lending_tvl_rankings() {
     let tool_definition = get_tool("shinkai-tool-defillama-lending-tvl-rankings").unwrap();
     let tool = Tool::new(
         tool_definition.code.clone().unwrap(),
-        serde_json::Value::Null,
+        serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
     );
     let run_result = tool.run(serde_json::json!({ "all": true }), None).await;
     assert!(run_result.is_ok());
@@ -364,7 +364,7 @@ async fn shinkai_tool_aave_loan_requester() {
     let tool_definition = get_tool("shinkai-tool-aave-loan-requester").unwrap();
     let tool = Tool::new(
         tool_definition.code.clone().unwrap(),
-        serde_json::Value::Null,
+        serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
     );
     let run_result = tool
         .run(
