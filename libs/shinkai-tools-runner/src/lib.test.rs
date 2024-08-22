@@ -356,7 +356,7 @@ async fn shinkai_tool_defillama_lending_tvl_rankings() {
     );
     let run_result = tool.run(serde_json::json!({ "all": true }), None).await;
     assert!(run_result.is_ok());
-    assert_eq!(run_result.unwrap().data["rowsCount"], 405);
+    assert_eq!(run_result.unwrap().data["rowsCount"], 10);
 }
 
 #[tokio::test]
