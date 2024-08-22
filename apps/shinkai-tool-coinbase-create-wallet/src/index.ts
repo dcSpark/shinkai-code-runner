@@ -73,6 +73,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     return {
       data: {
         ...exportedWallet,
+        walletId: wallet.getId(),
         address: address?.getId(),
       },
     };
