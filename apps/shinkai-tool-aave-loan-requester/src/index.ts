@@ -17,8 +17,7 @@ type Params = {
   assetSymbol: string;
 };
 type Result = {
-  assetsToSupply: { asset: string; apy: string }[];
-  assetsToBorrow: { asset: string; apy: string }[];
+  amountProcessed: string;
 };
 
 // Extend the Window interface to include ethereum
@@ -54,30 +53,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
     result: {
       type: 'object',
       properties: {
-        assetsToSupply: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              asset: { type: 'string' },
-              apy: { type: 'string' },
-            },
-            required: ['asset', 'apy'],
-          },
-        },
-        assetsToBorrow: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              asset: { type: 'string' },
-              apy: { type: 'string' },
-            },
-            required: ['asset', 'apy'],
-          },
-        },
+        amountProcessed: { type: 'string' },
       },
-      required: ['assetsToSupply', 'assetsToBorrow'],
+      required: ['amountProcessed'],
     },
   };
 
@@ -162,7 +140,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
     await browser.close();
     return Promise.resolve({
-      data: { assetsToSupply: [], assetsToBorrow: [] },
+      data: { amountProcessed: params.inputValue },
     });
   }
 }
