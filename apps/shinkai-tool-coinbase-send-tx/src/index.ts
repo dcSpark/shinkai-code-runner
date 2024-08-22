@@ -7,7 +7,7 @@ type Config = {
   privateKey: string;
   walletId: string;
   seed?: string;
-  useServerSigner?: boolean;
+  useServerSigner?: string;
 };
 type Params = {
   recipient_address: string;
@@ -33,7 +33,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
         privateKey: { type: 'string' },
         walletId: { type: 'string', nullable: true },
         seed: { type: 'string', nullable: true },
-        useServerSigner: { type: 'boolean', default: false, nullable: true },
+        useServerSigner: { type: 'string', default: 'false', nullable: true },
       },
       required: ['name', 'privateKey'],
     },
@@ -59,7 +59,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const coinbaseOptions: CoinbaseOptions = {
       apiKeyName: this.config.name,
       privateKey: this.config.privateKey,
-      useServerSigner: this.config.useServerSigner ?? false,
+      useServerSigner: this.config.useServerSigner === 'true',
       debugging: true,
     };
     const coinbase = new Coinbase(coinbaseOptions);
@@ -68,12 +68,12 @@ export class Tool extends BaseTool<Config, Params, Result> {
     console.log(`User: `, user);
 
     // Check if seed exists or useServerSigner is true, but not both
-    if (!this.config.seed && !this.config.useServerSigner) {
+    if (!this.config.seed && this.config.useServerSigner !== 'true') {
       throw new Error(
         'Either seed must be provided or useServerSigner must be true',
       );
     }
-    if (this.config.seed && this.config.useServerSigner) {
+    if (this.config.seed && this.config.useServerSigner === 'true') {
       throw new Error(
         'Both seed and useServerSigner cannot be true at the same time',
       );
@@ -83,7 +83,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const walletId = this.config.walletId;
     let wallet;
 
-    if (this.config.useServerSigner) {
+    if (this.config.useServerSigner === 'true') {
       // Use getWallet if useServerSigner is true
       if (!walletId) {
         throw new Error(

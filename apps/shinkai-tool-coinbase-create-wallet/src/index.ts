@@ -5,7 +5,7 @@ import { Coinbase, CoinbaseOptions } from '@coinbase/coinbase-sdk';
 type Config = {
   name: string;
   privateKey: string;
-  useServerSigner?: boolean;
+  useServerSigner?: string;
 };
 type Params = {}; // Params type is now empty
 type Result = {
@@ -26,7 +26,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
       properties: {
         name: { type: 'string' },
         privateKey: { type: 'string' },
-        useServerSigner: { type: 'boolean', default: false, nullable: true },
+        useServerSigner: { type: 'string', default: 'false', nullable: true },
       },
       required: ['name', 'privateKey'],
     },
@@ -50,7 +50,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const coinbaseOptions: CoinbaseOptions = {
       apiKeyName: this.config.name,
       privateKey: this.config.privateKey,
-      useServerSigner: this.config.useServerSigner ?? false,
+      useServerSigner: this.config.useServerSigner === 'true',
     };
     const coinbase = new Coinbase(coinbaseOptions);
     console.log(`Coinbase configured: `, coinbase);
