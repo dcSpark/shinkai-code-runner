@@ -5,11 +5,9 @@ import { Coinbase, CoinbaseOptions } from '@coinbase/coinbase-sdk';
 type Config = {
   name: string;
   privateKey: string;
-  walletId?: string;
+  walletId: string;
 };
-type Params = {
-  walletId?: string;
-};
+type Params = {};
 type Result = {
   data: string;
 };
@@ -32,9 +30,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     },
     parameters: {
       type: 'object',
-      properties: {
-        walletId: { type: 'string', nullable: true },
-      },
+      properties: {},
       required: [],
     },
     result: {
@@ -47,22 +43,17 @@ export class Tool extends BaseTool<Config, Params, Result> {
   };
 
   async run(params: Params): Promise<RunResult<Result>> {
-    // Coinbase wallet creation using constructor
     const coinbaseOptions: CoinbaseOptions = {
       apiKeyName: this.config.name,
       privateKey: this.config.privateKey,
-      useServerSigner: false,
-      debugging: false,
-      basePath: '',
-      maxNetworkRetries: 3,
     };
     const coinbase = new Coinbase(coinbaseOptions);
     console.log(`Coinbase configured: `, coinbase);
     const user = await coinbase.getDefaultUser();
     console.log(`User: `, user);
 
-    // Prioritize walletId from Params over Config
-    const walletId = params.walletId || this.config.walletId;
+    // Use walletId from Config only
+    const walletId = this.config.walletId;
 
     let wallet;
     if (walletId) {
@@ -85,7 +76,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
     return {
       data: {
-        data: `Faucet transaction completed successfully: ${faucetTransaction.toString()}`,
+        data: `Faucet transaction completed successfully: ${faucetTransaction.toString()} for wallet: ${wallet.getDefaultAddress()}`,
       },
     };
   }

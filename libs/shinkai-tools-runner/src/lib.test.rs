@@ -354,12 +354,7 @@ async fn shinkai_tool_defillama_lending_tvl_rankings() {
         tool_definition.code.clone().unwrap(),
         serde_json::Value::Null,
     );
-    let run_result = tool
-        .run(
-            serde_json::json!({ "all": true }),
-            None,
-        )
-        .await;
+    let run_result = tool.run(serde_json::json!({ "all": true }), None).await;
     assert!(run_result.is_ok());
     assert_eq!(run_result.unwrap().data["rowsCount"], 405);
 }
@@ -379,4 +374,3 @@ async fn shinkai_tool_aave_loan_requester() {
         .await;
     assert!(run_result.is_ok());
 }
-

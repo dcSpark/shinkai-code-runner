@@ -5,10 +5,11 @@ import { Coinbase, CoinbaseOptions } from '@coinbase/coinbase-sdk';
 type Config = {
   name: string;
   privateKey: string;
-  walletId?: string;
+  walletId: string;
+  seed?: string;
+  useServerSigner?: boolean;
 };
 type Params = {
-  walletId?: string;
   recipient_address: string;
   assetId: string;
   amount: string;
@@ -31,13 +32,14 @@ export class Tool extends BaseTool<Config, Params, Result> {
         name: { type: 'string' },
         privateKey: { type: 'string' },
         walletId: { type: 'string', nullable: true },
+        seed: { type: 'string', nullable: true },
+        useServerSigner: { type: 'boolean', default: false, nullable: true },
       },
       required: ['name', 'privateKey'],
     },
     parameters: {
       type: 'object',
       properties: {
-        walletId: { type: 'string', nullable: true },
         recipient_address: { type: 'string' },
         assetId: { type: 'string' },
         amount: { type: 'string' },
@@ -54,34 +56,58 @@ export class Tool extends BaseTool<Config, Params, Result> {
   };
 
   async run(params: Params): Promise<RunResult<Result>> {
-    // Coinbase wallet creation using constructor
     const coinbaseOptions: CoinbaseOptions = {
       apiKeyName: this.config.name,
       privateKey: this.config.privateKey,
-      useServerSigner: false,
-      debugging: false,
-      basePath: '',
-      maxNetworkRetries: 3,
+      useServerSigner: this.config.useServerSigner ?? false,
+      debugging: true,
     };
     const coinbase = new Coinbase(coinbaseOptions);
     console.log(`Coinbase configured: `, coinbase);
     const user = await coinbase.getDefaultUser();
     console.log(`User: `, user);
 
-    // Prioritize walletId from Params over Config
-    const walletId = params.walletId || this.config.walletId;
+    // Check if seed exists or useServerSigner is true, but not both
+    if (!this.config.seed && !this.config.useServerSigner) {
+      throw new Error(
+        'Either seed must be provided or useServerSigner must be true',
+      );
+    }
+    if (this.config.seed && this.config.useServerSigner) {
+      throw new Error(
+        'Both seed and useServerSigner cannot be true at the same time',
+      );
+    }
 
+    // Prioritize walletId from Params over Config
+    const walletId = this.config.walletId;
     let wallet;
-    if (walletId) {
-      // Retrieve existing Wallet using walletId
+
+    if (this.config.useServerSigner) {
+      // Use getWallet if useServerSigner is true
+      if (!walletId) {
+        throw new Error(
+          'walletId must be provided when useServerSigner is true',
+        );
+      }
       wallet = await user.getWallet(walletId);
-      console.log(`Wallet retrieved: `, wallet.toString());
+      console.log(`Wallet retrieved using server signer: `, wallet.toString());
     } else {
-      // Create a new Wallet for the User
-      wallet = await user.createWallet({
-        networkId: Coinbase.networks.BaseSepolia,
-      });
-      console.log(`Wallet successfully created: `, wallet.toString());
+      if (walletId) {
+        // Retrieve existing Wallet using walletId
+        wallet = await user.importWallet({
+          walletId,
+          // it's not going to be empty but to quiet the type error
+          seed: this.config.seed || '',
+        });
+        console.log(`Wallet retrieved: `, wallet.toString());
+      } else {
+        // Create a new Wallet for the User
+        wallet = await user.createWallet({
+          networkId: Coinbase.networks.BaseSepolia,
+        });
+        console.log(`Wallet successfully created: `, wallet.toString());
+      }
     }
 
     // Retrieve the list of balances for the wallet
@@ -107,16 +133,27 @@ export class Tool extends BaseTool<Config, Params, Result> {
       throw new Error('Invalid amount provided');
     }
 
+    // Convert assetId to have only the first letter capitalized
+    const formattedAssetId = params.assetId.toLowerCase();
+
     // Create and send the transfer
-    const transfer = await wallet.createTransfer({
-      amount,
-      assetId: params.assetId,
-      destination: params.recipient_address,
-      timeoutSeconds: 60,
-      intervalSeconds: 5,
-      gasless: false,
-    });
-    console.log(`Transfer completed successfully: `, transfer.toString());
+    let transfer;
+    try {
+      transfer = await wallet.createTransfer({
+        amount,
+        assetId: Coinbase.toAssetId(formattedAssetId),
+        destination: params.recipient_address,
+      });
+      console.log(`Transfer successfully completed: `, transfer.toString());
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error during transfer:', error);
+        throw new Error(`Transfer failed: ${error.message}`);
+      } else {
+        console.error('Unknown error during transfer:', error);
+        throw new Error('Transfer failed due to an unknown error');
+      }
+    }
 
     return {
       data: {
