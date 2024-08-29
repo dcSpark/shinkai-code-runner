@@ -167,7 +167,7 @@ impl Tool {
         max_execution_time_s: Option<u64>,
     ) -> Result<RunResult, ExecutionError> {
         let mut shinkai_tool_backend = ShinkaiToolsBackend::new(self.shinkai_tools_backend_options.clone());
-        let _ = shinkai_tool_backend.run().await;
+        shinkai_tool_backend.run().await.map_err(|e| ExecutionError::new(format!("Failed to run shinkai tool backend: {}", e), None))?;
         let result = self.internal_run(parameters, max_execution_time_s).await;
         let _ = shinkai_tool_backend.kill().await;
         result

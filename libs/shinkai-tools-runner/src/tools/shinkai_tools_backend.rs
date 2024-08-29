@@ -24,6 +24,8 @@ impl ShinkaiToolsBackend {
 
         let child_process = Command::new(self.options.binary_path.clone())
             .env("PORT", self.options.api_port.to_string())
+            .stdout(std::process::Stdio::piped())
+            .stderr(std::process::Stdio::piped())
             .spawn()
             .map_err(|e| {
                 println!("Error spawning child process: {}", e);
@@ -36,10 +38,10 @@ impl ShinkaiToolsBackend {
         let client = reqwest::Client::new();
 
         // Wait for the /health endpoint to respond with 200
-        let health_check_url = "http://127.0.0.1:3000/health";
+        let health_check_url = format!("http://127.0.0.1:{}/", self.options.api_port).to_string();
         let mut retries = 5;
         while retries > 0 {
-            match client.get(health_check_url).send().await {
+            match client.get(health_check_url.clone()).send().await {
                 Ok(response) if response.status().is_success() => {
                     println!("Health check successful.");
                     break;
