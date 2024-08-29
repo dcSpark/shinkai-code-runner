@@ -38,25 +38,37 @@ impl ShinkaiToolsBackend {
         let client = reqwest::Client::new();
 
         // Wait for the /health endpoint to respond with 200
-        let health_check_url = format!("http://127.0.0.1:{}/", self.options.api_port).to_string();
+        let health_check_url = format!("http://127.0.0.1:{}/health", self.options.api_port).to_string();
         let mut retries = 5;
         while retries > 0 {
             match client.get(health_check_url.clone()).send().await {
-                Ok(response) if response.status().is_success() => {
-                    println!("Health check successful.");
-                    break;
+                Ok(response) => {
+                    if response.status().is_success() {
+                        println!("shinkai-tools-backend /health successful.");
+                        break;
+                    } else {
+                        println!(
+                            "shinkai-tools-backend /health failed status: {}, code: {}, text: {}, retrying...",
+                            response.status(),
+                            response.status().as_u16(),
+                            response.text().await.unwrap_or_else(|_| "".to_string())
+                        );
+                    }
                 }
                 Err(e) => {
-                    println!("Health check failed: {}, retrying...", e);
-                }
-                _ => {
-                    println!(
-                        "Health check response was not successful, retries left: {}",
-                        retries
-                    );
+                    println!("shinkai-tools-backend /health failed: {}, retrying...", e);
                 }
             }
             retries -= 1;
+            if retries <= 0 {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    format!(
+                        "shinkai-tools-backend /health timeout after {} retries",
+                        5 - retries
+                    ),
+                ));
+            }
             tokio::time::sleep(std::time::Duration::from_secs(1)).await;
         }
         Ok(())
