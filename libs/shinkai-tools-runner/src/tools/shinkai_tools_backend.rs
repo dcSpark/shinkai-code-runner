@@ -1,18 +1,19 @@
 use std::process::{Child, Command};
 
+use super::shinkai_tools_backend_options::ShinkaiToolsBackendOptions;
+
+#[derive(Default)]
 pub struct ShinkaiToolsBackend {
     child: Option<Child>,
-}
-
-impl Default for ShinkaiToolsBackend {
-    fn default() -> Self {
-        Self { child: None }
-    }
+    options: ShinkaiToolsBackendOptions,
 }
 
 impl ShinkaiToolsBackend {
-    fn new() -> Self {
-        ShinkaiToolsBackend::default()
+    pub fn new(options: ShinkaiToolsBackendOptions) -> Self {
+        ShinkaiToolsBackend {
+            options,
+            ..Default::default()
+        }
     }
 
     pub async fn run(&mut self) -> Result<(), std::io::Error> {
@@ -21,11 +22,13 @@ impl ShinkaiToolsBackend {
             self.kill().await?;
         }
 
-        // Spawn the child process using native spawn
-        let child_process = Command::new("./shinkai-tools-runner-resources/shinkai-tools-backend").spawn().map_err(|e| {
-            println!("Error spawning child process: {}", e);
-            e
-        })?;
+        let child_process = Command::new(self.options.binary_path.clone())
+            .env("PORT", self.options.api_port.to_string())
+            .spawn()
+            .map_err(|e| {
+                println!("Error spawning child process: {}", e);
+                e
+            })?;
         let pid = child_process.id();
         self.child = Some(child_process);
         println!("Started new child process with PID: {}", pid);
