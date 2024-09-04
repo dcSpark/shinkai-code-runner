@@ -1,14 +1,14 @@
 import { BaseTool, RunResult } from '@shinkai_protocol/shinkai-tools-builder';
 import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
 import { TranscriptResponse, YoutubeTranscript } from 'youtube-transcript';
-import { Ollama } from 'ollama';
+import OpenAI from 'openai';
 
-type Config = {
-  ollamaApiUrl?: string;
-};
+type Config = {};
 type Params = {
   url: string;
-  ollamaModel: string;
+  apiUrl?: string;
+  apiKey?: string;
+  model: string;
 };
 type Result = { transcript: TranscriptResponse[]; message: string };
 
@@ -21,9 +21,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     keywords: ['youtube', 'transcript', 'video', 'captions', 'subtitles'],
     configurations: {
       type: 'object',
-      properties: {
-        ollamaApiUrl: { type: 'string', nullable: true },
-      },
+      properties: {},
       required: [],
     },
     parameters: {
@@ -33,9 +31,19 @@ export class Tool extends BaseTool<Config, Params, Result> {
           type: 'string',
           description: 'The URL of the YouTube video to transcribe',
         },
-        ollamaModel: {
+        apiUrl: {
           type: 'string',
-          description: 'The Ollama model to use for generating the summary',
+          description: 'The OpenAI api compatible URL',
+          nullable: true,
+        },
+        apiKey: {
+          type: 'string',
+          description: 'Api Key to call OpenAI compatible endpoint',
+          nullable: true,
+        },
+        model: {
+          type: 'string',
+          description: 'The model to use for generating the summary',
         },
       },
       required: ['url'],
@@ -69,13 +77,13 @@ export class Tool extends BaseTool<Config, Params, Result> {
     const transcript = await YoutubeTranscript.fetchTranscript(params.url);
 
     // Send to ollama to build a formatted response
-    const message = {
+    const message: OpenAI.ChatCompletionUserMessageParam = {
       role: 'user',
       content: `
       According to this transcription of a youtube video (which is in csv separated by ';'):
 
       offset;text
-      ${transcript.map((v) => `${v.offset};${v.text}`).join('\n')}
+      ${transcript.map((v) => `${Math.floor(v.offset)};${v.text}`).join('\n')}
       ---------------
 
       The video URL is ${params.url}
@@ -84,18 +92,28 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
       Write a detailed summary divided in sections along the video.
       Format the answer using markdown.
-      Add markdown links referencing every section using this format https://www.youtube.com/watch?v={video_id}&t={offset} where 'offset' is a number and can be obtained from the transcription in csv format and should be in seconds to generate the URL
+      Add markdown links referencing every section using this format https://www.youtube.com/watch?v={video_id}&t={offset} where 'offset' is a number and can be obtained from the transcription in csv format to generate the URL
     `,
     };
-    const ollamaClient = new Ollama({ host: 'http://localhost:11435' });
+
+    let url = params.apiUrl || 'http://127.0.0.1:11435';
+    url = url?.endsWith('/v1') ? url : `${url}/v1`;
+    console.log('url', url);
+    const client = new OpenAI({
+      baseURL: url,
+      apiKey: params.apiKey || '',
+    });
     try {
-      const response = await ollamaClient.chat({
-        model: params.ollamaModel,
+      const response = await client.chat.completions.create({
+        model: params.model,
         messages: [message],
         stream: false,
       });
       return Promise.resolve({
-        data: { transcript, message: response.message.content },
+        data: {
+          transcript,
+          message: response.choices[0]?.message?.content || '',
+        },
       });
     } catch (error) {
       console.error('Error calling Ollama API:', error);

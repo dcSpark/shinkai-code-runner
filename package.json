@@ -67,7 +67,7 @@
     "micro-eth-signer": "^0.10.0",
     "minimist": "^1.2.8",
     "networkanalysis-ts": "^1.0.0",
-    "ollama": "^0.5.8",
+    "openai": "^4.57.2",
     "playwright": "^1.46.1",
     "playwright-chromium": "^1.45.3",
     "playwright-extra": "^4.3.6",
