@@ -18,7 +18,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
     id: 'shinkai-tool-youtube-transcript',
     name: 'Shinkai: YouTube Transcript and Summary',
     description:
-      'Extract and summarize the content of a YouTube video without watching it. This tool provides a detailed transcript and generates a comprehensive summary with organized sections and clickable timestamp links. To use this tool, you only need to provide a valid YouTube video URL. The tool will then process the video, retrieving its transcript and creating an easy-to-navigate summary. This is particularly useful for quickly grasping the main points of lengthy videos, preparing for discussions, or conducting research efficiently. For example, you could use this tool to summarize a long tech talk, a detailed product review, or an in-depth educational lecture, allowing you to decide if the full video is worth your time or to quickly reference specific parts of the content.',
+      'Extracts and summarizes YouTube video content without watching. Provides a transcript and summary with organized sections and clickable timestamp links. Useful for quickly grasping main points, preparing for discussions, or efficient research. Example uses: summarizing tech talks, product reviews, or educational lectures. Parameters: url (string) - The full YouTube video URL to process.',
     author: 'Shinkai',
     keywords: [
       'youtube',
