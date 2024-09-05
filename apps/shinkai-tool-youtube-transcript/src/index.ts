@@ -16,27 +16,42 @@ type Result = { transcript: TranscriptResponse[]; message: string };
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-youtube-transcript',
-    name: 'Shinkai: YouTube Transcript',
-    description: 'Retrieve the transcript of a YouTube video',
+    name: 'Shinkai: YouTube Transcript and Summary',
+    description:
+      'Extract and summarize the content of a YouTube video without watching it. This tool provides a detailed transcript and generates a comprehensive summary with organized sections and clickable timestamp links. To use this tool, you only need to provide a valid YouTube video URL. The tool will then process the video, retrieving its transcript and creating an easy-to-navigate summary. This is particularly useful for quickly grasping the main points of lengthy videos, preparing for discussions, or conducting research efficiently. For example, you could use this tool to summarize a long tech talk, a detailed product review, or an in-depth educational lecture, allowing you to decide if the full video is worth your time or to quickly reference specific parts of the content.',
     author: 'Shinkai',
-    keywords: ['youtube', 'transcript', 'video', 'captions', 'subtitles'],
+    keywords: [
+      'youtube',
+      'transcript',
+      'video',
+      'summary',
+      'sections',
+      'timestamp',
+      'links',
+    ],
     configurations: {
       type: 'object',
       properties: {
         apiUrl: {
           type: 'string',
-          description: 'The OpenAI api compatible URL',
+          description:
+            'The URL of the OpenAI compatible API endpoint for summary generation. Optional. Default: "http://127.0.0.1:11435".',
           nullable: true,
+          example: 'https://api.openai.com/v1',
         },
         apiKey: {
           type: 'string',
-          description: 'Api Key to call OpenAI compatible endpoint',
+          description:
+            'The API key for the OpenAI compatible endpoint. Required if using a service that needs authentication.',
           nullable: true,
+          example: 'sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         },
         model: {
           type: 'string',
-          description: 'The model to use for generating the summary',
+          description:
+            'The name of the language model for summary generation. Optional. Default: "llama3.1:8b-instruct-q4_1".',
           nullable: true,
+          example: 'gpt-3.5-turbo',
         },
       },
       required: [],
@@ -46,7 +61,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
       properties: {
         url: {
           type: 'string',
-          description: 'The URL of the YouTube video to transcribe',
+          description:
+            'The full URL of the YouTube video to transcribe and summarize. Must be a valid and accessible YouTube video link.',
+          example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         },
       },
       required: ['url'],
@@ -56,20 +73,41 @@ export class Tool extends BaseTool<Config, Params, Result> {
       properties: {
         transcript: {
           type: 'array',
+          description:
+            'An array of transcript segments from the video, providing a detailed text representation of the audio content.',
           items: {
             type: 'object',
             properties: {
-              text: { type: 'string' },
-              duration: { type: 'number' },
-              offset: { type: 'number' },
-              lang: { type: 'string', nullable: true },
+              text: {
+                type: 'string',
+                description:
+                  'The text content of a specific transcript segment.',
+              },
+              duration: {
+                type: 'number',
+                description: 'The duration of the segment in seconds.',
+              },
+              offset: {
+                type: 'number',
+                description:
+                  'The start time of the segment in seconds from the beginning of the video.',
+              },
+              lang: {
+                type: 'string',
+                nullable: true,
+                description: 'The language code of the segment, if available.',
+              },
             },
             required: ['text', 'duration', 'offset'],
           },
         },
-        message: { type: 'string' },
+        message: {
+          type: 'string',
+          description:
+            'A markdown-formatted summary of the video content, divided into sections with timestamp links to relevant parts of the video.',
+        },
       },
-      required: ['transcript'],
+      required: ['transcript', 'message'],
     },
   };
 
