@@ -401,5 +401,8 @@ async fn shinkai_tool_youtube_transcript() {
         )
         .await;
     assert!(run_result.is_ok());
-    assert!(!run_result.unwrap().data["transcript"].as_array().unwrap().is_empty());
+    assert!(!run_result.unwrap().data["transcript"]
+        .as_array()
+        .unwrap()
+        .is_empty());
 }
