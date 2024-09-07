@@ -12,7 +12,7 @@
         "parallel": false,
         "commands": [
           "npx baml-cli generate --from ./apps/shinkai-tool-youtube-summary/baml_src",
-          "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-youtube-summary/src/index.ts --outputFolder ./dist/apps/shinkai-tool-youtube-summary"
+          "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-youtube-summary/src/index.ts --outputFolder ./dist/apps/shinkai-tool-youtube-summary --loader:.node=file"
         ]
       },
       "configurations": {
