@@ -158,13 +158,8 @@ test('test `findNetworkName` method', async () => {
     chromePath: process.env?.CHROME_PATH,
   });
 
-  // expect(tool.findNetworkName('eth')).toEqual('Ethereum');
-  // expect(tool.findNetworkName('sol')).toEqual('Solana');
-  // expect(tool.findNetworkName('arb')).toEqual('Arbitrum');
   expect(tool.findNetworkName('base')).toEqual('Base');
-  // expect(tool.findNetworkName('ada')).toEqual('Cardano');
   expect(tool.findNetworkName('near')).toEqual('Near');
-  // expect(tool.findNetworkName('bnb')).toEqual('BSC');
   expect(tool.findNetworkName('sui')).toEqual('Sui');
   expect(tool.findNetworkName('eThEReum')).toEqual('Ethereum');
   expect(tool.findNetworkName('sOlANa')).toEqual('Solana');
@@ -174,6 +169,4 @@ test('test `findNetworkName` method', async () => {
   expect(tool.findNetworkName('undefined')).toEqual('undefined');
   expect(tool.findNetworkName('')).toEqual(undefined);
   expect(tool.findNetworkName(' ')).toEqual(undefined);
-  // expect(tool.findNetworkName('ETH')).toEqual('Ethereum');
-  // expect(tool.findNetworkName('SOL')).toEqual('Solana');
 }, 30000);
