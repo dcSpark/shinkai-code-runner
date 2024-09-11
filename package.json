@@ -1,6 +1,6 @@
 {
   "name": "@shinkai_protocol/source",
-  "version": "0.7.13",
+  "version": "0.7.12",
   "description": "This repository serves as the ecosystem to execute Shinkai tools, provided by the Shinkai team or third-party developers, in a secure environment. It provides a sandboxed space for executing these tools, ensuring that they run safely and efficiently, while also allowing for seamless integration with Rust code.",
   "main": "index.js",
   "author": "",
@@ -61,6 +61,7 @@
     "@nestjs/axios": "^3.0.3",
     "ajv": "^7.2.4",
     "chrome-paths": "^1.0.1",
+    "date-fns": "^3.6.0",
     "expr-eval": "^2.0.2",
     "fastify": "^4.28.1",
     "fastify-type-provider-zod": "^2.0.0",
