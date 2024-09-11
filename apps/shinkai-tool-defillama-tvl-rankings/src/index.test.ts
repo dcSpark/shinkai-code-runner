@@ -20,6 +20,33 @@ test('run using top10=false, categoryName=Liquid Staking, networkName=Ethereum',
   expect(run_result.data.rowsCount).toBeGreaterThan(10);
 }, 10000);
 
+test('run using top10=false, categoryName=Yield Aggregator, networkName=BSC', async () => {
+  const tool = new Tool({
+    chromePath: process.env?.CHROME_PATH,
+  });
+  const run_result = await tool.run({
+    top10: true,
+    categoryName: 'Yield AGGREGATOR',
+    networkName: 'bsc',
+  });
+  console.log('table-csv', run_result.data.tableCsv);
+  expect(run_result.data.columnsCount).toEqual(8);
+  expect(run_result.data.rowsCount).toBe(10)
+}, 10000);
+
+test('run using top10=false, categoryName=Derivatives', async () => {
+  const tool = new Tool({
+    chromePath: process.env?.CHROME_PATH,
+  });
+  const run_result = await tool.run({
+    top10: true,
+    categoryName: 'Derivatives',
+  });
+  console.log('table-csv', run_result.data.tableCsv);
+  expect(run_result.data.columnsCount).toEqual(14);
+  expect(run_result.data.rowsCount).toBe(10)
+}, 10000);
+
 test('run using top10=false, categoryName=DEXES, networkName=BSC', async () => {
   const tool = new Tool({
     chromePath: process.env?.CHROME_PATH,
@@ -131,7 +158,7 @@ test('test `findNetworkName` method', async () => {
   expect(tool.findNetworkName('aRbITrum')).toEqual('Arbitrum');
   expect(tool.findNetworkName('cArDAno')).toEqual('Cardano');
   expect(tool.findNetworkName('bsc')).toEqual('BSC');
-  expect(tool.findNetworkName('undefined')).toEqual(undefined);
+  expect(tool.findNetworkName('undefined')).toEqual('undefined');
   expect(tool.findNetworkName('')).toEqual(undefined);
   expect(tool.findNetworkName(' ')).toEqual(undefined);
   // expect(tool.findNetworkName('ETH')).toEqual('Ethereum');

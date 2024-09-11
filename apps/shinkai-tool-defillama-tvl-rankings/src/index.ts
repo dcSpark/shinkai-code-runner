@@ -110,6 +110,11 @@ export class Tool extends BaseTool<Config, Params, Result> {
       return undefined;
     }
 
+    let candidate = networkName.toLowerCase().trim()
+    if (!candidate) {
+      return undefined
+    }
+    
     const mapping: { [key: string]: string } = {
       // eth: 'Ethereum',
       // sol: 'Solana',
@@ -126,8 +131,8 @@ export class Tool extends BaseTool<Config, Params, Result> {
       bsc: 'BSC',
     };
 
-    const normalized = mapping[networkName.toLowerCase().trim()];
-    return normalized ? normalized : undefined;
+    const normalized = mapping[candidate];
+    return normalized ? normalized : networkName;
   }
 
   async getCategories(page: playwright.Page): Promise<string[]> {
