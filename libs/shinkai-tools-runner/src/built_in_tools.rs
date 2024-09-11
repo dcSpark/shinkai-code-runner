@@ -128,16 +128,6 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-defillama-lending-tvl-rankings",
-            &*Box::leak(Box::new(
-                serde_json::from_str::<ToolDefinition>(include_str!(concat!(
-                    env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-defillama-lending-tvl-rankings/definition.json"
-                )))
-                .unwrap(),
-            )),
-        );
-        m.insert(
             "shinkai-tool-defillama-tvl-rankings",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
