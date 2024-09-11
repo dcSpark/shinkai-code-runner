@@ -61,7 +61,6 @@
     "@nestjs/axios": "^3.0.3",
     "ajv": "^7.2.4",
     "chrome-paths": "^1.0.1",
-    "date-fns": "^3.6.0",
     "expr-eval": "^2.0.2",
     "fastify": "^4.28.1",
     "fastify-type-provider-zod": "^2.0.0",
