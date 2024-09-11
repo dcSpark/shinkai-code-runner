@@ -88,7 +88,7 @@ test('run using top10=false, categoryName=LiquId StAkInG, networkName=eth', asyn
   expect(run_result.data.rowsCount).toBeGreaterThan(10);
 }, 10000);
 
-test('run using top10=false, categoryName=LiquId StAkInG, networkName=eth', async () => {
+test('run using top10=false, categoryName=LiquId StAkInG, networkName=Solana', async () => {
   const tool = new Tool({
     chromePath: process.env?.CHROME_PATH,
   });

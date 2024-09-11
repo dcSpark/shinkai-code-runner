@@ -247,16 +247,6 @@ lazy_static! {
                 .unwrap(),
             )),
         );
-        m.insert(
-            "shinkai-tool-defillama-tvl-rankings",
-            &*Box::leak(Box::new(
-                serde_json::from_str::<ToolDefinition>(include_str!(concat!(
-                    env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-defillama-tvl-rankings/definition.json"
-                )))
-                .unwrap(),
-            )),
-        );
         // ntim: New tools will be inserted here, don't remove this comment
         m
     };
