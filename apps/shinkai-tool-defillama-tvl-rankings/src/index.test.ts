@@ -20,6 +20,19 @@ test('run using top10=false, categoryName=Liquid Staking, networkName=Ethereum',
   expect(run_result.data.rowsCount).toBeGreaterThan(10);
 }, 10000);
 
+test('run using top10=false, categoryName=Lending', async () => {
+  const tool = new Tool({
+    chromePath: process.env?.CHROME_PATH,
+  });
+  const run_result = await tool.run({
+    top10: false,
+    categoryName: 'Lending',
+  });
+  console.log('table-csv', run_result.data.tableCsv);
+  expect(run_result.data.columnsCount).toEqual(15);
+  expect(run_result.data.rowsCount).toBeGreaterThan(10);
+}, 10000);
+
 test('run using top10=false, categoryName=Yield Aggregator, networkName=BSC', async () => {
   const tool = new Tool({
     chromePath: process.env?.CHROME_PATH,
