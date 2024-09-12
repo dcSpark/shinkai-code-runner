@@ -15,6 +15,7 @@ type Config = {
 type Params = {
   inputValue: string;
   assetSymbol: string;
+  secretKey: string;
 };
 type Result = {
   amountProcessed: string;
@@ -47,8 +48,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
       properties: {
         inputValue: { type: 'string' },
         assetSymbol: { type: 'string' },
+        secretKey: { type: 'string' },
       },
-      required: ['inputValue', 'assetSymbol'],
+      required: ['inputValue', 'assetSymbol', 'secretKey'],
     },
     result: {
       type: 'object',
@@ -62,6 +64,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
   async run(params: Params): Promise<RunResult<Result>> {
     const browser = await playwright['chromium'].launch({
       executablePath: this.config?.chromePath || chromePaths.chrome,
+      headless: false,
     });
     const context = await browser.newContext({
       viewport: { width: 1280, height: 800 }, // Set viewport size
@@ -69,9 +72,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
 
     const page = await context.newPage();
     // await page.goto(params.url);
-    await page.goto(
-      'https://staging.aave.com/?marketName=proto_arbitrum_sepolia_v3',
-    );
+    await page.goto('https://staging.aave.com/?marketName=proto_base_sepolia_v3');
 
     console.log('Viem script loaded');
 
@@ -81,6 +82,13 @@ export class Tool extends BaseTool<Config, Params, Result> {
       document.head.appendChild(script);
       console.log('Viem script injected');
     }, Buffer.from(viemScriptContent, 'base64').toString('utf-8'));
+
+    // Call alert('hello') on the page
+    await page.evaluate((secretKey) => {
+      console.log('hello', secretKey);
+      alert('hello');
+      (window as any).initViemProvider(secretKey);
+    }, params.secretKey);
 
     // Click the "Opt-out" button
     // Wait for the "Opt-out" button to appear and click it

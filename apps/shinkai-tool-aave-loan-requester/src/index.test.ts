@@ -13,6 +13,7 @@ test('run definition', async () => {
   const run_result = await tool.run({
     inputValue: '0.005',
     assetSymbol: 'ETH',
+    secretKey: '0x{{your-secret-key}}',
   });
   console.log(run_result);
 }, 25000);
