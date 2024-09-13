@@ -38,7 +38,7 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: build-cargo-${{ hashFiles('**/Cargo.lock') }}
-
+          
       - name: Install dependencies
         run: |
           npm cache verify
@@ -60,5 +60,6 @@ jobs:
       - name: Run NX test
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          EMBEDDING_API_URL : ${{ env.EMBEDDING_API_URL }}
         run: |
           npx nx run-many -t test --parallel=false --skip-nx-cache
