@@ -134,4 +134,4 @@ jobs:
         run: npx nx run-many -t publish --verbose
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-          EMBEDDING_API_URL : ${{ env.EMBEDDING_API_URL }}
+          EMBEDDING_API_URL : ${{ vars.EMBEDDING_API_URL }}
