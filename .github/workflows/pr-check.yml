@@ -54,6 +54,7 @@ jobs:
       - name: Run NX lint
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          EMBEDDING_API_URL : ${{ env.EMBEDDING_API_URL }}
         run: |
           npx nx run-many -t lint --verbose
           
