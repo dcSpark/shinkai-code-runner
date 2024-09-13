@@ -1,83 +1,15 @@
 import * as esbuild from 'esbuild';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
-import axios from 'axios';
 
 const singleAppBinaryName =
   process.platform === 'win32'
     ? 'shinkai-tools-backend.exe'
     : 'shinkai-tools-backend';
 
-async function getEmbeddings(prompt: string): Promise<number[]> {
-  const apiUrl = process.env.EMBEDDING_API_URL || 'http://localhost:11434';
-  const response = await fetch(`${apiUrl}/api/embeddings`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'snowflake-arctic-embed:xs',
-      prompt,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch embeddings: ${response.statusText}`);
-  }
-
-  const data = await response.json();
-  return data.embedding;
-}
-
-async function updateTools() {
-  // Print the current working directory
-  console.log(`Current working directory: ${process.cwd()}`);
-
-  const toolsDir = 'libs/shinkai-tools-runner/tools';
-  const tools = fs.readdirSync(toolsDir);
-
-  for (const tool of tools) {
-    const toolPath = `${toolsDir}/${tool}`;
-    const toolDefinitionPath = `${toolPath}/definition.json`;
-
-    if (fs.existsSync(toolDefinitionPath)) {
-      console.log(`Updating tool: ${tool}`);
-      const toolDefinition = JSON.parse(
-        fs.readFileSync(toolDefinitionPath, 'utf8'),
-      );
-
-      // Extract NAME and DESCRIPTION
-      const name = toolDefinition.name;
-      const description = toolDefinition.description;
-      const prompt = `${name} ${description}`;
-
-      // Get embeddings
-      const embeddings = await getEmbeddings(prompt);
-
-      // Add embedding metadata
-      toolDefinition.embedding_metadata = {
-        model_name: 'snowflake-arctic-embed:xs',
-        embeddings,
-      };
-
-      // Save the updated tool definition
-      fs.writeFileSync(
-        toolDefinitionPath,
-        JSON.stringify(toolDefinition, null, 2),
-      );
-      console.log(`Updated tool: ${tool}`);
-    } else {
-      console.warn(`Tool definition not found: ${toolDefinitionPath}`);
-    }
-  }
-}
-
 async function bundle() {
   try {
     console.log('Starting bundling process...');
-
-    // Step: Update all tools
-    console.log('Step: Updating all tools...');
-    await updateTools();
-    console.log('All tools updated successfully.');
 
     // Step: Bundle the application using esbuild
     console.log('Step: Bundling the application...');
