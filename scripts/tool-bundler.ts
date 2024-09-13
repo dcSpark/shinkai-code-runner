@@ -7,6 +7,7 @@ const args = minimist(process.argv.slice(2));
 const entryFile: string = args.entry;
 const outputFolder: string = args.outputFolder || join(__dirname);
 const outputFile: string = join(outputFolder, 'index.js');
+
 build({
   entryPoints: [entryFile],
   bundle: true,
