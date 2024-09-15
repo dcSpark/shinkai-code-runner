@@ -238,11 +238,11 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-read-files-fs",
+            "shinkai-tool-read-folder-fs",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-read-files-fs/definition.json"
+                    "/tools/shinkai-tool-read-folder-fs/definition.json"
                 )))
                 .unwrap(),
             )),

@@ -21,7 +21,7 @@ type AuthResponse = {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-shinkai-tool-read-files-fs',
+    id: 'shinkai-tool-shinkai-tool-read-folder-fs',
     name: 'Shinkai: Read Files from FS',
     description: 'Read files from FS',
     author: 'Shinkai',
