@@ -1,7 +1,7 @@
 {
-  "name": "@shinkai_protocol/shinkai-tool-shinkai-tool-read-files-fs",
+  "name": "@shinkai_protocol/shinkai-tool-write-file-fs",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shinkai-tool-shinkai-tool-read-files-fs/src",
+  "sourceRoot": "apps/shinkai-tool-write-file-fs/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-shinkai-tool-read-files-fs/src/index.ts --outputFolder ./dist/apps/shinkai-tool-shinkai-tool-read-files-fs"
+        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-write-file-fs/src/index.ts --outputFolder ./dist/apps/shinkai-tool-write-file-fs"
       },
       "configurations": {
         "development": {},
@@ -21,8 +21,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "apps/shinkai-tool-shinkai-tool-read-files-fs/**/*.ts",
-          "apps/shinkai-tool-shinkai-tool-read-files-fs/package.json"
+          "apps/shinkai-tool-write-file-fs/**/*.ts",
+          "apps/shinkai-tool-write-file-fs/package.json"
         ]
       }
     }

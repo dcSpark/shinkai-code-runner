@@ -238,11 +238,21 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-shinkai-tool-read-files-fs",
+            "shinkai-tool-read-files-fs",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-shinkai-tool-read-files-fs/definition.json"
+                    "/tools/shinkai-tool-read-files-fs/definition.json"
+                )))
+                .unwrap(),
+            )),
+        );
+        m.insert(
+            "shinkai-tool-write-file-fs",
+            &*Box::leak(Box::new(
+                serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                    env!("CARGO_MANIFEST_DIR"),
+                    "/tools/shinkai-tool-write-file-fs/definition.json"
                 )))
                 .unwrap(),
             )),

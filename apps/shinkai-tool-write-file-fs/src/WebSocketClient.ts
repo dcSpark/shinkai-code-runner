@@ -1,23 +1,6 @@
 import { WebSocket } from 'ws';
 
-export interface MessageKind<T, D> {
-  type: T;
-  data: D;
-}
-
-export interface CloseFrame {
-  code: number;
-  reason: string;
-}
-
-export type Message =
-  | MessageKind<'Text', string>
-  | MessageKind<'Binary', number[]>
-  | MessageKind<'Ping', number[]>
-  | MessageKind<'Pong', number[]>
-  | MessageKind<'Close', CloseFrame | null>;
-
-export class WebSocketClient {
+export class WebSocketClient<T = any> {
   private ws: WebSocket;
 
   constructor(url: string) {
@@ -38,7 +21,7 @@ export class WebSocketClient {
     });
   }
 
-  send(message: Message): Promise<void> {
+  send(message: Object): Promise<void> {
     return new Promise((resolve, reject) => {
       this.ws.send(JSON.stringify(message), (err) => {
         if (err) {
@@ -52,11 +35,11 @@ export class WebSocketClient {
     });
   }
 
-  onMessage(callback: (message: Object) => void): void {
+  onMessage(callback: (message: T) => void): void {
     this.ws.on('message', (data) => {
       try {
-        const message: Object = JSON.parse(data.toString());
-        console.log('Received:', message);
+        console.log('Received:', data);
+        const message: T = JSON.parse(data.toString());
         callback(message);
       } catch (error) {
         console.error('Error parsing message:', error);
@@ -69,24 +52,15 @@ export class WebSocketClient {
   }
 
   createRequestMessage(action: string, payload: any): any {
-    // MessageKind<'Text', string>
     return {
-      channel: 'actions', // Ensure 'channel' is at the top level
+      channel: 'actions',
       action: {
         [action.toLowerCase()]: payload,
       },
     };
-    // return {
-    //   type: 'Text',
-    //   data: JSON.stringify({
-    //     channel: 'actions',
-    //     action,
-    //     payload
-    //   })
-    // };
   }
 
-  handleMessages(): Promise<{ message: Object }> {
+  handleMessages(): Promise<{ message: T }> {
     return new Promise((resolve, reject) => {
       this.onMessage((message) => {
         resolve({ message });
