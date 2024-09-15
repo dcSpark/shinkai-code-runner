@@ -6,13 +6,9 @@ type Config = {
   ws_password: string;
 };
 type Params = {
-  folder_to_read?: string;
+  file_path: string;
 };
-type Result = { tableCsv: string };
-
-type ResponseItem = {
-  [key: string]: any;
-};
+type Result = { fileContent: string } | { error: string };
 
 type AuthResponse = {
   status: string;
@@ -21,11 +17,11 @@ type AuthResponse = {
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-shinkai-tool-read-folder-fs',
-    name: 'Shinkai: Read Folder from FS',
-    description: 'Read folder from FS',
+    id: 'shinkai-tool-read-file-fs',
+    name: 'Shinkai: read-file-fs',
+    description: 'Reads the content of a file from the filesystem',
     author: 'Shinkai',
-    keywords: ['read', 'folder', 'fs'],
+    keywords: ['read-file-fs', 'shinkai'],
     configurations: {
       type: 'object',
       properties: {
@@ -36,21 +32,20 @@ export class Tool extends BaseTool<Config, Params, Result> {
     parameters: {
       type: 'object',
       properties: {
-        folder_to_read: { type: 'string', nullable: true },
+        file_path: { type: 'string' },
       },
-      required: [],
+      required: ['file_path'],
     },
     result: {
       type: 'object',
       properties: {
-        tableCsv: { type: 'string', nullable: true },
+        fileContent: { type: 'string' },
       },
-      required: ['tableCsv'],
+      required: ['fileContent'],
     },
   };
 
   async run(params: Params): Promise<RunResult<Result>> {
-    // TODO: this should be a config by the tool or the general tool?
     const wsClient = new WebSocketClient('ws://127.0.0.1:9555');
 
     try {
@@ -67,28 +62,25 @@ export class Tool extends BaseTool<Config, Params, Result> {
       // }
 
       const requestMessage = wsClient.createRequestMessage(
-        'readfolder',
-        params.folder_to_read || '.',
+        'readfile',
+        params.file_path,
       );
       await wsClient.send(requestMessage);
 
       const response = await wsClient.handleMessages();
-      const message: ResponseItem[] = response.message;
-      console.log(message);
+      console.log(response);
 
-      // Convert response to CSV format
-      const headers = Object.keys(message[0]);
-      const rows = message.map((item: any) =>
-        headers.map((header) => item[header]),
-      );
-      const tableCsv = [headers, ...rows]
-        .map((row) => row.join(';'))
-        .join('\n');
+      if (response.message && response.message.status === 'error') {
+        return { data: { error: response.message.message } };
+      }
 
-      return { data: { tableCsv } };
+      const fileContent = response.message.data;
+      console.log(fileContent);
+
+      return { data: { fileContent } };
     } catch (error) {
       console.error('Error connecting to WebSocket:', error);
-      return { data: { tableCsv: 'Error connecting to WebSocket' } };
+      return { data: { error: 'Error connecting to WebSocket' } };
     } finally {
       wsClient.close();
     }

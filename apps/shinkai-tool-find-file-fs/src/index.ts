@@ -6,26 +6,19 @@ type Config = {
   ws_password: string;
 };
 type Params = {
-  folder_to_read?: string;
+  partial_file_name?: string;
+  extension_name?: string;
 };
-type Result = { tableCsv: string };
-
-type ResponseItem = {
-  [key: string]: any;
-};
-
-type AuthResponse = {
-  status: string;
-  message: any;
-};
+type Result = { files: string[] } | { error: string };
 
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
-    id: 'shinkai-tool-shinkai-tool-read-folder-fs',
-    name: 'Shinkai: Read Folder from FS',
-    description: 'Read folder from FS',
+    id: 'shinkai-tool-find-file-fs',
+    name: 'Shinkai: Find File Path',
+    description:
+      'Finds a file path using its name, partial name and/ or extension.',
     author: 'Shinkai',
-    keywords: ['read', 'folder', 'fs'],
+    keywords: ['find-file-fs', 'shinkai'],
     configurations: {
       type: 'object',
       properties: {
@@ -36,21 +29,21 @@ export class Tool extends BaseTool<Config, Params, Result> {
     parameters: {
       type: 'object',
       properties: {
-        folder_to_read: { type: 'string', nullable: true },
+        partial_file_name: { type: 'string', nullable: true },
+        extension_name: { type: 'string', nullable: true },
       },
       required: [],
     },
     result: {
       type: 'object',
       properties: {
-        tableCsv: { type: 'string', nullable: true },
+        files: { type: 'array', items: { type: 'string' } },
       },
-      required: ['tableCsv'],
+      required: ['files'],
     },
   };
 
   async run(params: Params): Promise<RunResult<Result>> {
-    // TODO: this should be a config by the tool or the general tool?
     const wsClient = new WebSocketClient('ws://127.0.0.1:9555');
 
     try {
@@ -66,29 +59,30 @@ export class Tool extends BaseTool<Config, Params, Result> {
       //   throw new Error('Authentication failed');
       // }
 
-      const requestMessage = wsClient.createRequestMessage(
-        'readfolder',
-        params.folder_to_read || '.',
-      );
+      const requestMessage = wsClient.createRequestMessage('findfilesbyname', {
+        partial_file_name: params.partial_file_name ?? '', // Set to empty string if null/undefined
+        extension_name: params.extension_name ?? '', // Set to empty string if null/undefined
+      });
       await wsClient.send(requestMessage);
 
       const response = await wsClient.handleMessages();
-      const message: ResponseItem[] = response.message;
-      console.log(message);
+      console.log(response);
 
-      // Convert response to CSV format
-      const headers = Object.keys(message[0]);
-      const rows = message.map((item: any) =>
-        headers.map((header) => item[header]),
-      );
-      const tableCsv = [headers, ...rows]
-        .map((row) => row.join(';'))
-        .join('\n');
+      if (response.message && response.message.status === 'error') {
+        return { data: { error: response.message.message } };
+      }
 
-      return { data: { tableCsv } };
+      // Check if response.message.data exists and is an array
+      if (response.message && Array.isArray(response.message)) {
+        const files = response.message.map((file: any) => file.path); // Extract file paths
+        console.log(files);
+        return { data: { files } };
+      } else {
+        return { data: { error: 'Invalid response format' } };
+      }
     } catch (error) {
       console.error('Error connecting to WebSocket:', error);
-      return { data: { tableCsv: 'Error connecting to WebSocket' } };
+      return { data: { error: 'Error connecting to WebSocket' } };
     } finally {
       wsClient.close();
     }
