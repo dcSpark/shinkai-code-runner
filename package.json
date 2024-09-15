@@ -23,6 +23,7 @@
     "@types/node": "^20.14.0",
     "@types/turndown": "^5.0.4",
     "@types/whatwg-url": "^11.0.5",
+    "@types/ws": "^8.5.12",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.17.0",
     "buffer": "^6.0.3",
@@ -77,6 +78,7 @@
     "turndown": "^7.2.0",
     "viem": "^2.19.6",
     "whatwg-url": "^14.0.0",
+    "ws": "^8.18.0",
     "youtube-transcript": "^1.2.1",
     "zod": "^3.23.8"
   }
