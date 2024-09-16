@@ -9,9 +9,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { viemScriptContent } from './bundled-resources/shinkai-viem';
 
+const timeout = 50 * 60 * 1000;
+
 type Config = {
   chromePath?: string;
 };
+
 type Params = {
   inputValue: string;
   assetSymbol: string;
@@ -83,20 +86,20 @@ export class Tool extends BaseTool<Config, Params, Result> {
       console.log('Viem script injected');
     }, Buffer.from(viemScriptContent, 'base64').toString('utf-8'));
 
-    // Call alert('hello') on the page
+    // Initialize the viem provider
     await page.evaluate((secretKey) => {
-      console.log('hello', secretKey);
-      alert('hello');
       (window as any).initViemProvider(secretKey);
     }, params.secretKey);
 
     // Click the "Opt-out" button
     // Wait for the "Opt-out" button to appear and click it
-    await page.waitForSelector('#rcc-decline-button > p');
+    console.log('10 Waiting for selector');
+    await page.waitForSelector('#rcc-decline-button > p', { timeout: timeout });
     await page.click('#rcc-decline-button > p');
 
     // Click the wallet button
-    await page.waitForSelector('#wallet-button');
+    console.log('20 Waiting for selector');
+    await page.waitForSelector('#wallet-button', { timeout: timeout });
     await page.click('#wallet-button');
 
     // Click the "Browser wallet" button
@@ -138,8 +141,10 @@ export class Tool extends BaseTool<Config, Params, Result> {
     console.log('Action button clicked');
 
     // Wait for the specified selector with a more flexible approach
+    console.log('30 Waiting for selector');
     await page.waitForSelector(
       'body > div.MuiModal-root > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1 > div.MuiBox-root > h2',
+      { timeout: timeout },
     );
 
     // Take a screenshot and save it to ./tmp/

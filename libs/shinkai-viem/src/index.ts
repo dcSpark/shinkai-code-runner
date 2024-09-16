@@ -6,9 +6,6 @@ import { privateKeyToAccount } from 'viem/accounts';
 // Assign to window object
 (window as any).viem = viem;
 (window as any).chains = chains;
-(window as any).holaDaniel = function () {
-  console.log('hola Daniel3333');
-};
 
 // EIP-1193 Provider Implementation
 class ViemProvider {
@@ -248,7 +245,7 @@ function addEip6963Listener(info: EIP6963ProviderInfo, provider: ViemProvider) {
 
 // Function to initialize and assign the provider to window.ethereum
 function initializeViemProvider(chain: any, providerInfo: EIP6963ProviderInfo, sk: string) {
-  const provider = new ViemProvider(chain, sk); // TODO: remove null
+  const provider = new ViemProvider(chain, sk);
 
   (window as any).ethereum = {
     request: provider.request.bind(provider),
@@ -300,7 +297,6 @@ const viemProviderInfo: EIP6963ProviderInfo = {
 
 // Initialize the provider for Base Sepolia by default
 (window as any).initViemProvider = function (sk: string) {
-  console.log(`hola Daniel, vamos a inicializar el provider con la sk: ${sk}`);
   initializeViemProvider(chains.baseSepolia, viemProviderInfo, sk);
 };
 
