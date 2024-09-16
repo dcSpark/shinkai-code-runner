@@ -2,9 +2,7 @@ import { BaseTool, RunResult } from '@shinkai_protocol/shinkai-tools-builder';
 import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
 import { WebSocketClient } from './WebSocketClient';
 
-type Config = {
-  ws_password: string;
-};
+type Config = {};
 type Params = {
   partial_file_name?: string;
   extension_name?: string;
@@ -21,10 +19,8 @@ export class Tool extends BaseTool<Config, Params, Result> {
     keywords: ['find-file-fs', 'shinkai'],
     configurations: {
       type: 'object',
-      properties: {
-        ws_password: { type: 'string' },
-      },
-      required: ['ws_password'],
+      properties: {},
+      required: [],
     },
     parameters: {
       type: 'object',

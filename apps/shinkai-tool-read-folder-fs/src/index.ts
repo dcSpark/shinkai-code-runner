@@ -3,7 +3,7 @@ import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
 import { WebSocketClient } from './WebSocketClient';
 
 type Config = {
-  ws_password: string;
+  // ws_password: string;
 };
 type Params = {
   folder_to_read?: string;
@@ -22,16 +22,14 @@ type AuthResponse = {
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-shinkai-tool-read-folder-fs',
-    name: 'Shinkai: Read Folder from FS',
-    description: 'Read folder from FS',
+    name: 'Shinkai: Read Files From Folder',
+    description: 'Read the files from a folder in the file system',
     author: 'Shinkai',
     keywords: ['read', 'folder', 'fs'],
     configurations: {
       type: 'object',
-      properties: {
-        ws_password: { type: 'string' },
-      },
-      required: ['ws_password'],
+      properties: {},
+      required: [],
     },
     parameters: {
       type: 'object',

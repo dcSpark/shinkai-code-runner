@@ -2,11 +2,8 @@ import { BaseTool, RunResult } from '@shinkai_protocol/shinkai-tools-builder';
 import { ToolDefinition } from 'libs/shinkai-tools-builder/src/tool-definition';
 import { WebSocketClient } from './WebSocketClient';
 
-type Config = {
-  ws_password: string;
-};
+type Config = {};
 type Params = {
-  name: string;
   destination: string;
   content: string;
 };
@@ -15,25 +12,23 @@ type Result = { message: string };
 export class Tool extends BaseTool<Config, Params, Result> {
   definition: ToolDefinition<Config, Params, Result> = {
     id: 'shinkai-tool-write-file-fs',
-    name: 'Shinkai: write-file-fs',
-    description: 'New write-file-fs tool from template',
+    name: 'Shinkai: Create / Write / Generate File To FS',
+    description:
+      'Creates / Writes / Generates a file to the file system. E.g. Create or overwrite a file with name "test.txt", destination "/" and content "Hello, world!"',
     author: 'Shinkai',
-    keywords: ['write-file-fs', 'shinkai'],
+    keywords: ['create', 'generate', 'write', 'file', 'fs'],
     configurations: {
       type: 'object',
-      properties: {
-        ws_password: { type: 'string' },
-      },
-      required: ['ws_password'],
+      properties: {},
+      required: [],
     },
     parameters: {
       type: 'object',
       properties: {
-        name: { type: 'string' },
         destination: { type: 'string' },
         content: { type: 'string' },
       },
-      required: ['name', 'destination', 'content'],
+      required: ['destination', 'content'],
     },
     result: {
       type: 'object',
@@ -45,30 +40,28 @@ export class Tool extends BaseTool<Config, Params, Result> {
   };
 
   async run(params: Params): Promise<RunResult<Result>> {
-    const { name, destination, content } = params;
+    const { destination, content } = params;
 
-    // Validate that the name has an extension
-    if (!/\.[^/.]+$/.test(name)) {
+    // Extract name from destination
+    const name = destination.split('/').pop();
+    if (!name || !/\.[^/.]+$/.test(name)) {
       const errorMessage =
         'The file name must have an extension (e.g., .txt, .pdf).';
       console.error(errorMessage);
       return { data: { message: errorMessage } };
     }
 
+    // Check if the first 100 characters of content are base64
+    const first100Chars = content.substring(0, 100);
+    const isBase64 = /^[A-Za-z0-9+/=]+$/.test(first100Chars);
+    const finalContent = isBase64
+      ? content
+      : Buffer.from(content).toString('base64');
+
     const wsClient = new WebSocketClient('ws://127.0.0.1:9555');
 
     try {
       await wsClient.connect();
-
-      // // Authenticate with WebSocket using ws_password
-      // const authMessage = wsClient.createRequestMessage('authenticate', this.config.ws_password);
-      // await wsClient.send(authMessage);
-
-      // // Check authentication response
-      // const authResponse = await wsClient.handleMessages();
-      // if (authResponse.status !== 'success') {
-      //   throw new Error('Authentication failed');
-      // }
 
       // Set destination to "." if it is empty
       const finalDestination = destination || '.';
@@ -76,7 +69,7 @@ export class Tool extends BaseTool<Config, Params, Result> {
       const requestMessage = wsClient.createRequestMessage('writefile', {
         name,
         destination: finalDestination,
-        content,
+        content: finalContent,
       });
       await wsClient.send(requestMessage);
 
