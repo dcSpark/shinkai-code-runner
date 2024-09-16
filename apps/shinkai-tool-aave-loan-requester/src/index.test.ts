@@ -1,6 +1,6 @@
 import { Tool } from '../src/index';
 
-const timeout = 60 * 60 * 1000;
+const timeout = 25000;
 
 test('exists definition', async () => {
   const tool = new Tool({});
