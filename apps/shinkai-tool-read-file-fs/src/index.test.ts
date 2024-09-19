@@ -11,9 +11,9 @@ test('read file', async () => {
   const result = await tool.run({ file_path: 'nico.txt' });
   console.log(result);
   expect(result).toBeInstanceOf(Object);
-  if ('fileContent' in result.data) {
+  if ('contentBase64' in result.data) {
     const decodedContent = Buffer.from(
-      result.data.fileContent,
+      result.data.contentBase64,
       'base64',
     ).toString('utf-8');
     expect(decodedContent).toBe('hello world! 2nd attempt');

@@ -6,7 +6,7 @@ type Config = {};
 type Params = {
   file_path: string;
 };
-type Result = { fileContent: string } | { error: string };
+type Result = { contentBase64: string } | { error: string };
 
 type AuthResponse = {
   status: string;
@@ -35,9 +35,9 @@ export class Tool extends BaseTool<Config, Params, Result> {
     result: {
       type: 'object',
       properties: {
-        fileContent: { type: 'string' },
+        contentBase64: { type: 'string' },
       },
-      required: ['fileContent'],
+      required: ['contentBase64'],
     },
   };
 
@@ -71,9 +71,20 @@ export class Tool extends BaseTool<Config, Params, Result> {
       }
 
       const fileContent = response.message.data;
+      const mimeType = response.message.mime_type;
       console.log(fileContent);
 
-      return { data: { fileContent } };
+      // Determine if the file is a text file based on its MIME type
+      const isTextFile = mimeType.startsWith('text/');
+
+      if (isTextFile) {
+        const utf8Content = Buffer.from(fileContent, 'base64').toString(
+          'utf-8',
+        );
+        return { data: { contentBase64: utf8Content } };
+      }
+
+      return { data: { contentBase64: fileContent } };
     } catch (error) {
       console.error('Error connecting to WebSocket:', error);
       return { data: { error: 'Error connecting to WebSocket' } };
