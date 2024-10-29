@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "@shinkai_protocol/shinkai-tools-builder": "./libs/shinkai-tools-builder/src/index.ts"
+  },
+  "nodeModulesDir": "auto"
+}
