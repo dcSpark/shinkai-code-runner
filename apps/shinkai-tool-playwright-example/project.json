@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-playwright-example/src/index.ts --outputFolder ./dist/apps/shinkai-tool-playwright-example"
+        "command": "deno run ./scripts/tool-bundler.ts --entry ./apps/shinkai-tool-playwright-example/src/index.ts --outputFolder ./dist/apps/shinkai-tool-playwright-example"
       },
       "configurations": {
         "development": {},
