@@ -1,9 +1,6 @@
-import { Run, ToolDefinition } from '@shinkai_protocol/shinkai-tools-builder';
 export const run: Run<{}, { message: string }, { message: string }> = (
-  _configurations: {},
-  parameters: {
-    message: string;
-  },
+  _configurations,
+  parameters,
 ): Promise<{ message: string }> => {
   console.log('run echo from js');
   return Promise.resolve({
