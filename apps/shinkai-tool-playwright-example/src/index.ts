@@ -1,7 +1,3 @@
-import {
-  type Run,
-  type ToolDefinition,
-} from '@shinkai_protocol/shinkai-tools-builder';
 import * as playwright from 'npm:playwright';
 import chromePaths from 'npm:chrome-paths';
 
