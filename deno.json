@@ -1,6 +1,11 @@
 {
-  "imports": {
-    "@shinkai_protocol/shinkai-tools-builder": "./libs/shinkai-tools-builder/src/index.ts"
+  "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "lib": ["deno.window", "document", "dom"]
   },
-  "nodeModulesDir": "auto"
+  "tasks": {
+    "shinkai-viem-bundler": "deno run --allow-read --allow-env --allow-write --allow-run scripts/shinkai-viem-bundler.ts",
+    "tool-bundler": "deno run --allow-read --allow-env --allow-write --allow-ffi --allow-sys --allow-net scripts/tool-bundler.ts",
+    "attach-shinkai-viem": "deno run --allow-read --allow-write scripts/attach-shinkai-viem.ts"
+  }
 }
