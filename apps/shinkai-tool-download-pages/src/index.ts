@@ -1,17 +1,16 @@
 import TurndownService from 'npm:turndown';
 import axios from 'npm:axios';
-import { Run, ToolDefinition } from '@shinkai_protocol/shinkai-tools-builder';
 
-type Config = {};
-type Params = {
+type Configurations = {};
+type Parameters = {
   urls: string[];
 };
 
 type Result = { markdowns: string[] };
 
-export const run: Run<Config, Params, Result> = async (
-  _configurations: Config,
-  parameters: Params,
+export const run: Run<Configurations, Parameters, Result> = async (
+  _configurations: Configurations,
+  parameters: Parameters,
 ): Promise<Result> => {
   try {
     const responses = await axios.all(
