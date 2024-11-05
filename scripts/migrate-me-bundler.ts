@@ -1,6 +1,7 @@
-import * as esbuild from 'esbuild';
-import * as fs from 'fs';
-import { execSync } from 'child_process';
+import * as esbuild from 'npm:esbuild';
+import * as fs from 'npm:fs';
+import { execSync } from 'npm:child_process';
+import process from "node:process";
 
 const singleAppBinaryName =
   process.platform === 'win32'

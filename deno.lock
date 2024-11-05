@@ -45,6 +45,7 @@
     "npm:ajv@^7.2.4": "7.2.4",
     "npm:axios@*": "1.7.7",
     "npm:buffer@^6.0.3": "6.0.3",
+    "npm:child_process@*": "1.0.2",
     "npm:chrome-paths@*": "1.0.1",
     "npm:chrome-paths@^1.0.1": "1.0.1",
     "npm:copyfiles@^2.4.1": "2.4.1",
@@ -3553,6 +3554,9 @@
     },
     "char-regex@1.0.2": {
       "integrity": "sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw=="
+    },
+    "child_process@1.0.2": {
+      "integrity": "sha512-Wmza/JzL0SiWz7kl6MhIKT5ceIlnFPJX+lwUGj7Clhy5MMldsSoJR0+uvRzOS5Kv45Mq7t1PoE8TsOA9bzvb6g=="
     },
     "chokidar@3.6.0": {
       "integrity": "sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==",

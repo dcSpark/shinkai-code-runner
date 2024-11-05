@@ -1,15 +1,25 @@
 use serde_json::Value;
 
-use crate::built_in_tools::{get_tool, get_tools};
+use crate::{
+    built_in_tools::{get_tool, get_tools},
+    tools::shinkai_tools_backend_options::ShinkaiToolsBackendOptions,
+};
 
 #[tokio::test]
 async fn get_tools_all_load() {
     let tools = get_tools();
     for (tool_name, tool_definition) in tools {
-        let mut tool_instance = crate::tools::tool::Tool::new(tool_definition.code.unwrap(), Value::Null, None);
-        let defintion = tool_instance
-            .get_definition()
-            .await;
+        println!("Creating tool instance for {}", tool_name);
+        let tool_instance = crate::tools::tool::Tool::new(
+            tool_definition.code.unwrap(),
+            Value::Null,
+            Some(ShinkaiToolsBackendOptions {
+                binary_path: "/opt/homebrew/bin/deno".into(),
+            }),
+        );
+        println!("Getting definition for {}", tool_name);
+        let defintion = tool_instance.definition().await;
+        println!("Definition result for {}: {:?}", tool_name, defintion);
         assert_eq!(defintion.as_ref().unwrap().id, tool_name);
         assert!(defintion.is_ok(), "Tool {} failed to load", tool_name);
     }
