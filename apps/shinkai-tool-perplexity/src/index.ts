@@ -16,7 +16,6 @@ export const run: Run<Configurations, Parameters, Result> = async (
 ): Promise<Result> => {
   const browser = await playwright['chromium'].launch({
     executablePath: configurations?.chromePath || chromePaths.chrome,
-    // headless: false,
   });
   const context = await browser.newContext({
     viewport: { width: 1280, height: 800 }, // Set viewport size

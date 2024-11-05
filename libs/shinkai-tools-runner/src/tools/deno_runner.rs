@@ -8,13 +8,7 @@ pub struct DenoRunner {
 }
 
 impl DenoRunner {
-    const DENO_PERMISSIONS: [&'static str; 5] = [
-        "--allow-read",
-        "--allow-net",
-        "--allow-env",
-        "--allow-sys",
-        "--allow-write",
-    ];
+    const DENO_PERMISSIONS: [&'static str; 1] = ["--allow-all"];
     pub fn new(options: DenoRunnerOptions) -> Self {
         DenoRunner {
             options,

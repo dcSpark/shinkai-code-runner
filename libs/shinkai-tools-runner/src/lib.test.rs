@@ -343,7 +343,7 @@ async fn shinkai_tool_playwright_example() {
 
 #[tokio::test]
 async fn shinkai_tool_defillama_lending_tvl_rankings() {
-    let tool_definition = get_tool("shinkai-tool-defillama-lending-tvl-rankings").unwrap();
+    let tool_definition = get_tool("shinkai-tool-defillama-tvl-rankings").unwrap();
     let tool = Tool::new(
         tool_definition.code.clone().unwrap(),
         serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
