@@ -1,19 +1,19 @@
 use std::collections::HashMap;
 
-use crate::tools::shinkai_tools_backend::ShinkaiToolsBackend;
+use crate::tools::deno_runner::DenoRunner;
 
-use super::ShinkaiToolsBackendOptions;
+use super::DenoRunnerOptions;
 
 #[tokio::test]
 async fn test_run_echo_tool() {
-    let mut backend = ShinkaiToolsBackend::new(ShinkaiToolsBackendOptions {
+    let mut deno_runner = DenoRunner::new(DenoRunnerOptions {
         binary_path: "/opt/homebrew/bin/deno".into(),
     });
     let code = r#"
       console.log("{\"message\": \"hello world\"}");
     "#;
 
-    let result = backend
+    let result = deno_runner
         .run(
             code,
             HashMap::from([

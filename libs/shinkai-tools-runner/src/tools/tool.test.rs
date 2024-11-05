@@ -1,10 +1,8 @@
-use std::collections::HashMap;
-
 use serde_json::Value;
 
-use crate::tools::{shinkai_tools_backend::ShinkaiToolsBackend, tool::Tool};
+use crate::tools::tool::Tool;
 
-use super::ShinkaiToolsBackendOptions;
+use super::DenoRunnerOptions;
 
 #[tokio::test]
 async fn get_tool_definition() {
@@ -16,13 +14,7 @@ async fn get_tool_definition() {
     .to_string();
     let configurations = serde_json::json!({});
 
-    let tool = Tool::new(
-        code,
-        configurations,
-        Some(ShinkaiToolsBackendOptions {
-            binary_path: "/opt/homebrew/bin/deno".into(),
-        }),
-    );
+    let tool = Tool::new(code, configurations, None);
 
     let definition = tool.definition().await.unwrap();
 
@@ -39,13 +31,7 @@ async fn run_tool() {
     .to_string();
     let configurations = Value::Null;
 
-    let tool = Tool::new(
-        code,
-        configurations,
-        Some(ShinkaiToolsBackendOptions {
-            binary_path: "/opt/homebrew/bin/deno".into(),
-        }),
-    );
+    let tool = Tool::new(code, configurations, None);
 
     let result = tool
         .run(

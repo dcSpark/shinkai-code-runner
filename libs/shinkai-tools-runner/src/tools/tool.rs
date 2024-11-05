@@ -1,15 +1,14 @@
 use serde_json::Value;
 
 use super::{
-    execution_error::ExecutionError, run_result::RunResult,
-    shinkai_tools_backend::ShinkaiToolsBackend,
-    shinkai_tools_backend_options::ShinkaiToolsBackendOptions, tool_definition::ToolDefinition,
+    deno_runner::DenoRunner, deno_runner_options::DenoRunnerOptions,
+    execution_error::ExecutionError, run_result::RunResult, tool_definition::ToolDefinition,
 };
 
 pub struct Tool {
     code: String,
     configurations: Value,
-    shinkai_tools_backend_options: ShinkaiToolsBackendOptions,
+    deno_runner_options: DenoRunnerOptions,
 }
 
 impl Tool {
@@ -18,21 +17,20 @@ impl Tool {
     pub fn new(
         code: String,
         configurations: Value,
-        shinkai_tools_backend_options: Option<ShinkaiToolsBackendOptions>,
+        deno_runner_options: Option<DenoRunnerOptions>,
     ) -> Self {
-        let options = shinkai_tools_backend_options.unwrap_or_default();
+        let options = deno_runner_options.unwrap_or_default();
         Tool {
             code,
             configurations,
-            shinkai_tools_backend_options: options,
+            deno_runner_options: options,
         }
     }
 
     pub async fn definition(&self) -> Result<ToolDefinition, ExecutionError> {
-        println!("preparing to get tool definition from code");
+        log::info!("preparing to get tool definition from code");
 
-        let mut shinkai_tool_backend =
-            ShinkaiToolsBackend::new(self.shinkai_tools_backend_options.clone());
+        let mut deno_runner = DenoRunner::new(self.deno_runner_options.clone());
 
         // Empty envs when get definition
         let envs = std::collections::HashMap::new();
@@ -45,9 +43,10 @@ impl Tool {
         "#,
             &self.code.to_string()
         );
-        let result = shinkai_tool_backend.run(&code, envs).await.map_err(|e| {
-            ExecutionError::new(format!("Failed to run shinkai tool backend: {}", e), None)
-        })?;
+        let result = deno_runner
+            .run(&code, envs)
+            .await
+            .map_err(|e| ExecutionError::new(format!("failed to run deno: {}", e), None))?;
 
         let result_text = result
             .lines()
@@ -57,14 +56,14 @@ impl Tool {
             .collect::<Vec<&str>>()
             .join("\n");
 
-        println!("result text: {}", result_text);
+        log::info!("result text: {}", result_text);
 
         let tool_definition: ToolDefinition = serde_json::from_str(&result_text).map_err(|e| {
-            println!("failed to parse tool definition: {}", e);
+            log::info!("failed to parse tool definition: {}", e);
             ExecutionError::new(format!("failed to parse tool definition: {}", e), None)
         })?;
 
-        println!(
+        log::info!(
             "successfully retrieved tool definition: {:?}",
             tool_definition
         );
@@ -76,19 +75,18 @@ impl Tool {
         parameters: Value,
         max_execution_time_s: Option<u64>,
     ) -> Result<RunResult, ExecutionError> {
-        println!("preparing to run tool");
-        println!("configurations: {:?}", self.configurations);
-        println!("parameters: {:?}", parameters);
+        log::info!("preparing to run tool");
+        log::info!("configurations: {:?}", self.configurations);
+        log::info!("parameters: {:?}", parameters);
 
-        let mut shinkai_tool_backend =
-            ShinkaiToolsBackend::new(self.shinkai_tools_backend_options.clone());
+        let mut deno_runner = DenoRunner::new(self.deno_runner_options.clone());
         // Empty envs when get definition
         let envs = std::collections::HashMap::new();
         let code = format!(
             r#"
             {}
-            const configurations = JSON.parse({});
-            const parameters = JSON.parse({});
+            const configurations = JSON.parse('{}');
+            const parameters = JSON.parse('{}');
 
             const result = await run(configurations, parameters);
             console.log("<shinkai-tool-result>");
@@ -97,11 +95,12 @@ impl Tool {
         "#,
             &self.code.to_string(),
             serde_json::to_string(&self.configurations).unwrap(),
-            serde_json::to_string(&parameters.to_string()).unwrap(),
+            serde_json::to_string(&parameters).unwrap(),
         );
-        let result = shinkai_tool_backend.run(&code, envs).await.map_err(|e| {
-            ExecutionError::new(format!("Failed to run shinkai tool backend: {}", e), None)
-        })?;
+        let result = deno_runner
+            .run(&code, envs)
+            .await
+            .map_err(|e| ExecutionError::new(format!("failed to run deno: {}", e), None))?;
 
         let result_text = result
             .lines()
@@ -111,13 +110,13 @@ impl Tool {
             .collect::<Vec<&str>>()
             .join("\n");
 
-        println!("result text: {}", result_text);
+        log::info!("result text: {}", result_text);
 
         let result: Value = serde_json::from_str(&result_text).map_err(|e| {
-            println!("failed to parse result: {}", e);
+            log::info!("failed to parse result: {}", e);
             ExecutionError::new(format!("failed to parse result: {}", e), None)
         })?;
-        println!("successfully parsed run result: {:?}", result);
+        log::info!("successfully parsed run result: {:?}", result);
         Ok(RunResult { data: result })
     }
 }

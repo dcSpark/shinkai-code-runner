@@ -1,15 +1,22 @@
 use std::{collections::HashMap, process::Command};
 
-use super::shinkai_tools_backend_options::ShinkaiToolsBackendOptions;
+use super::deno_runner_options::DenoRunnerOptions;
 
 #[derive(Default)]
-pub struct ShinkaiToolsBackend {
-    options: ShinkaiToolsBackendOptions,
+pub struct DenoRunner {
+    options: DenoRunnerOptions,
 }
 
-impl ShinkaiToolsBackend {
-    pub fn new(options: ShinkaiToolsBackendOptions) -> Self {
-        ShinkaiToolsBackend {
+impl DenoRunner {
+    const DENO_PERMISSIONS: [&'static str; 5] = [
+        "--allow-read",
+        "--allow-net",
+        "--allow-env",
+        "--allow-sys",
+        "--allow-write",
+    ];
+    pub fn new(options: DenoRunnerOptions) -> Self {
+        DenoRunner {
             options,
             ..Default::default()
         }
@@ -33,11 +40,10 @@ impl ShinkaiToolsBackend {
             e
         })?;
 
-        let deno_permissions = ["--allow-all"];
         let mut command = Command::new(binary_path);
         let command = command
             .args(["run", "--ext", "ts"])
-            .args(deno_permissions)
+            .args(DenoRunner::DENO_PERMISSIONS)
             .arg(temp_file.path().to_str().unwrap())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
@@ -48,7 +54,7 @@ impl ShinkaiToolsBackend {
 
         if !output.status.success() {
             let error = String::from_utf8_lossy(&output.stderr);
-            log::info!("command failed with error: {}", error);
+            println!("command failed with error: {}", error);
             return Err(std::io::Error::new(std::io::ErrorKind::Other, error));
         }
 
@@ -60,5 +66,5 @@ impl ShinkaiToolsBackend {
 }
 
 #[cfg(test)]
-#[path = "shinkai_tools_backend.test.rs"]
+#[path = "deno_runner.test.rs"]
 mod tests;

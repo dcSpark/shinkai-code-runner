@@ -35,36 +35,17 @@ async fn shinkai_tool_weather_by_city() {
 #[tokio::test]
 async fn shinkai_tool_inline() {
     let js_code = r#"
-    class BaseTool {
-        constructor(config) {
-            this.config = config;
+        function run(configurations, params) {
+            return { message: `Hello, ${params.name}!` };
         }
-        setConfig(value) {
-            this.config = value;
-            return this.config;
-        }
-        getConfig() {
-            return this.config;
-        }
-    }
 
-    class Tool extends BaseTool {
-        constructor(config) {
-            super(config);
-        }
-        async run(params) {
-            return { data: `Hello, ${params.name}!` };
-        }
-    }
-
-    globalThis.tool = { Tool };
 "#;
     let tool = Tool::new(js_code.to_string(), serde_json::Value::Null, None);
     let run_result = tool
         .run(serde_json::json!({ "name": "world" }), None)
         .await
         .unwrap();
-    assert_eq!(run_result.data, "Hello, world!");
+    assert_eq!(run_result.data["message"], "Hello, world!");
 }
 
 #[tokio::test]
@@ -120,11 +101,12 @@ async fn shinkai_tool_download_page() {
     let run_result = tool
         .run(
             serde_json::json!({
-                "url": "https://shinkai.com"
+                "urls": "https://shinkai.com"
             }),
             None,
         )
         .await;
+    println!("{}", run_result.as_ref().unwrap().data);
     assert!(run_result.is_ok());
 }
 
@@ -199,6 +181,7 @@ async fn shinkai_tool_download_page_stack_overflow() {
         .unwrap()
         .join()
         .unwrap();
+    println!("run_result: {:?}", run_result);
     assert!(run_result.is_ok());
 }
 
