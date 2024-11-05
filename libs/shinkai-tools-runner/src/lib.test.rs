@@ -376,7 +376,7 @@ async fn shinkai_tool_youtube_summary() {
     let tool_definition = get_tool("shinkai-tool-youtube-summary").unwrap();
     let tool = Tool::new(
         tool_definition.code.clone().unwrap(),
-        serde_json::Value::Null,
+        serde_json::json!({ "apiUrl": "http://127.0.0.1:11434" }),
         None,
     );
     let run_result = tool
