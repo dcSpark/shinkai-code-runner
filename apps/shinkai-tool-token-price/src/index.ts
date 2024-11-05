@@ -1,5 +1,5 @@
-import { ArchiveNodeProvider, Chainlink } from 'npm:micro-eth-signer/net';
-import axios from 'npm:axios';
+import { ArchiveNodeProvider, Chainlink } from 'npm:micro-eth-signer@0.10.0/net';
+import axios from 'npm:axios@1.7.7';
 import process from 'node:process';
 
 type Configurations = {};

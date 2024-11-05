@@ -1,5 +1,5 @@
-import { YoutubeTranscript } from 'npm:youtube-transcript';
-import OpenAI from 'npm:openai';
+import { YoutubeTranscript } from 'npm:youtube-transcript@1.2.1';
+import OpenAI from 'npm:openai@4.71.0';
 
 type Config = {
   apiUrl?: string;

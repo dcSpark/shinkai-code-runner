@@ -9,7 +9,7 @@ use crate::{
 async fn get_tools_all_load() {
     let tools = get_tools();
     for (tool_name, tool_definition) in tools {
-        println!("Creating tool instance for {}", tool_name);
+        println!("creating tool instance for {}", tool_name);
         let tool_instance = crate::tools::tool::Tool::new(
             tool_definition.code.unwrap(),
             Value::Null,
@@ -17,11 +17,15 @@ async fn get_tools_all_load() {
                 binary_path: "/opt/homebrew/bin/deno".into(),
             }),
         );
-        println!("Getting definition for {}", tool_name);
+        println!("fetching definition for {}", tool_name);
         let defintion = tool_instance.definition().await;
-        println!("Definition result for {}: {:?}", tool_name, defintion);
+        println!(
+            "definition load successfully for {}: {:?}",
+            tool_name,
+            defintion.clone().unwrap().id
+        );
         assert_eq!(defintion.as_ref().unwrap().id, tool_name);
-        assert!(defintion.is_ok(), "Tool {} failed to load", tool_name);
+        assert!(defintion.is_ok(), "tool {} failed to load", tool_name);
     }
 }
 

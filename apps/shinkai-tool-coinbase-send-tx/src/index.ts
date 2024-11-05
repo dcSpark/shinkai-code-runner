@@ -1,4 +1,4 @@
-import { Coinbase, CoinbaseOptions, Transfer } from 'npm:@coinbase/coinbase-sdk';
+import { Coinbase, CoinbaseOptions, Transfer } from 'npm:@coinbase/coinbase-sdk@0.0.16';
 
 type Configurations = {
   name: string;

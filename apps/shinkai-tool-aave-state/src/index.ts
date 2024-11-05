@@ -1,5 +1,5 @@
-import * as playwright from 'npm:playwright';
-import chromePaths from 'npm:chrome-paths';
+import * as playwright from 'npm:playwright@1.48.2';
+import chromePaths from 'npm:chrome-paths@1.0.1';
 
 // Remove later. It's for debugging.
 import { Buffer } from 'node:buffer';

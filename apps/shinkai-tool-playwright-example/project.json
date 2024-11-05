@@ -22,6 +22,12 @@
       "options": {
         "lintFilePatterns": ["apps/shinkai-tool-playwright-example/**/*.ts"]
       }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "deno test"
+      }
     }
   }
 }

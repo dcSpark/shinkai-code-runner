@@ -1,5 +1,5 @@
-import * as playwright from 'npm:playwright';
-import chromePaths from 'npm:chrome-paths';
+import * as playwright from 'npm:playwright@1.48.2';
+import chromePaths from 'npm:chrome-paths@1.0.1';
 
 type Configurations = {
   chromePath?: string;
@@ -24,6 +24,8 @@ export const run: Run<Configurations, Parameters, Result> = async (
     console.log('navigating to', parameters.url);
     await page.goto(parameters.url);
     const title = await page.title();
+    await page.close();
+    await context.close();
     await browser.close();
     return { title };
   } catch (e) {

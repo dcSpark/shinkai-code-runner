@@ -1,5 +1,5 @@
-import TurndownService from 'npm:turndown';
-import axios from 'npm:axios';
+import TurndownService from 'npm:turndown@7.2.0';
+import axios from 'npm:axios@1.7.7';
 
 type Configurations = {};
 type Parameters = {

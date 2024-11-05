@@ -1,5 +1,5 @@
-import { URL } from 'npm:whatwg-url';
-import axios from 'npm:axios';
+import { URL } from 'npm:whatwg-url@14.0.0';
+import axios from 'npm:axios@1.7.7';
 import process from 'node:process';
 
 type Configurations = {};

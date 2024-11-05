@@ -1,5 +1,5 @@
-import { weieth } from 'npm:micro-eth-signer';
-import { ArchiveNodeProvider } from 'npm:micro-eth-signer/net';
+import { weieth } from 'npm:micro-eth-signer@0.10.0';
+import { ArchiveNodeProvider } from 'npm:micro-eth-signer@0.10.0/net';
 import axios from 'npm:axios';
 import process from 'node:process';
 

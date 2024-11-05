@@ -1,5 +1,5 @@
 import process from 'node:process';
-import axios from 'npm:axios';
+import axios from 'npm:axios@1.7.7';
 
 type Configurations = {
   apiKey: string;

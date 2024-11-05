@@ -1,4 +1,4 @@
-import { Parser } from 'npm:expr-eval';
+import { Parser } from 'npm:expr-eval@2.0.2';
 
 type Configurations = {};
 type Parameters = {

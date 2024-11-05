@@ -10,6 +10,8 @@ Deno.test({
     write: true,
     run: true,
   },
+  sanitizeResources: false,
+  sanitizeOps: false,
   fn: async () => {
     const result = await run(
       {

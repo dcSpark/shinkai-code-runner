@@ -1,4 +1,4 @@
-import * as nunjucks from 'npm:nunjucks';
+import * as nunjucks from 'npm:nunjucks@3.2.4';
 
 type Configurations = {
   only_system: boolean;

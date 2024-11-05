@@ -4,7 +4,7 @@ import {
   Layout,
   LeidenAlgorithm,
   Network,
-} from 'npm:networkanalysis-ts';
+} from 'npm:networkanalysis-ts@1.0.0';
 
 type Configurations = {};
 type Parameters = {
