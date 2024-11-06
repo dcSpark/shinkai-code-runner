@@ -57,7 +57,29 @@ export const run: Run<Config, Params, Result> = async (
     });
   } catch (error) {
     console.error('Error calling Ollama API:', error);
-    throw error;
+    // Fallback to 11434 if apiUrl is not set
+    if (!configurations.apiUrl) {
+      console.log('Retrying with fallback URL http://127.0.0.1:11434');
+      const fallbackClient = new OpenAI({
+        baseURL: 'http://127.0.0.1:11434/v1',
+        apiKey: configurations?.apiKey || '',
+      });
+      try {
+        const fallbackResponse = await fallbackClient.chat.completions.create({
+          model: configurations?.model || 'llama3.1:8b-instruct-q4_1',
+          messages: [message],
+          stream: false,
+        });
+        return Promise.resolve({
+          summary: fallbackResponse.choices[0]?.message?.content || '',
+        });
+      } catch (fallbackError) {
+        console.error('Error calling fallback Ollama API:', fallbackError);
+        throw fallbackError;
+      }
+    } else {
+      throw error;
+    }
   }
 };
 
@@ -65,7 +87,7 @@ export const definition: ToolDefinition<typeof run> = {
   id: 'shinkai-tool-youtube-summary',
   name: 'Shinkai: YouTube Video Summary',
   description:
-    'Summarizes a YouTube video content without watching. Provides a summary with organized sections and clickable timestamp links. Useful for quickly grasping main points, preparing for discussions, or efficient research. Example uses: summarizing tech talks, product reviews, or educational lectures. Parameters: url (string) - The full YouTube video URL to process.',
+    'Summarizes a YouTube video. Provides a summary with organized sections and clickable timestamp links. Useful for quickly grasping main points, preparing for discussions, or efficient research. Example uses: summarizing tech talks, product reviews, or educational lectures. Parameters: url (string) - The full YouTube video URL to process.',
   author: 'Shinkai',
   keywords: [
     'youtube',
