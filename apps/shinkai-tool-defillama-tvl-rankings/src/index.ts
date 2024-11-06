@@ -69,7 +69,7 @@ export const findNetworkName = (
 
 const getCategories = async (page: playwright.Page): Promise<string[]> => {
   await goToPage(page, 'https://defillama.com/categories');
-  let table = await getRows(page);
+  const table = await getRows(page);
 
   return table
     .map((row) => {
@@ -157,6 +157,7 @@ const getRows = async (page: playwright.Page): Promise<(string | null)[][]> => {
       (divs) => {
         return divs.map((div) => {
           const columns = [
+            // deno-lint-ignore no-explicit-any
             ...(div.querySelectorAll(':scope > div') as any),
           ].map((column) => {
             return (
@@ -186,6 +187,7 @@ const getRows = async (page: playwright.Page): Promise<(string | null)[][]> => {
       const scrollingElement = document.scrollingElement;
       if (scrollingElement) {
         return (
+          // deno-lint-ignore no-window
           scrollingElement.scrollTop + window.innerHeight <
           scrollingElement.scrollHeight
         );

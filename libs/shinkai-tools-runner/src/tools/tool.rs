@@ -44,7 +44,7 @@ impl Tool {
             &self.code.to_string()
         );
         let result = deno_runner
-            .run(&code, envs)
+            .run(&code, envs, None)
             .await
             .map_err(|e| ExecutionError::new(format!("failed to run deno: {}", e), None))?;
 
@@ -98,7 +98,7 @@ impl Tool {
             serde_json::to_string(&parameters).unwrap(),
         );
         let result = deno_runner
-            .run(&code, envs)
+            .run(&code, envs, max_execution_time_s)
             .await
             .map_err(|e| ExecutionError::new(format!("failed to run deno: {}", e), None))?;
 

@@ -53,10 +53,10 @@ export const run: Run<Configurations, Parameters, Result> = async (
 
   try {
     price = await link.coinPrice(parameters.symbol);
-  } catch (coinError) {
+  } catch (_coinError) {
     try {
       price = await link.tokenPrice(parameters.symbol);
-    } catch (tokenError) {
+    } catch (_tokenError) {
       console.error(`Failed to fetch price for symbol: ${parameters.symbol}`);
     }
   }

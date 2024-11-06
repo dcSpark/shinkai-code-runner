@@ -110,50 +110,31 @@ async fn shinkai_tool_download_page() {
     assert!(run_result.is_ok());
 }
 
-// #[tokio::test]
-// async fn max_execution_time() {
-//     let js_code = r#"
-//     class BaseTool {
-//         constructor(config) {
-//             this.config = config;
-//         }
-//         setConfig(value) {
-//             this.config = value;
-//             return this.config;
-//         }
-//         getConfig() {
-//             return this.config;
-//         }
-//     }
-//     class Tool extends BaseTool {
-//         constructor(config) {
-//             super(config);
-//         }
-//         async run() {
-//             let startedAt = Date.now();
-//             while (true) {
-//                 const elapse = Date.now() - startedAt;
-//                 console.log(`while true every ${500}ms, elapse ${elapse} ms`);
-//                 await new Promise(async (resolve) => {
-//                     setTimeout(() => {
-//                         resolve();
-//                     }, 500);
-//                 });
-//             }
+#[tokio::test]
+async fn max_execution_time() {
+    let js_code = r#"
+        async function run(configurations, parameters) {
+            let startedAt = Date.now();
+            while (true) {
+                const elapse = Date.now() - startedAt;
+                console.log(`while true every ${500}ms, elapse ${elapse} ms`);
+                await new Promise(async (resolve) => {
+                    setTimeout(() => {
+                        resolve();
+                    }, parameters.timeoutMs);
+                });
+            }
 
-//             return { data: true };
-//         }
-//     }
-//     globalThis.tool = { Tool };
-// "#;
-//     let tool = Tool::new(js_code.to_string(), serde_json::Value::Null);
-//     let start_time = std::time::Instant::now();
-//     let run_result = tool.run(serde_json::Value::Null, Some(10000)).await;
-//     let elapsed_time = start_time.elapsed();
-//     assert!(run_result.is_err());
-//     assert!(elapsed_time.as_millis() <= 10050);
-//     assert!(run_result.err().unwrap().message().contains("time reached"));
-// }
+            return { data: true };
+        }
+"#;
+    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null, None);
+    let run_result = tool
+        .run(serde_json::json!({ "timeoutMs": 3200 }), Some(3000))
+        .await;
+    assert!(run_result.is_err());
+    assert!(run_result.err().unwrap().message().contains("timed out"));
+}
 
 #[tokio::test]
 async fn shinkai_tool_download_page_stack_overflow() {

@@ -2,8 +2,6 @@ use serde_json::Value;
 
 use crate::tools::tool::Tool;
 
-use super::DenoRunnerOptions;
-
 #[tokio::test]
 async fn get_tool_definition() {
     // Just for a simple test, it could be any tool

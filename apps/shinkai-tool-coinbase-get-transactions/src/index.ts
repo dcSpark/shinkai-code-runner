@@ -10,7 +10,7 @@ type Result = { tableCsv: string; rowsCount: number; columnsCount: number };
 
 export const run: Run<Configurations, Parameters, Result> = async (
   configurations: Configurations,
-  params: Parameters,
+  _parameters: Parameters,
 ): Promise<Result> => {
   const coinbaseOptions: CoinbaseOptions = {
     apiKeyName: configurations.name,
@@ -22,12 +22,12 @@ export const run: Run<Configurations, Parameters, Result> = async (
   // Prioritize walletId from Params over Config
   const walletId = configurations.walletId;
 
-  let wallet = await user.getWallet(walletId);
+  const wallet = await user.getWallet(walletId);
   console.log(`Wallet retrieved: `, wallet.toString());
 
   // Retrieve the list of balances for the wallet
-  let address = await wallet.getDefaultAddress();
-  let transactions = (await address?.listTransfers()) ?? [];
+  const address = await wallet.getDefaultAddress();
+  const transactions = (await address?.listTransfers()) ?? [];
 
   // Convert transactions to CSV format
   const headers = [
@@ -79,9 +79,7 @@ export const definition: ToolDefinition<typeof run> = {
   },
   parameters: {
     type: 'object',
-    properties: {
-      walletId: { type: 'string', nullable: true },
-    },
+    properties: {},
     required: [],
   },
   result: {

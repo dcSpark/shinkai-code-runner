@@ -17,10 +17,15 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": ["apps/shinkai-tool-math-exp/**/*.ts"]
+        "command": "deno lint apps/shinkai-tool-math-exp/src/index.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "deno test --no-check --allow-all apps/shinkai-tool-math-exp/src/**/*.test.ts"
       }
     }
   }

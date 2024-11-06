@@ -23,13 +23,15 @@
       }
     },
     "lint": {
-      "dependsOn": [
-        { "projects": "@shinkai_protocol/shinkai-viem", "target": "build" }
-      ],
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": ["apps/shinkai-tool-aave-state/**/*.ts"]
+        "command": "deno lint apps/shinkai-tool-aave-state/src/index.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "deno test --no-check --allow-all apps/shinkai-tool-aave-state/src/**/*.test.ts"
       }
     }
   }

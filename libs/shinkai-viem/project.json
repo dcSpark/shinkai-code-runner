@@ -17,10 +17,15 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": ["libs/shinkai-viem/**/*.ts"]
+        "command": "deno lint libs/shinkai-viem/src/**/*.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "deno test --no-check --allow-all libs/shinkai-viem/src/**/*.test.ts"
       }
     }
   }

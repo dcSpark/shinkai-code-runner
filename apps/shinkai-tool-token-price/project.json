@@ -17,10 +17,15 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": ["apps/shinkai-tool-token-price/**/*.ts"]
+        "command": "deno lint apps/shinkai-tool-token-price/src/index.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "deno test --no-check --allow-all apps/shinkai-tool-token-price/src/**/*.test.ts"
       }
     }
   }
