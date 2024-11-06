@@ -330,9 +330,18 @@ async fn shinkai_tool_defillama_lending_tvl_rankings() {
         serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
         None,
     );
-    let run_result = tool.run(serde_json::json!({ "all": true }), None).await;
+    let run_result = tool
+        .run(
+            serde_json::json!(      {
+              "top10": false,
+              "categoryName": "Liquid Staking",
+              "networkName": "Ethereum",
+            }),
+            None,
+        )
+        .await;
     assert!(run_result.is_ok());
-    assert_eq!(run_result.unwrap().data["rowsCount"], 10);
+    assert_eq!(run_result.unwrap().data["rowsCount"], 43);
 }
 
 #[tokio::test]
