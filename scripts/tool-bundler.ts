@@ -72,6 +72,8 @@ fs.promises
   .then(async (code) => {
     // Write bundled code to output file
     console.log('📝 Writing bundled code to output file...');
+    // Ensure output folder exists
+    await fs.promises.mkdir(outputFolder, { recursive: true });
     await fs.promises.writeFile(outputFile, code);
 
     // Import tool definition from bundled code
