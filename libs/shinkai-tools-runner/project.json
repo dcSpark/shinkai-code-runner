@@ -6,6 +6,12 @@
   "tags": [],
   "targets": {
     "build": {
+      "dependsOn": [
+        {
+          "projects": ["tag:tool"],
+          "target": "build"
+        }
+      ],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",

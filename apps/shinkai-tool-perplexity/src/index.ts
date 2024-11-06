@@ -1,6 +1,7 @@
 import * as playwright from 'npm:playwright@1.48.2';
 import chromePaths from 'npm:chrome-paths@1.0.1';
 import TurndownService from 'npm:turndown@7.2.0';
+import { defineConfig } from 'npm:playwright@1.48.2/test';
 
 type Configurations = {
   chromePath?: string;
@@ -14,6 +15,12 @@ export const run: Run<Configurations, Parameters, Result> = async (
   configurations,
   params,
 ): Promise<Result> => {
+  defineConfig({
+    use: {
+      actionTimeout: 60 * 1000,
+      navigationTimeout: 60 * 1000,
+    },
+  });
   const browser = await playwright['chromium'].launch({
     executablePath: configurations?.chromePath || chromePaths.chrome,
   });
