@@ -76,8 +76,8 @@ impl Tool {
         max_execution_time_s: Option<u64>,
     ) -> Result<RunResult, ExecutionError> {
         log::info!("preparing to run tool");
-        log::info!("configurations: {:?}", self.configurations);
-        log::info!("parameters: {:?}", parameters);
+        log::info!("configurations: {}", self.configurations.to_string());
+        log::info!("parameters: {}", parameters.to_string());
 
         let mut deno_runner = DenoRunner::new(self.deno_runner_options.clone());
         // Empty envs when get definition
@@ -94,8 +94,8 @@ impl Tool {
             console.log("</shinkai-tool-result>");
         "#,
             &self.code.to_string(),
-            serde_json::to_string(&self.configurations).unwrap(),
-            serde_json::to_string(&parameters).unwrap(),
+            serde_json::to_string(&self.configurations).unwrap().replace("\\", "\\\\"),
+            serde_json::to_string(&parameters).unwrap().replace("\\", "\\\\"),
         );
         let result = deno_runner
             .run(&code, envs, max_execution_time_s)
