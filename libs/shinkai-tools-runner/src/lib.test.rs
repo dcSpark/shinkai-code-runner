@@ -1,3 +1,5 @@
+use std::env;
+
 use serde_json::json;
 
 use crate::built_in_tools::get_tool;
@@ -421,9 +423,15 @@ async fn shinkai_tool_youtube_summary() {
         .is_test(true)
         .try_init();
     let tool_definition = get_tool("shinkai-tool-youtube-summary").unwrap();
+    let configurations = if env::var("CI").unwrap_or(String::from("false")) == "true" {
+        serde_json::json!({ "apiUrl": "https://api.openai.com/v1", "apiKey": env::var("OPEN_AI_API_KEY").unwrap(), "model": "gpt-4o-mini" })
+    } else {
+        serde_json::json!({ "apiUrl": "http://127.0.0.1:11434" })
+    };
+
     let tool = Tool::new(
         tool_definition.code.clone().unwrap(),
-        serde_json::json!({ "apiUrl": "http://127.0.0.1:11434" }),
+        configurations,
         None,
     );
     let run_result = tool
