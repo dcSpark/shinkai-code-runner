@@ -8,6 +8,7 @@ type Config = {
 };
 type Params = {
   url: string;
+  lang?: string;
 };
 type Result = { summary: string };
 
@@ -18,7 +19,9 @@ export const run: Run<Config, Params, Result> = async (
   console.log(`transcripting ${parameters.url}`);
 
   // Get transcription
-  const transcript = await YoutubeTranscript.fetchTranscript(parameters.url);
+  const transcript = await YoutubeTranscript.fetchTranscript(parameters.url, {
+    lang: parameters.lang || 'en',
+  });
 
   // Send to ollama to build a formatted response
   const message: OpenAI.ChatCompletionUserMessageParam = {
@@ -133,6 +136,13 @@ export const definition: ToolDefinition<typeof run> = {
         description:
           'The full URL of the YouTube video to transcribe and summarize. Must be a valid and accessible YouTube video link.',
         example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      },
+      lang: {
+        type: 'string',
+        description:
+          'The language code for the transcript in ISO 639-1 format (e.g. "en" for English). Optional. If not specified, will use the default available transcript.',
+        example: 'en',
+        nullable: true,
       },
     },
     required: ['url'],
