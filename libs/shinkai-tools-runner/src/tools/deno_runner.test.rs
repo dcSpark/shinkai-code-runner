@@ -2,13 +2,9 @@ use std::collections::HashMap;
 
 use crate::tools::deno_runner::DenoRunner;
 
-use super::DenoRunnerOptions;
-
 #[tokio::test]
 async fn test_run_echo_tool() {
-    let mut deno_runner = DenoRunner::new(DenoRunnerOptions {
-        binary_path: "/opt/homebrew/bin/deno".into(),
-    });
+    let mut deno_runner = DenoRunner::default();
     let code = r#"
       console.log('{"message":"hello world"}');
     "#;
