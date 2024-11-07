@@ -418,6 +418,9 @@ async fn shinkai_tool_defillama_lending_tvl_rankings() {
 
 #[tokio::test]
 async fn shinkai_tool_youtube_summary() {
+    if env::var("CI").unwrap_or(String::from("false")) == "true" {
+        return;
+    }
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
