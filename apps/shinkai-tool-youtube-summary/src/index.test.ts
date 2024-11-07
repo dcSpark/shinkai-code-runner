@@ -18,6 +18,7 @@ Deno.test('transcript video', async () => {
     },
     {
       url: 'https://www.youtube.com/watch?v=SUj34OWkjXU',
+      lang: 'en',
     },
   );
   expect(result.summary.length).toBeGreaterThan(0);

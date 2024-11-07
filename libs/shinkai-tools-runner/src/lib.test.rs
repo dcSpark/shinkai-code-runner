@@ -426,14 +426,10 @@ async fn shinkai_tool_youtube_summary() {
     let configurations = if env::var("CI").unwrap_or(String::from("false")) == "true" {
         serde_json::json!({ "apiUrl": "https://api.openai.com/v1", "apiKey": env::var("OPEN_AI_API_KEY").unwrap(), "model": "gpt-4o-mini" })
     } else {
-        serde_json::json!({ "apiUrl": "http://127.0.0.1:11434" })
+        serde_json::json!({ "apiUrl": "http://127.0.0.1:11434", "lang": "en" })
     };
 
-    let tool = Tool::new(
-        tool_definition.code.clone().unwrap(),
-        configurations,
-        None,
-    );
+    let tool = Tool::new(tool_definition.code.clone().unwrap(), configurations, None);
     let run_result = tool
         .run(
             serde_json::json!({ "url": "https://www.youtube.com/watch?v=GQ9yRPfsDPk" }),
