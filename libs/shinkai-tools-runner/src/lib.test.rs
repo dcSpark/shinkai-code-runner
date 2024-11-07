@@ -52,7 +52,6 @@ async fn shinkai_tool_inline() {
         function run(configurations, params) {
             return { message: `Hello, ${params.name}!` };
         }
-
 "#;
     let tool = Tool::new(js_code.to_string(), serde_json::Value::Null, None);
     let run_result = tool
@@ -60,6 +59,22 @@ async fn shinkai_tool_inline() {
         .await
         .unwrap();
     assert_eq!(run_result.data["message"], "Hello, world!");
+}
+
+#[tokio::test]
+async fn shinkai_tool_inline_non_json_return() {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+    let js_code = r#"
+        function run(configurations, params) {
+            return 5;
+        }
+"#;
+    let tool = Tool::new(js_code.to_string(), serde_json::Value::Null, None);
+    let run_result = tool.run(serde_json::json!({}), None).await.unwrap();
+    assert_eq!(run_result.data, 5);
 }
 
 #[tokio::test]
