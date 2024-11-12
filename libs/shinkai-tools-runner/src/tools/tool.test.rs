@@ -33,6 +33,7 @@ async fn run_tool() {
 
     let result = tool
         .run(
+            None,
             serde_json::json!({
                 "message": "hello world"
             }),
