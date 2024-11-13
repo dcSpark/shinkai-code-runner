@@ -12,21 +12,19 @@ to: apps/shinkai-tool-<%= name %>/project.json
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "npx ts-node scripts/tool-bundler.ts --entry ./apps/shinkai-tool-<%= name %>/src/index.ts --outputFolder ./dist/apps/shinkai-tool-<%= name %>"
+        "command": "deno task tool-bundler --entry ./apps/shinkai-tool-<%= name %>/src/index.ts --outputFolder ./dist/apps/shinkai-tool-<%= name %>"
       },
-      "configurations": {
-        "development": {},
-        "production": {}
-      }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": [
-          "apps/shinkai-tool-<%= name %>/**/*.ts",
-          "apps/shinkai-tool-<%= name %>/package.json"
-        ]
+        "command": "deno lint ./apps/shinkai-tool-<%= name %>/src/index.ts"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "deno test --no-check --allow-all ./apps/shinkai-tool-<%= name %>/src/**/*.test.ts"
       }
     }
   }

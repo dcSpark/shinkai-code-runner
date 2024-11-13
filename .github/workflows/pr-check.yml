@@ -27,6 +27,10 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Cache cargo assets
         id: cache
         uses: actions/cache@v4
@@ -38,11 +42,12 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: build-cargo-${{ hashFiles('**/Cargo.lock') }}
-
+          
       - name: Install dependencies
         run: |
           npm cache verify
           npm ci --no-audit --prefer-offline
+          deno install
 
       - name: Setup Chrome
         id: setup-chrome
@@ -54,11 +59,13 @@ jobs:
       - name: Run NX lint
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          EMBEDDING_API_URL : ${{ vars.EMBEDDING_API_URL }}
         run: |
           npx nx run-many -t lint --verbose
           
       - name: Run NX test
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          EMBEDDING_API_URL : ${{ vars.EMBEDDING_API_URL }}
         run: |
           npx nx run-many -t test --parallel=false --skip-nx-cache

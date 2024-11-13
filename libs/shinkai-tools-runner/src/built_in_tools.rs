@@ -57,11 +57,11 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-download-page",
+            "shinkai-tool-download-pages",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-download-page/definition.json"
+                    "/tools/shinkai-tool-download-pages/definition.json"
                 )))
                 .unwrap(),
             )),
@@ -128,11 +128,11 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-defillama-lending-tvl-rankings",
+            "shinkai-tool-defillama-tvl-rankings",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-defillama-lending-tvl-rankings/definition.json"
+                    "/tools/shinkai-tool-defillama-tvl-rankings/definition.json"
                 )))
                 .unwrap(),
             )),
@@ -208,11 +208,41 @@ lazy_static! {
         )),
         );
         m.insert(
+          "shinkai-tool-perplexity",
+          &*Box::leak(Box::new(
+              serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                  env!("CARGO_MANIFEST_DIR"),
+                  "/tools/shinkai-tool-perplexity/definition.json"
+              )))
+              .unwrap(),
+          )),
+        );
+        m.insert(
+          "shinkai-tool-perplexity-api",
+          &*Box::leak(Box::new(
+              serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                  env!("CARGO_MANIFEST_DIR"),
+                  "/tools/shinkai-tool-perplexity-api/definition.json"
+              )))
+              .unwrap(),
+          )),
+        );
+        m.insert(
             "shinkai-tool-youtube-summary",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
                     "/tools/shinkai-tool-youtube-summary/definition.json"
+                )))
+                .unwrap(),
+            )),
+        );
+        m.insert(
+            "shinkai-tool-json-to-md",
+            &*Box::leak(Box::new(
+                serde_json::from_str::<ToolDefinition>(include_str!(concat!(
+                    env!("CARGO_MANIFEST_DIR"),
+                    "/tools/shinkai-tool-json-to-md/definition.json"
                 )))
                 .unwrap(),
             )),
