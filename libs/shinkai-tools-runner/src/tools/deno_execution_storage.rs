@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 #[derive(Default)]
 pub struct DenoExecutionStorage {
+    pub id: String,
     pub root: PathBuf,
     pub root_code: PathBuf,
     pub code: PathBuf,
@@ -16,6 +17,7 @@ impl DenoExecutionStorage {
         let root_code = root.join("code");
         let code = root_code.join(id);
         Self {
+            id: id.to_string(),
             root: root.clone(),
             root_code,
             code: code.clone(),

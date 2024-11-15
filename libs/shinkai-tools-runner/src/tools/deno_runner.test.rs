@@ -106,5 +106,5 @@ async fn test_execution_storage_cache_contains_files() {
     assert!(cache_files.count() > 0);
 
     // Clean up test directory
-    // std::fs::remove_dir_all(test_dir).unwrap();
+    std::fs::remove_dir_all(test_dir).unwrap();
 }

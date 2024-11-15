@@ -186,18 +186,17 @@ impl DenoRunner {
             "--allow-read=C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe",
             home_permissions.as_str(),
         ];
-        let code_entrypoint = execution_storage.get_relative_code_entrypoint()?;
 
         let mut command = tokio::process::Command::new(binary_path);
         let command = command
             .args(["run", "--ext", "ts"])
             .args(deno_permissions_host)
-            .arg(code_entrypoint.as_str())
+            .arg(execution_storage.code_entrypoint.clone())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);
 
-        command.env("DENO_DIR", execution_storage.get_relative_deno_cache()?);
+        command.env("DENO_DIR", execution_storage.deno_cache.clone());
         if let Some(envs) = envs {
             command.envs(envs);
         }
