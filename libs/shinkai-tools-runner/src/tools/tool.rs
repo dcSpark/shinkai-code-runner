@@ -50,11 +50,12 @@ impl Tool {
             .map_err(|e| ExecutionError::new(format!("failed to run deno: {}", e), None))?;
 
         let result_text = result
-            .lines()
+            .iter()
             .skip_while(|line| !line.contains("<shinkai-tool-definition>"))
             .skip(1)
             .take_while(|line| !line.contains("</shinkai-tool-definition>"))
-            .collect::<Vec<&str>>()
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>()
             .join("\n");
 
         log::info!("result text: {}", result_text);
@@ -107,14 +108,15 @@ impl Tool {
             .map_err(|e| ExecutionError::new(format!("failed to run deno: {}", e), None))?;
 
         let result_text = result
-            .lines()
+            .iter()
             .skip_while(|line| !line.contains("<shinkai-tool-result>"))
             .skip(1)
             .take_while(|line| !line.contains("</shinkai-tool-result>"))
-            .collect::<Vec<&str>>()
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>()
             .join("\n");
 
-        log::info!("result text: {}", result_text);
+        log::info!("result text: {:?}", result);
 
         let result: Value = serde_json::from_str(&result_text).map_err(|e| {
             log::info!("failed to parse result: {}", e);

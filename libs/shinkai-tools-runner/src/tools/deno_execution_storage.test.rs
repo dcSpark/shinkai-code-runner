@@ -1,6 +1,8 @@
 use nanoid::nanoid;
 
-use crate::tools::deno_execution_storage::DenoExecutionStorage;
+use crate::tools::{
+    deno_execution_storage::DenoExecutionStorage, execution_context::ExecutionContext,
+};
 
 #[tokio::test]
 async fn test_execution_storage_init() {
@@ -11,7 +13,10 @@ async fn test_execution_storage_init() {
 
     let test_dir =
         std::path::PathBuf::from("./shinkai-tools-runner-execution-storage/test-execution-storage");
-    let storage = DenoExecutionStorage::new(test_dir.clone(), nanoid!().as_str());
+    let storage = DenoExecutionStorage::new(ExecutionContext {
+        storage: test_dir.clone(),
+        ..Default::default()
+    });
 
     let test_code = "console.log('test');";
     storage.init(test_code, None).unwrap();
@@ -40,7 +45,10 @@ async fn test_execution_storage_clean_cache() {
 
     let test_dir =
         std::path::PathBuf::from("./shinkai-tools-runner-execution-storage/test-clean-cache");
-    let storage = DenoExecutionStorage::new(test_dir.clone(), nanoid!().as_str());
+    let storage = DenoExecutionStorage::new(ExecutionContext {
+        storage: test_dir.clone(),
+        ..Default::default()
+    });
 
     // Initialize with some test code
     let test_code = "console.log('test');";

@@ -1,9 +1,8 @@
-use std::collections::HashMap;
-
 use crate::tools::{
     deno_execution_storage::DenoExecutionStorage, deno_runner::DenoRunner,
-    deno_runner_options::DenoRunnerOptions,
+    deno_runner_options::DenoRunnerOptions, execution_context::ExecutionContext,
 };
+use std::collections::HashMap;
 
 #[tokio::test]
 async fn test_run_echo_tool() {
@@ -26,7 +25,7 @@ async fn test_run_echo_tool() {
         })
         .unwrap();
 
-    assert_eq!(result, "{\"message\":\"hello world\"}");
+    assert_eq!(result.first().unwrap(), "{\"message\":\"hello world\"}");
 }
 
 #[tokio::test]
@@ -45,7 +44,7 @@ async fn test_run_with_env() {
     envs.insert("HELLO_WORLD".to_string(), "hello world!".to_string()); // Insert the key-value pair
     let result = deno_runner.run(code, Some(envs), None).await.unwrap();
 
-    assert_eq!(result, "hello world!");
+    assert_eq!(result.first().unwrap(), "hello world!");
 }
 
 #[tokio::test]
@@ -93,13 +92,19 @@ async fn test_execution_storage_cache_contains_files() {
     "#;
     // Run the code to ensure dependencies are downloaded
     let mut deno_runner = DenoRunner::new(DenoRunnerOptions {
-        execution_storage: test_dir.clone(),
+        context: ExecutionContext {
+            storage: test_dir.clone(),
+            ..Default::default()
+        },
         ..Default::default()
     });
     let _ = deno_runner.run(test_code, None, None).await.unwrap();
 
     // Verify cache directory contains files
-    let storage = DenoExecutionStorage::new(test_dir.clone(), nanoid::nanoid!().as_str());
+    let storage = DenoExecutionStorage::new(ExecutionContext {
+        storage: test_dir.clone(),
+        ..Default::default()
+    });
 
     assert!(storage.deno_cache.exists());
     let cache_files = std::fs::read_dir(&storage.deno_cache).unwrap();

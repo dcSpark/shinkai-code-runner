@@ -1,29 +1,44 @@
-use std::path::PathBuf;
+use std::{io::Write, path::PathBuf};
+
+use nanoid::nanoid;
+
+use super::execution_context::ExecutionContext;
 
 #[derive(Default)]
 pub struct DenoExecutionStorage {
-    pub id: String,
+    pub context: ExecutionContext,
+    pub code_id: String,
     pub root: PathBuf,
     pub root_code: PathBuf,
     pub code: PathBuf,
     pub code_entrypoint: PathBuf,
     pub deno_cache: PathBuf,
     pub logs: PathBuf,
+    pub log_file: PathBuf,
     pub home: PathBuf,
 }
 
 impl DenoExecutionStorage {
-    pub fn new(root: PathBuf, id: &str) -> Self {
+    pub fn new(context: ExecutionContext) -> Self {
+        let code_id = format!("{}-{}", context.code_id, nanoid!());
+        let root = context.storage.clone();
         let root_code = root.join("code");
-        let code = root_code.join(id);
+        let code = root_code.join(code_id.clone());
+        let logs = context.storage.join("logs");
+        let log_file = logs.join(format!(
+            "log_{}_{}.log",
+            context.context_id, context.execution_id,
+        ));
         Self {
-            id: id.to_string(),
+            context,
+            code_id: code_id.clone(),
             root: root.clone(),
             root_code,
             code: code.clone(),
             code_entrypoint: code.join("index.ts"),
             deno_cache: root.join("deno-cache"),
-            logs: root.join("logs"),
+            logs: logs.clone(),
+            log_file,
             home: root.join("home"),
         }
     }
@@ -49,6 +64,17 @@ impl DenoExecutionStorage {
             log::error!("failed to write code to index.ts: {}", e);
             e
         })?;
+
+        log::info!(
+            "creating log file if not exists: {}",
+            self.log_file.display()
+        );
+        if !self.log_file.exists() {
+            std::fs::write(&self.log_file, "").map_err(|e| {
+                log::error!("failed to create log file: {}", e);
+                e
+            })?;
+        }
 
         if pristine_cache.unwrap_or(false) {
             std::fs::remove_dir_all(&self.deno_cache)?;
@@ -82,14 +108,21 @@ impl DenoExecutionStorage {
             })
     }
 
-    pub fn persist_logs(&self, output: &str) -> anyhow::Result<()> {
+    pub fn append_log(&self, log: &str) -> anyhow::Result<()> {
         let timestamp = chrono::Local::now().format("%Y%m%d_%H%M%S");
-        let log_file = self.logs.join(format!("output_{}.log", timestamp));
-        std::fs::write(&log_file, output).map_err(|e| {
-            log::error!("failed to write output to log file: {}", e);
-            e
-        })?;
-        log::info!("wrote output to {}", log_file.display());
+        let log_line = format!(
+            "{},{},{},{},{}\n",
+            timestamp, self.context.context_id, self.context.execution_id, self.code_id, log,
+        );
+        let mut file = std::fs::OpenOptions::new()
+            .append(true)
+            .create(true) // Create the file if it doesn't exist
+            .open(self.log_file.clone())
+            .map_err(|e| {
+                log::error!("failed to open log file: {}", e);
+                e
+            })?;
+        file.write_all(log_line.as_bytes())?;
         Ok(())
     }
 }

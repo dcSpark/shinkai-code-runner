@@ -1,3 +1,8 @@
+use tokio::{
+    io::{AsyncBufReadExt, BufReader},
+    select,
+};
+
 use crate::tools::deno_execution_storage::DenoExecutionStorage;
 
 use super::{container_utils::DockerStatus, deno_runner_options::DenoRunnerOptions};
@@ -46,7 +51,7 @@ impl DenoRunner {
         code: &str,
         envs: Option<HashMap<String, String>>,
         max_execution_time_s: Option<u64>,
-    ) -> anyhow::Result<String> {
+    ) -> anyhow::Result<Vec<String>> {
         let force_deno_in_host =
             std::env::var("CI_FORCE_DENO_IN_HOST").unwrap_or(String::from("false")) == *"true";
         if !force_deno_in_host
@@ -63,16 +68,13 @@ impl DenoRunner {
         code: &str,
         envs: Option<HashMap<String, String>>,
         max_execution_time_s: Option<u64>,
-    ) -> anyhow::Result<String> {
+    ) -> anyhow::Result<Vec<String>> {
         log::info!(
             "using deno from container image:{:?}",
             self.options.deno_image_name
         );
 
-        let execution_storage = DenoExecutionStorage::new(
-            self.options.execution_storage.clone(),
-            &self.options.execution_id,
-        );
+        let execution_storage = DenoExecutionStorage::new(self.options.context.clone());
         execution_storage.init(code, None)?;
 
         let mount_param = format!("{}:/app", execution_storage.root.to_str().unwrap());
@@ -112,10 +114,39 @@ impl DenoRunner {
             .kill_on_drop(true);
 
         log::info!("spawning docker command");
-        let child = command.spawn().map_err(|e| {
+        let mut child = command.spawn().map_err(|e| {
             log::error!("failed to spawn command: {}", e);
             e
         })?;
+
+        let stdout = child.stdout.take().expect("Failed to get stdout");
+        let mut stdout_stream = BufReader::new(stdout).lines();
+
+        let stderr = child.stderr.take().expect("Failed to get stderr");
+        let mut stderr_stream = BufReader::new(stderr).lines();
+
+        let mut stdout_lines = Vec::new();
+        let mut stderr_lines = Vec::new();
+
+        loop {
+            select! {
+                Ok(line) = stdout_stream.next_line() => match line {
+                    Some(line) => {
+                        stdout_lines.push(line.clone());
+                        let _ = execution_storage.append_log(line.as_str());
+                    },
+                    None => break,
+                },
+                Ok(line) = stderr_stream.next_line() => match line {
+                    Some(line) => {
+                        stderr_lines.push(line.clone());
+                        let _ = execution_storage.append_log(line.as_str());
+                    },
+                    None => break,
+                },
+                else => break,
+            }
+        }
 
         let output = if let Some(timeout) = max_execution_time_s {
             let timeout_duration = std::time::Duration::from_millis(timeout);
@@ -140,11 +171,11 @@ impl DenoRunner {
             return Err(anyhow::anyhow!("command execution failed: {}", error));
         }
 
-        let output = String::from_utf8_lossy(&output.stdout);
-
-        log::info!("command completed successfully with output: {}", output);
-        let _ = execution_storage.persist_logs(&output);
-        Ok(output.trim().to_string())
+        log::debug!(
+            "command completed successfully with output: {:?}",
+            stdout_lines
+        );
+        Ok(stdout_lines)
     }
 
     async fn run_in_host(
@@ -152,17 +183,14 @@ impl DenoRunner {
         code: &str,
         envs: Option<HashMap<String, String>>,
         max_execution_time_s: Option<u64>,
-    ) -> anyhow::Result<String> {
+    ) -> anyhow::Result<Vec<String>> {
         log::info!(
             "using deno from host at path: {:?}",
             self.options.deno_binary_path
         );
         let binary_path = self.options.deno_binary_path.clone();
 
-        let execution_storage = DenoExecutionStorage::new(
-            self.options.execution_storage.clone(),
-            &self.options.execution_id,
-        );
+        let execution_storage = DenoExecutionStorage::new(self.options.context.clone());
         execution_storage.init(code, None)?;
 
         let home_permissions =
@@ -201,7 +229,35 @@ impl DenoRunner {
             command.envs(envs);
         }
         log::info!("prepared command with arguments: {:?}", command);
-        let child = command.spawn()?;
+        let mut child = command.spawn()?;
+
+        let stdout = child.stdout.take().expect("Failed to get stdout");
+        let mut stdout_stream = BufReader::new(stdout).lines();
+
+        let stderr = child.stderr.take().expect("Failed to get stderr");
+        let mut stderr_stream = BufReader::new(stderr).lines();
+
+        let mut stdout_lines = Vec::new();
+        let mut stderr_lines = Vec::new();
+        loop {
+            select! {
+                Ok(line) = stdout_stream.next_line() => match line {
+                    Some(line) => {
+                        stdout_lines.push(line.clone());
+                        let _ = execution_storage.append_log(line.as_str());
+                    },
+                    None => break,
+                },
+                Ok(line) = stderr_stream.next_line() => match line {
+                    Some(line) => {
+                        stderr_lines.push(line.clone());
+                        let _ = execution_storage.append_log(line.as_str());
+                    },
+                    None => break,
+                },
+                else => break,
+            }
+        }
 
         let output = if let Some(timeout) = max_execution_time_s {
             let timeout_duration = std::time::Duration::from_millis(timeout);
@@ -228,12 +284,11 @@ impl DenoRunner {
                 error.to_string(),
             )));
         }
-
-        let output = String::from_utf8_lossy(&output.stdout);
-
-        log::info!("command completed successfully with output: {}", output);
-        let _ = execution_storage.persist_logs(&output);
-        Ok(output.trim().to_string())
+        log::info!(
+            "command completed successfully with output: {:?}",
+            stdout_lines
+        );
+        Ok(stdout_lines)
     }
 }
 

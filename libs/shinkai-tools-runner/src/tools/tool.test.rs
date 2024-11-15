@@ -4,7 +4,7 @@ use serde_json::Value;
 
 use crate::tools::{
     deno_execution_storage::DenoExecutionStorage, deno_runner_options::DenoRunnerOptions,
-    tool::Tool,
+    execution_context::ExecutionContext, tool::Tool,
 };
 
 #[tokio::test]
@@ -69,9 +69,9 @@ async fn shinkai_tool_with_env() {
     envs.insert("BAR".to_string(), "bar".to_string());
     let run_result = tool
         .run(Some(envs), serde_json::json!({ "name": "world" }), None)
-        .await
-        .unwrap();
-    assert_eq!(run_result.data["foo"], "bar");
+        .await;
+    assert!(run_result.is_ok());
+    assert_eq!(run_result.unwrap().data["foo"], "bar");
 }
 
 #[tokio::test]
@@ -112,13 +112,18 @@ async fn shinkai_tool_run_concurrency() {
     "#;
 
     let execution_storage = "./shinkai-tools-runner-execution-storage/concurrent-runs";
-
+    let context_id = nanoid::nanoid!();
+    let execution_id = nanoid::nanoid!();
     let tool1 = Tool::new(
         js_code1.to_string(),
         serde_json::Value::Null,
         Some(DenoRunnerOptions {
-            execution_storage: execution_storage.into(),
-            execution_id: nanoid::nanoid!(),
+            context: ExecutionContext {
+                storage: execution_storage.into(),
+                execution_id: context_id.clone(),
+                context_id: execution_id.clone(),
+                code_id: "js_code1".into(),
+            },
             ..Default::default()
         }),
     );
@@ -126,8 +131,12 @@ async fn shinkai_tool_run_concurrency() {
         js_code2.to_string(),
         serde_json::Value::Null,
         Some(DenoRunnerOptions {
-            execution_storage: execution_storage.into(),
-            execution_id: nanoid::nanoid!(),
+            context: ExecutionContext {
+                storage: execution_storage.into(),
+                execution_id: context_id.clone(),
+                context_id: execution_id.clone(),
+                code_id: "js_code2".into(),
+            },
             ..Default::default()
         }),
     );
@@ -135,8 +144,12 @@ async fn shinkai_tool_run_concurrency() {
         js_code3.to_string(),
         serde_json::Value::Null,
         Some(DenoRunnerOptions {
-            execution_storage: execution_storage.into(),
-            execution_id: nanoid::nanoid!(),
+            context: ExecutionContext {
+                storage: execution_storage.into(),
+                execution_id: context_id.clone(),
+                context_id: execution_id.clone(),
+                code_id: "js_code3".into(),
+            },
             ..Default::default()
         }),
     );
