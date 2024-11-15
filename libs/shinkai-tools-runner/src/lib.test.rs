@@ -360,6 +360,7 @@ async fn shinkai_tool_duckduckgo_search() {
 
 #[tokio::test]
 async fn shinkai_tool_playwright_example() {
+    
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)

@@ -157,11 +157,26 @@ impl DenoRunner {
         let execution_storage = DenoExecutionStorage::new(self.options.execution_storage.clone());
         execution_storage.init(code)?;
 
-        let deno_permissions_host: [&'static str; 4] = [
-            "--allow-all",
-            "--deny-write=/etc",
-            "--deny-write=/usr",
-            "--deny-write=C:\\Windows",
+        let home_permissions =
+            format!("--allow-write={}", execution_storage.home.to_string_lossy());
+        let deno_permissions_host: Vec<&str> = vec![
+            "--allow-env",
+            "--allow-run",
+            "--allow-net",
+            "--allow-sys",
+            "--allow-scripts",
+            "--allow-ffi",
+            "--allow-import",
+            "--allow-read=.",
+            "--allow-write=/var/folders",
+            "--allow-read=/var/folders",
+            "--allow-read=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            "--allow-read=/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
+            "--allow-read=/Applications/Chromium.app/Contents/MacOS/Chromium",
+            "--allow-read=C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+            "--allow-read=C:\\Program Files (x86)\\Google\\Chrome SxS\\Application\\chrome.exe",
+            "--allow-read=C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe",
+            home_permissions.as_str(),
         ];
 
         let mut command = tokio::process::Command::new(binary_path);

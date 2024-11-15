@@ -7,6 +7,7 @@ pub struct DenoExecutionStorage {
     pub code_entrypoint: PathBuf,
     pub deno_cache: PathBuf,
     pub logs: PathBuf,
+    pub home: PathBuf,
 }
 
 impl DenoExecutionStorage {
@@ -17,11 +18,18 @@ impl DenoExecutionStorage {
             code_entrypoint: root.join("code/index.ts"),
             deno_cache: root.join("deno-cache"),
             logs: root.join("logs"),
+            home: root.join("home"),
         }
     }
 
     pub fn init(&self, code: &str) -> anyhow::Result<()> {
-        for dir in [&self.root, &self.code, &self.deno_cache, &self.logs] {
+        for dir in [
+            &self.root,
+            &self.code,
+            &self.deno_cache,
+            &self.logs,
+            &self.home,
+        ] {
             std::fs::create_dir_all(dir).map_err(|e| {
                 log::error!("failed to create directory {}: {}", dir.display(), e);
                 e
