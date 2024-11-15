@@ -1,5 +1,12 @@
 use std::process::Command;
 
+#[derive(Debug, PartialEq)]
+pub enum DockerStatus {
+    NotInstalled,
+    NotRunning,
+    Running,
+}
+
 /// Checks if Docker is available on the system by attempting to run 'docker info' command.
 /// This function verifies both that Docker is installed and that the Docker daemon is running.
 ///
@@ -31,15 +38,17 @@ use std::process::Command;
 ///     println!("docker is not available - check installation and permissions");
 /// }
 /// ```
-pub fn is_docker_available() -> bool {
-    // Try to run 'docker info' command
+pub fn is_docker_available() -> DockerStatus {
     let docker_check = Command::new("docker").arg("info").output();
 
     match docker_check {
         Ok(output) => {
-            // Check if command was successful (exit code 0)
-            output.status.success()
+            if output.status.success() {
+                DockerStatus::Running
+            } else {
+                DockerStatus::NotRunning
+            }
         }
-        Err(_) => false, // Docker command not found or failed to execute
+        Err(_) => DockerStatus::NotInstalled,
     }
 }
