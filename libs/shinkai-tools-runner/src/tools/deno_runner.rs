@@ -6,7 +6,7 @@ use tokio::{
 use crate::tools::deno_execution_storage::DenoExecutionStorage;
 
 use super::{container_utils::DockerStatus, deno_runner_options::DenoRunnerOptions};
-use std::collections::HashMap;
+use std::{collections::HashMap, time::Duration};
 
 #[derive(Default)]
 pub struct DenoRunner {
@@ -50,16 +50,16 @@ impl DenoRunner {
         &mut self,
         code: &str,
         envs: Option<HashMap<String, String>>,
-        max_execution_time_s: Option<u64>,
+        max_execution_time_ms: Option<u64>,
     ) -> anyhow::Result<Vec<String>> {
         let force_deno_in_host =
             std::env::var("CI_FORCE_DENO_IN_HOST").unwrap_or(String::from("false")) == *"true";
         if !force_deno_in_host
             && super::container_utils::is_docker_available() == DockerStatus::Running
         {
-            self.run_in_docker(code, envs, max_execution_time_s).await
+            self.run_in_docker(code, envs, max_execution_time_ms).await
         } else {
-            self.run_in_host(code, envs, max_execution_time_s).await
+            self.run_in_host(code, envs, max_execution_time_ms).await
         }
     }
 
@@ -67,7 +67,7 @@ impl DenoRunner {
         &mut self,
         code: &str,
         envs: Option<HashMap<String, String>>,
-        max_execution_time_s: Option<u64>,
+        max_execution_time_ms: Option<u64>,
     ) -> anyhow::Result<Vec<String>> {
         log::info!(
             "using deno from container image:{:?}",
@@ -163,8 +163,8 @@ impl DenoRunner {
             }
         } else {
             log::info!("executing command without timeout");
-            child.wait_with_output().await?
-        };
+            child.wait_with_output().await
+        }?;
         if !output.status.success() {
             let error = String::from_utf8_lossy(&output.stdout);
             log::error!("command execution failed: {}", error);
@@ -182,7 +182,7 @@ impl DenoRunner {
         &mut self,
         code: &str,
         envs: Option<HashMap<String, String>>,
-        max_execution_time_s: Option<u64>,
+        max_execution_time_ms: Option<u64>,
     ) -> anyhow::Result<Vec<String>> {
         log::info!(
             "using deno from host at path: {:?}",
@@ -259,7 +259,7 @@ impl DenoRunner {
             }
         }
 
-        let output = if let Some(timeout) = max_execution_time_s {
+        let output = if let Some(timeout) = max_execution_time_ms {
             let timeout_duration = std::time::Duration::from_millis(timeout);
             log::info!("executing command with {}ms timeout", timeout);
             match tokio::time::timeout(timeout_duration, child.wait_with_output()).await {

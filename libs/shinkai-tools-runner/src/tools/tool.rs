@@ -76,7 +76,7 @@ impl Tool {
         &self,
         envs: Option<HashMap<String, String>>,
         parameters: Value,
-        max_execution_time_s: Option<u64>,
+        max_execution_time_ms: Option<u64>,
     ) -> Result<RunResult, ExecutionError> {
         log::info!("preparing to run tool");
         log::info!("configurations: {}", self.configurations.to_string());
@@ -103,7 +103,7 @@ impl Tool {
                 .replace("\\", "\\\\"),
         );
         let result = deno_runner
-            .run(&code, envs, max_execution_time_s)
+            .run(&code, envs, max_execution_time_ms)
             .await
             .map_err(|e| ExecutionError::new(format!("failed to run deno: {}", e), None))?;
 

@@ -1,5 +1,3 @@
-use nanoid::nanoid;
-
 use crate::tools::{
     deno_execution_storage::DenoExecutionStorage, execution_context::ExecutionContext,
 };
