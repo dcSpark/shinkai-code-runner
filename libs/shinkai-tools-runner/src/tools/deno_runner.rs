@@ -1,6 +1,6 @@
 use crate::tools::deno_execution_storage::DenoExecutionStorage;
 
-use super::deno_runner_options::DenoRunnerOptions;
+use super::{container_utils::DockerStatus, deno_runner_options::DenoRunnerOptions};
 use std::collections::HashMap;
 
 #[derive(Default)]
@@ -49,7 +49,9 @@ impl DenoRunner {
     ) -> anyhow::Result<String> {
         let force_deno_in_host =
             std::env::var("CI_FORCE_DENO_IN_HOST").unwrap_or(String::from("false")) == *"true";
-        if !force_deno_in_host && super::container_utils::is_docker_available() {
+        if !force_deno_in_host
+            && super::container_utils::is_docker_available() == DockerStatus::Running
+        {
             self.run_in_docker(code, envs, max_execution_time_s).await
         } else {
             self.run_in_host(code, envs, max_execution_time_s).await
