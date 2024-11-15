@@ -148,7 +148,7 @@ impl DenoRunner {
             }
         }
 
-        let output = if let Some(timeout) = max_execution_time_s {
+        let output = if let Some(timeout) = max_execution_time_ms {
             let timeout_duration = std::time::Duration::from_millis(timeout);
             log::info!("executing command with {}ms timeout", timeout);
             match tokio::time::timeout(timeout_duration, child.wait_with_output()).await {
@@ -163,8 +163,8 @@ impl DenoRunner {
             }
         } else {
             log::info!("executing command without timeout");
-            child.wait_with_output().await
-        }?;
+            child.wait_with_output().await?
+        };
         if !output.status.success() {
             let error = String::from_utf8_lossy(&output.stdout);
             log::error!("command execution failed: {}", error);
