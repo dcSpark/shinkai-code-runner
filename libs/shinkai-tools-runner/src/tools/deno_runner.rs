@@ -69,8 +69,11 @@ impl DenoRunner {
             self.options.deno_image_name
         );
 
-        let execution_storage = DenoExecutionStorage::new(self.options.execution_storage.clone());
-        execution_storage.init(code)?;
+        let execution_storage = DenoExecutionStorage::new(
+            self.options.execution_storage.clone(),
+            &self.options.execution_id,
+        );
+        execution_storage.init(code, None)?;
 
         let mount_param = format!("{}:/app", execution_storage.root.to_str().unwrap());
 
@@ -79,7 +82,7 @@ impl DenoRunner {
         container_envs.push(String::from("-e"));
         container_envs.push(format!(
             "DENO_DIR={}",
-            execution_storage.deno_cache.display()
+            execution_storage.get_relative_deno_cache()?
         ));
         if let Some(envs) = envs {
             for (key, value) in envs {
@@ -88,7 +91,7 @@ impl DenoRunner {
                 container_envs.push(env);
             }
         }
-
+        let code_entrypoint = execution_storage.get_relative_code_entrypoint()?;
         let mut command = tokio::process::Command::new("docker");
         let mut args = ["run", "-it", "-v", mount_param.as_str()].to_vec();
         args.extend(container_envs.iter().map(|s| s.as_str()));
@@ -100,7 +103,7 @@ impl DenoRunner {
             "--ext",
             "ts",
             "--allow-all",
-            "./code/index.ts",
+            code_entrypoint.as_str(),
         ]);
         let command = command
             .args(args)
@@ -156,8 +159,11 @@ impl DenoRunner {
         );
         let binary_path = self.options.deno_binary_path.clone();
 
-        let execution_storage = DenoExecutionStorage::new(self.options.execution_storage.clone());
-        execution_storage.init(code)?;
+        let execution_storage = DenoExecutionStorage::new(
+            self.options.execution_storage.clone(),
+            &self.options.execution_id,
+        );
+        execution_storage.init(code, None)?;
 
         let home_permissions =
             format!("--allow-write={}", execution_storage.home.to_string_lossy());
@@ -180,15 +186,18 @@ impl DenoRunner {
             "--allow-read=C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe",
             home_permissions.as_str(),
         ];
+        let code_entrypoint = execution_storage.get_relative_code_entrypoint()?;
 
         let mut command = tokio::process::Command::new(binary_path);
         let command = command
             .args(["run", "--ext", "ts"])
             .args(deno_permissions_host)
-            .arg(execution_storage.code_entrypoint.to_str().unwrap())
+            .arg(code_entrypoint.as_str())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);
+
+        command.env("DENO_DIR", execution_storage.get_relative_deno_cache()?);
         if let Some(envs) = envs {
             command.envs(envs);
         }

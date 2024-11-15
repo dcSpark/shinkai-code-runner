@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
-use crate::tools::deno_runner::DenoRunner;
+use crate::tools::{
+    deno_execution_storage::DenoExecutionStorage, deno_runner::DenoRunner,
+    deno_runner_options::DenoRunnerOptions,
+};
 
 #[tokio::test]
 async fn test_run_echo_tool() {
@@ -72,4 +75,36 @@ async fn test_write_forbidden_folder() {
     });
 
     assert!(result.is_err());
+}
+
+#[tokio::test]
+async fn test_execution_storage_cache_contains_files() {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let test_dir =
+        std::path::PathBuf::from("./shinkai-tools-runner-execution-storage/test-cache-files");
+
+    let test_code = r#"
+        import { assertEquals } from "https://deno.land/std@0.201.0/assert/mod.ts";
+        console.log('test');
+    "#;
+    // Run the code to ensure dependencies are downloaded
+    let mut deno_runner = DenoRunner::new(DenoRunnerOptions {
+        execution_storage: test_dir.clone(),
+        ..Default::default()
+    });
+    let _ = deno_runner.run(test_code, None, None).await.unwrap();
+
+    // Verify cache directory contains files
+    let storage = DenoExecutionStorage::new(test_dir.clone(), nanoid::nanoid!().as_str());
+
+    assert!(storage.deno_cache.exists());
+    let cache_files = std::fs::read_dir(&storage.deno_cache).unwrap();
+    assert!(cache_files.count() > 0);
+
+    // Clean up test directory
+    // std::fs::remove_dir_all(test_dir).unwrap();
 }
