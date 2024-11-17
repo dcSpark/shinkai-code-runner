@@ -77,8 +77,16 @@ impl DenoRunner {
         let execution_storage = DenoExecutionStorage::new(self.options.context.clone());
         execution_storage.init(code, None)?;
 
-        let mount_param = format!("{}:/app", execution_storage.root.to_str().unwrap());
-
+        let mount_param = format!(
+            r#"type=bind,source={},target=/app"#,
+            execution_storage
+                .root
+                .canonicalize()
+                .unwrap()
+                .to_str()
+                .unwrap()
+                .replace("\\\\?\\", "")
+        );
         let mut container_envs = Vec::<String>::new();
 
         container_envs.push(String::from("-e"));
@@ -95,7 +103,7 @@ impl DenoRunner {
         }
         let code_entrypoint = execution_storage.get_relative_code_entrypoint()?;
         let mut command = tokio::process::Command::new("docker");
-        let mut args = ["run", "-it", "-v", mount_param.as_str()].to_vec();
+        let mut args = ["run", "-it", "--mount", mount_param.as_str()].to_vec();
         args.extend(container_envs.iter().map(|s| s.as_str()));
         args.extend([
             "--workdir",
@@ -119,10 +127,10 @@ impl DenoRunner {
             e
         })?;
 
-        let stdout = child.stdout.take().expect("Failed to get stdout");
+        let stdout = child.stdout.take().expect("failed to get stdout");
         let mut stdout_stream = BufReader::new(stdout).lines();
 
-        let stderr = child.stderr.take().expect("Failed to get stderr");
+        let stderr = child.stderr.take().expect("failed to get stderr");
         let mut stderr_stream = BufReader::new(stderr).lines();
 
         let mut stdout_lines = Vec::new();
