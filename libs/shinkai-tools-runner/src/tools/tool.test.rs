@@ -174,7 +174,11 @@ async fn test_file_persistence() {
     let js_code = r#"
         async function run(c, p) {
             const content = "Hello from tool!";
-            await Deno.writeTextFile("/app/home/test.txt", content);
+            console.log("Current directory contents:");
+            for await (const entry of Deno.readDir("./")) {
+                console.log(entry.name);
+            }
+            await Deno.writeTextFile("./home/test.txt", content);
             const data = { success: true };
             return data;
         }

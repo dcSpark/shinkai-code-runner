@@ -4,7 +4,7 @@ use nanoid::nanoid;
 
 use super::execution_context::ExecutionContext;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct DenoExecutionStorage {
     pub context: ExecutionContext,
     pub code_id: String,

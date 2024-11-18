@@ -1,12 +1,13 @@
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
     select,
+    sync::Mutex,
 };
 
 use crate::tools::deno_execution_storage::DenoExecutionStorage;
 
 use super::{container_utils::DockerStatus, deno_runner_options::DenoRunnerOptions};
-use std::{collections::HashMap, time::Duration};
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
 #[derive(Default)]
 pub struct DenoRunner {
@@ -50,16 +51,16 @@ impl DenoRunner {
         &mut self,
         code: &str,
         envs: Option<HashMap<String, String>>,
-        max_execution_time_ms: Option<u64>,
+        max_execution_timeout: Option<Duration>,
     ) -> anyhow::Result<Vec<String>> {
         let force_deno_in_host =
             std::env::var("CI_FORCE_DENO_IN_HOST").unwrap_or(String::from("false")) == *"true";
         if !force_deno_in_host
             && super::container_utils::is_docker_available() == DockerStatus::Running
         {
-            self.run_in_docker(code, envs, max_execution_time_ms).await
+            self.run_in_docker(code, envs, max_execution_timeout).await
         } else {
-            self.run_in_host(code, envs, max_execution_time_ms).await
+            self.run_in_host(code, envs, max_execution_timeout).await
         }
     }
 
@@ -67,7 +68,7 @@ impl DenoRunner {
         &mut self,
         code: &str,
         envs: Option<HashMap<String, String>>,
-        max_execution_time_ms: Option<u64>,
+        max_execution_timeout: Option<Duration>,
     ) -> anyhow::Result<Vec<String>> {
         log::info!(
             "using deno from container image:{:?}",
@@ -127,45 +128,54 @@ impl DenoRunner {
             e
         })?;
 
-        let stdout = child.stdout.take().expect("failed to get stdout");
+        let stdout = child.stdout.take().expect("Failed to get stdout");
         let mut stdout_stream = BufReader::new(stdout).lines();
 
-        let stderr = child.stderr.take().expect("failed to get stderr");
+        let stderr = child.stderr.take().expect("Failed to get stderr");
         let mut stderr_stream = BufReader::new(stderr).lines();
 
-        let mut stdout_lines = Vec::new();
-        let mut stderr_lines = Vec::new();
+        let stdout_lines = Arc::new(Mutex::new(Vec::<String>::new()));
+        let stderr_lines = Arc::new(Mutex::new(Vec::<String>::new()));
+        let execution_storage_clone = execution_storage.clone();
 
-        loop {
-            select! {
-                Ok(line) = stdout_stream.next_line() => match line {
-                    Some(line) => {
-                        stdout_lines.push(line.clone());
-                        let _ = execution_storage.append_log(line.as_str());
-                    },
-                    None => break,
-                },
-                Ok(line) = stderr_stream.next_line() => match line {
-                    Some(line) => {
-                        stderr_lines.push(line.clone());
-                        let _ = execution_storage.append_log(line.as_str());
-                    },
-                    None => break,
-                },
-                else => break,
-            }
-        }
+        let stdout_lines_clone = stdout_lines.clone();
+        let stderr_lines_clone = stderr_lines.clone();
+        let execution_storage_clone2 = execution_storage_clone.clone();
 
-        let output = if let Some(timeout) = max_execution_time_ms {
-            let timeout_duration = std::time::Duration::from_millis(timeout);
-            log::info!("executing command with {}ms timeout", timeout);
-            match tokio::time::timeout(timeout_duration, child.wait_with_output()).await {
+        let stdout_task = tokio::task::spawn_blocking(move || {
+            tokio::runtime::Runtime::new().unwrap().block_on(async {
+                while let Ok(Some(line)) = stdout_stream.next_line().await {
+                    println!("{}", line);
+                    stdout_lines_clone.lock().await.push(line.clone());
+                    let _ = execution_storage_clone.append_log(line.as_str());
+                }
+            });
+        });
+
+        let stderr_task = tokio::task::spawn_blocking(move || {
+            tokio::runtime::Runtime::new().unwrap().block_on(async {
+                while let Ok(Some(line)) = stderr_stream.next_line().await {
+                    println!("{}", line);
+                    stderr_lines_clone.lock().await.push(line.clone());
+                    let _ = execution_storage_clone2.append_log(line.as_str());
+                }
+            });
+        });
+
+        #[allow(clippy::let_underscore_future)]
+        let _ = tokio::spawn(async move {
+            let _ = futures::future::join_all(vec![stdout_task, stderr_task]).await;
+        });
+
+        let output = if let Some(timeout) = max_execution_timeout {
+            log::info!("executing command with {}[s] timeout", timeout.as_secs());
+            match tokio::time::timeout(timeout, child.wait_with_output()).await {
                 Ok(result) => result?,
                 Err(_) => {
-                    log::error!("command execution timed out after {}ms", timeout);
+                    log::error!("command execution timed out after {}[s]", timeout.as_secs());
                     return Err(anyhow::anyhow!(
-                        "process timed out after {} seconds",
-                        timeout
+                        "process timed out after {}[s]",
+                        timeout.as_secs()
                     ));
                 }
             }
@@ -174,23 +184,24 @@ impl DenoRunner {
             child.wait_with_output().await?
         };
         if !output.status.success() {
-            let error = String::from_utf8_lossy(&output.stdout);
-            log::error!("command execution failed: {}", error);
-            return Err(anyhow::anyhow!("command execution failed: {}", error));
+            let stderr = stderr_lines.lock().await.to_vec().join("\n");
+            log::error!("command execution failed: {}", stderr);
+            return Err(anyhow::Error::new(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                stderr.to_string(),
+            )));
         }
 
-        log::debug!(
-            "command completed successfully with output: {:?}",
-            stdout_lines
-        );
-        Ok(stdout_lines)
+        let stdout: Vec<String> = stdout_lines.lock().await.to_vec();
+        log::info!("command completed successfully with output: {:?}", stdout);
+        Ok(stdout)
     }
 
     async fn run_in_host(
         &mut self,
         code: &str,
         envs: Option<HashMap<String, String>>,
-        max_execution_time_ms: Option<u64>,
+        max_execution_timeout: Option<Duration>,
     ) -> anyhow::Result<Vec<String>> {
         log::info!(
             "using deno from host at path: {:?}",
@@ -204,6 +215,7 @@ impl DenoRunner {
         let home_permissions =
             format!("--allow-write={}", execution_storage.home.to_string_lossy());
         let deno_permissions_host: Vec<&str> = vec![
+            // Basically all non-file related permissions
             "--allow-env",
             "--allow-run",
             "--allow-net",
@@ -211,7 +223,12 @@ impl DenoRunner {
             "--allow-scripts",
             "--allow-ffi",
             "--allow-import",
+
+            // Engine folders
             "--allow-read=.",
+            "--allow-write=./home",
+
+            // Playwright/Chrome folders
             "--allow-write=/var/folders",
             "--allow-read=/var/folders",
             "--allow-read=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -223,11 +240,18 @@ impl DenoRunner {
             home_permissions.as_str(),
         ];
 
-        let mut command = tokio::process::Command::new(binary_path);
+        let mut command = tokio::process::Command::new(binary_path.canonicalize().unwrap());
         let command = command
             .args(["run", "--ext", "ts"])
             .args(deno_permissions_host)
-            .arg(execution_storage.code_entrypoint.clone())
+            .arg(
+                execution_storage
+                    .code_entrypoint
+                    .canonicalize()
+                    .unwrap()
+                    .clone(),
+            )
+            .current_dir(execution_storage.root.canonicalize().unwrap().clone())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);
@@ -237,7 +261,10 @@ impl DenoRunner {
             command.envs(envs);
         }
         log::info!("prepared command with arguments: {:?}", command);
-        let mut child = command.spawn()?;
+        let mut child = command.spawn().map_err(|e| {
+            log::error!("failed to spawn command: {}", e);
+            e
+        })?;
 
         let stdout = child.stdout.take().expect("Failed to get stdout");
         let mut stdout_stream = BufReader::new(stdout).lines();
@@ -245,38 +272,48 @@ impl DenoRunner {
         let stderr = child.stderr.take().expect("Failed to get stderr");
         let mut stderr_stream = BufReader::new(stderr).lines();
 
-        let mut stdout_lines = Vec::new();
-        let mut stderr_lines = Vec::new();
-        loop {
-            select! {
-                Ok(line) = stdout_stream.next_line() => match line {
-                    Some(line) => {
-                        stdout_lines.push(line.clone());
-                        let _ = execution_storage.append_log(line.as_str());
-                    },
-                    None => break,
-                },
-                Ok(line) = stderr_stream.next_line() => match line {
-                    Some(line) => {
-                        stderr_lines.push(line.clone());
-                        let _ = execution_storage.append_log(line.as_str());
-                    },
-                    None => break,
-                },
-                else => break,
-            }
-        }
+        let stdout_lines = Arc::new(Mutex::new(Vec::<String>::new()));
+        let stderr_lines = Arc::new(Mutex::new(Vec::<String>::new()));
+        let execution_storage_clone = execution_storage.clone();
 
-        let output = if let Some(timeout) = max_execution_time_ms {
-            let timeout_duration = std::time::Duration::from_millis(timeout);
-            log::info!("executing command with {}ms timeout", timeout);
-            match tokio::time::timeout(timeout_duration, child.wait_with_output()).await {
+        let stdout_lines_clone = stdout_lines.clone();
+        let stderr_lines_clone = stderr_lines.clone();
+        let execution_storage_clone2 = execution_storage_clone.clone();
+
+        let stdout_task = tokio::task::spawn_blocking(move || {
+            tokio::runtime::Runtime::new().unwrap().block_on(async {
+                while let Ok(Some(line)) = stdout_stream.next_line().await {
+                    println!("{}", line);
+                    stdout_lines_clone.lock().await.push(line.clone());
+                    let _ = execution_storage_clone.append_log(line.as_str());
+                }
+            });
+        });
+
+        let stderr_task = tokio::task::spawn_blocking(move || {
+            tokio::runtime::Runtime::new().unwrap().block_on(async {
+                while let Ok(Some(line)) = stderr_stream.next_line().await {
+                    println!("{}", line);
+                    stderr_lines_clone.lock().await.push(line.clone());
+                    let _ = execution_storage_clone2.append_log(line.as_str());
+                }
+            });
+        });
+
+        #[allow(clippy::let_underscore_future)]
+        let _ = tokio::spawn(async move {
+            let _ = futures::future::join_all(vec![stdout_task, stderr_task]).await;
+        });
+
+        let output = if let Some(timeout) = max_execution_timeout {
+            log::info!("executing command with {}[s] timeout", timeout.as_secs());
+            match tokio::time::timeout(timeout, child.wait_with_output()).await {
                 Ok(result) => result?,
                 Err(_) => {
-                    log::error!("command execution timed out after {}ms", timeout);
+                    log::error!("command execution timed out after {}[s]", timeout.as_secs());
                     return Err(anyhow::Error::new(std::io::Error::new(
                         std::io::ErrorKind::TimedOut,
-                        format!("process timed out after {} seconds", timeout),
+                        format!("process timed out after {}[s]", timeout.as_secs()),
                     )));
                 }
             }
@@ -285,18 +322,16 @@ impl DenoRunner {
             child.wait_with_output().await?
         };
         if !output.status.success() {
-            let error = String::from_utf8_lossy(&output.stderr);
-            log::error!("command execution failed: {}", error);
+            let stderr = stderr_lines.lock().await.to_vec().join("\n");
+            log::error!("command execution failed: {}", stderr);
             return Err(anyhow::Error::new(std::io::Error::new(
                 std::io::ErrorKind::Other,
-                error.to_string(),
+                stderr.to_string(),
             )));
         }
-        log::info!(
-            "command completed successfully with output: {:?}",
-            stdout_lines
-        );
-        Ok(stdout_lines)
+        let stdout: Vec<String> = stdout_lines.lock().await.to_vec();
+        log::info!("command completed successfully with output: {:?}", stdout);
+        Ok(stdout)
     }
 }
 
