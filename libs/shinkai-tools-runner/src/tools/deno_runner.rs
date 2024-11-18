@@ -1,6 +1,5 @@
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
-    select,
     sync::Mutex,
 };
 
@@ -214,6 +213,7 @@ impl DenoRunner {
 
         let home_permissions =
             format!("--allow-write={}", execution_storage.home.to_string_lossy());
+        let exec_path = format!("--allow-read={}",binary_path.canonicalize().unwrap().parent().unwrap().to_string_lossy());
         let deno_permissions_host: Vec<&str> = vec![
             // Basically all non-file related permissions
             "--allow-env",
@@ -229,6 +229,7 @@ impl DenoRunner {
             "--allow-write=./home",
 
             // Playwright/Chrome folders
+            &exec_path,
             "--allow-write=/var/folders",
             "--allow-read=/var/folders",
             "--allow-read=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",

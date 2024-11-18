@@ -3,8 +3,7 @@ use std::collections::HashMap;
 use serde_json::Value;
 
 use crate::tools::{
-    deno_runner_options::DenoRunnerOptions,
-    execution_context::ExecutionContext, tool::Tool,
+    deno_runner_options::DenoRunnerOptions, execution_context::ExecutionContext, tool::Tool,
 };
 
 #[tokio::test]
@@ -185,7 +184,7 @@ async fn test_file_persistence() {
     "#;
 
     let execution_storage = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("shinkai-tools-runner-execution-storage/file-persistence");
+        .join("shinkai-tools-runner-execution-storage");
     let context_id = "test-context-id".to_string();
     let execution_id = "test-execution-id".to_string();
 
@@ -207,9 +206,6 @@ async fn test_file_persistence() {
     assert_eq!(result.data["success"], true);
 
     // Check if file exists in the execution storage directory
-    let file_path = execution_storage.join("home/test.txt");
+    let file_path = execution_storage.join(format!("{}/home/test.txt", execution_id));
     assert!(file_path.exists());
-
-    // Clean up
-    std::fs::remove_file(file_path).unwrap();
 }

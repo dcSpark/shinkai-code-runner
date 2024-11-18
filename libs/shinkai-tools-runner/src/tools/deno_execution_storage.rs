@@ -21,10 +21,10 @@ pub struct DenoExecutionStorage {
 impl DenoExecutionStorage {
     pub fn new(context: ExecutionContext) -> Self {
         let code_id = format!("{}-{}", context.code_id, nanoid!());
-        let root = context.storage.clone();
+        let root = context.storage.join(context.context_id.clone()).clone();
         let root_code = root.join("code");
         let code = root_code.join(code_id.clone());
-        let logs = context.storage.join("logs");
+        let logs = root.join("logs");
         let log_file = logs.join(format!(
             "log_{}_{}.log",
             context.context_id, context.execution_id,

@@ -14,8 +14,7 @@ impl Default for ExecutionContext {
             context_id: nanoid::nanoid!(),
             execution_id: nanoid::nanoid!(),
             code_id: nanoid::nanoid!(),
-            storage: PathBuf::from("./shinkai-tools-runner-execution-storage")
-                .join(nanoid::nanoid!()),
+            storage: PathBuf::from("./shinkai-tools-runner-execution-storage"),
         }
     }
 }
