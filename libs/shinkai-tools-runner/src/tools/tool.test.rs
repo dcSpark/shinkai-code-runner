@@ -168,3 +168,44 @@ async fn shinkai_tool_run_concurrency() {
     assert_eq!(run_result2.data["foo"], 3);
     assert_eq!(run_result3.data["foo"], 10);
 }
+
+#[tokio::test]
+async fn test_file_persistence() {
+    let js_code = r#"
+        async function run(c, p) {
+            const content = "Hello from tool!";
+            await Deno.writeTextFile("/app/home/test.txt", content);
+            const data = { success: true };
+            return data;
+        }
+    "#;
+
+    let execution_storage = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("shinkai-tools-runner-execution-storage/file-persistence");
+    let context_id = "test-context-id".to_string();
+    let execution_id = "test-execution-id".to_string();
+
+    let tool = Tool::new(
+        js_code.to_string(),
+        serde_json::Value::Null,
+        Some(DenoRunnerOptions {
+            context: ExecutionContext {
+                storage: execution_storage.clone(),
+                execution_id: context_id.clone(),
+                context_id: execution_id.clone(),
+                code_id: "js_code".into(),
+            },
+            ..Default::default()
+        }),
+    );
+
+    let result = tool.run(None, serde_json::Value::Null, None).await.unwrap();
+    assert_eq!(result.data["success"], true);
+
+    // Check if file exists in the execution storage directory
+    let file_path = execution_storage.join("home/test.txt");
+    assert!(file_path.exists());
+
+    // Clean up
+    std::fs::remove_file(file_path).unwrap();
+}
