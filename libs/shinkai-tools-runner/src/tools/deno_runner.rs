@@ -142,7 +142,7 @@ impl DenoRunner {
         let stdout_task = tokio::task::spawn_blocking(move || {
             tokio::runtime::Runtime::new().unwrap().block_on(async {
                 while let Ok(Some(line)) = stdout_stream.next_line().await {
-                    println!("{}", line);
+                    log::info!("from deno: {}", line);
                     stdout_lines_clone.lock().await.push(line.clone());
                     let _ = execution_storage_clone.append_log(line.as_str());
                 }
@@ -152,7 +152,7 @@ impl DenoRunner {
         let stderr_task = tokio::task::spawn_blocking(move || {
             tokio::runtime::Runtime::new().unwrap().block_on(async {
                 while let Ok(Some(line)) = stderr_stream.next_line().await {
-                    println!("{}", line);
+                    log::info!("from deno: {}", line);
                     stderr_lines_clone.lock().await.push(line.clone());
                     let _ = execution_storage_clone2.append_log(line.as_str());
                 }
