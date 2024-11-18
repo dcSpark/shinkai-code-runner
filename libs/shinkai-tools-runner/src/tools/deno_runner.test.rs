@@ -83,17 +83,19 @@ async fn test_execution_storage_cache_contains_files() {
         .is_test(true)
         .try_init();
 
-    let test_dir =
-        std::path::PathBuf::from("./shinkai-tools-runner-execution-storage/test-cache-files");
+    let test_dir = std::path::PathBuf::from("./shinkai-tools-runner-execution-storage");
 
     let test_code = r#"
         import { assertEquals } from "https://deno.land/std@0.201.0/assert/mod.ts";
         console.log('test');
     "#;
+
+    let context_id = String::from("test-execution-cache");
     // Run the code to ensure dependencies are downloaded
     let mut deno_runner = DenoRunner::new(DenoRunnerOptions {
         context: ExecutionContext {
             storage: test_dir.clone(),
+            context_id: context_id.clone(),
             ..Default::default()
         },
         ..Default::default()
@@ -103,13 +105,11 @@ async fn test_execution_storage_cache_contains_files() {
     // Verify cache directory contains files
     let storage = DenoExecutionStorage::new(ExecutionContext {
         storage: test_dir.clone(),
+        context_id,
         ..Default::default()
     });
 
     assert!(storage.deno_cache.exists());
     let cache_files = std::fs::read_dir(&storage.deno_cache).unwrap();
     assert!(cache_files.count() > 0);
-
-    // Clean up test directory
-    std::fs::remove_dir_all(test_dir).unwrap();
 }

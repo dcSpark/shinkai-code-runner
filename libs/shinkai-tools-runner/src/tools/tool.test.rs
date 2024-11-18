@@ -110,17 +110,17 @@ async fn shinkai_tool_run_concurrency() {
         }
     "#;
 
-    let execution_storage = "./shinkai-tools-runner-execution-storage/concurrent-runs";
-    let context_id = nanoid::nanoid!();
-    let execution_id = nanoid::nanoid!();
+    let execution_storage = "./shinkai-tools-runner-execution-storage";
+    let context_id = String::from("context-patata");
+    let execution_id = String::from("2");
     let tool1 = Tool::new(
         js_code1.to_string(),
         serde_json::Value::Null,
         Some(DenoRunnerOptions {
             context: ExecutionContext {
                 storage: execution_storage.into(),
-                execution_id: context_id.clone(),
-                context_id: execution_id.clone(),
+                execution_id: execution_id.clone(),
+                context_id: context_id.clone(),
                 code_id: "js_code1".into(),
             },
             ..Default::default()
@@ -132,8 +132,8 @@ async fn shinkai_tool_run_concurrency() {
         Some(DenoRunnerOptions {
             context: ExecutionContext {
                 storage: execution_storage.into(),
-                execution_id: context_id.clone(),
-                context_id: execution_id.clone(),
+                execution_id: execution_id.clone(),
+                context_id: context_id.clone(),
                 code_id: "js_code2".into(),
             },
             ..Default::default()
@@ -145,8 +145,8 @@ async fn shinkai_tool_run_concurrency() {
         Some(DenoRunnerOptions {
             context: ExecutionContext {
                 storage: execution_storage.into(),
-                execution_id: context_id.clone(),
-                context_id: execution_id.clone(),
+                execution_id: execution_id.clone(),
+                context_id: context_id.clone(),
                 code_id: "js_code3".into(),
             },
             ..Default::default()

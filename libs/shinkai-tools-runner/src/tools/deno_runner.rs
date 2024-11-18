@@ -6,7 +6,7 @@ use tokio::{
 use crate::tools::deno_execution_storage::DenoExecutionStorage;
 
 use super::{container_utils::DockerStatus, deno_runner_options::DenoRunnerOptions};
-use std::{collections::HashMap, sync::Arc, time::Duration};
+use std::{collections::HashMap, path, sync::Arc, time::Duration};
 
 #[derive(Default)]
 pub struct DenoRunner {
@@ -81,8 +81,6 @@ impl DenoRunner {
             r#"type=bind,source={},target=/app"#,
             execution_storage
                 .root
-                .canonicalize()
-                .unwrap()
                 .to_str()
                 .unwrap()
                 .replace("\\\\?\\", "")
@@ -202,18 +200,18 @@ impl DenoRunner {
         envs: Option<HashMap<String, String>>,
         max_execution_timeout: Option<Duration>,
     ) -> anyhow::Result<Vec<String>> {
-        log::info!(
-            "using deno from host at path: {:?}",
-            self.options.deno_binary_path
-        );
-        let binary_path = self.options.deno_binary_path.clone();
-
         let execution_storage = DenoExecutionStorage::new(self.options.context.clone());
         execution_storage.init(code, None)?;
 
         let home_permissions =
             format!("--allow-write={}", execution_storage.home.to_string_lossy());
-        let exec_path = format!("--allow-read={}",binary_path.canonicalize().unwrap().parent().unwrap().to_string_lossy());
+
+        let binary_path = path::absolute(self.options.deno_binary_path.clone())
+            .unwrap()
+            .to_string_lossy()
+            .to_string();
+        log::info!("using deno from host at path: {:?}", binary_path.clone());
+        let exec_path = format!("--allow-read={}", binary_path.clone());
         let deno_permissions_host: Vec<&str> = vec![
             // Basically all non-file related permissions
             "--allow-env",
@@ -241,18 +239,12 @@ impl DenoRunner {
             home_permissions.as_str(),
         ];
 
-        let mut command = tokio::process::Command::new(binary_path.canonicalize().unwrap());
+        let mut command = tokio::process::Command::new(binary_path);
         let command = command
             .args(["run", "--ext", "ts"])
             .args(deno_permissions_host)
-            .arg(
-                execution_storage
-                    .code_entrypoint
-                    .canonicalize()
-                    .unwrap()
-                    .clone(),
-            )
-            .current_dir(execution_storage.root.canonicalize().unwrap().clone())
+            .arg(execution_storage.code_entrypoint.clone())
+            .current_dir(execution_storage.root.clone())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);
