@@ -1,6 +1,6 @@
 use std::{
     io::Write,
-    path::{self, Path, PathBuf},
+    path::{self, PathBuf},
 };
 
 use nanoid::nanoid;
@@ -19,6 +19,8 @@ pub struct DenoExecutionStorage {
     pub logs: PathBuf,
     pub log_file: PathBuf,
     pub home: PathBuf,
+    pub assets: PathBuf,
+    pub mount: PathBuf,
 }
 
 impl DenoExecutionStorage {
@@ -46,6 +48,8 @@ impl DenoExecutionStorage {
             logs: logs.clone(),
             log_file,
             home: root.join("home"),
+            assets: root.join("assets"),
+            mount: root.join("mount"),
         }
     }
 
@@ -57,6 +61,8 @@ impl DenoExecutionStorage {
             &self.deno_cache,
             &self.logs,
             &self.home,
+            &self.assets,
+            &self.mount,
         ] {
             log::info!("creating directory: {}", dir.display());
             std::fs::create_dir_all(dir).map_err(|e| {
@@ -94,6 +100,16 @@ impl DenoExecutionStorage {
         Ok(())
     }
 
+    pub fn get_relative_code(&self) -> anyhow::Result<String> {
+        self.code
+            .strip_prefix(&self.root)
+            .map(|p| p.to_string_lossy().to_string())
+            .map_err(|e| {
+                log::error!("failed to get relative path: {}", e);
+                anyhow::anyhow!("failed to get relative path: {}", e)
+            })
+    }
+
     pub fn get_relative_code_entrypoint(&self) -> anyhow::Result<String> {
         self.code_entrypoint
             .strip_prefix(&self.root)
@@ -106,6 +122,36 @@ impl DenoExecutionStorage {
 
     pub fn get_relative_deno_cache(&self) -> anyhow::Result<String> {
         self.deno_cache
+            .strip_prefix(&self.root)
+            .map(|p| p.to_string_lossy().to_string())
+            .map_err(|e| {
+                log::error!("failed to get relative path: {}", e);
+                anyhow::anyhow!("failed to get relative path: {}", e)
+            })
+    }
+
+    pub fn get_relative_home(&self) -> anyhow::Result<String> {
+        self.home
+            .strip_prefix(&self.root)
+            .map(|p| p.to_string_lossy().to_string())
+            .map_err(|e| {
+                log::error!("failed to get relative path: {}", e);
+                anyhow::anyhow!("failed to get relative path: {}", e)
+            })
+    }
+
+    pub fn get_relative_assets(&self) -> anyhow::Result<String> {
+        self.assets
+            .strip_prefix(&self.root)
+            .map(|p| p.to_string_lossy().to_string())
+            .map_err(|e| {
+                log::error!("failed to get relative path: {}", e);
+                anyhow::anyhow!("failed to get relative path: {}", e)
+            })
+    }
+
+    pub fn get_relative_mount(&self) -> anyhow::Result<String> {
+        self.mount
             .strip_prefix(&self.root)
             .map(|p| p.to_string_lossy().to_string())
             .map_err(|e| {
