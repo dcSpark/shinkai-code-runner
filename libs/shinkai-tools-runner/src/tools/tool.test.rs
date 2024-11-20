@@ -1,4 +1,7 @@
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 use serde_json::Value;
 
@@ -207,7 +210,6 @@ async fn test_file_persistence_in_home() {
     let result = tool.run(None, serde_json::Value::Null, None).await.unwrap();
     assert_eq!(result.data["success"], true);
 
-    // Check if file exists in the execution storage directory
     let file_path = execution_storage.join(format!("{}/home/test.txt", context_id));
     assert!(file_path.exists());
 }
@@ -219,8 +221,11 @@ async fn test_mount_file_in_mount() {
         .is_test(true)
         .try_init();
 
-    // Create test file with content
-    let test_file_path = tempfile::NamedTempFile::new().unwrap().into_temp_path();
+    let test_file_path = PathBuf::from(format!(
+        "././shinkai-tools-runner-execution-storage/temp-test-files/{}",
+        nanoid::nanoid!()
+    ));
+    std::fs::create_dir_all(test_file_path.parent().unwrap()).unwrap();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
 

@@ -3,9 +3,9 @@ use std::{
     path::{self, PathBuf},
 };
 
-use nanoid::nanoid;
-
 use super::execution_context::ExecutionContext;
+use super::path_buf_ext::PathBufExt;
+use nanoid::nanoid;
 
 #[derive(Default, Clone)]
 pub struct DenoExecutionStorage {
@@ -120,13 +120,7 @@ impl DenoExecutionStorage {
 
     pub fn relative_to_root(&self, path: PathBuf) -> String {
         let path = path.strip_prefix(&self.root).unwrap();
-        self.normalize(path.to_path_buf())
-    }
-
-    pub fn normalize(&self, path: PathBuf) -> String {
-        path.to_string_lossy()
-            .replace("\\\\?\\", "")
-            .replace("\\", "/")
+        path.to_path_buf().as_normalized_string()
     }
 }
 

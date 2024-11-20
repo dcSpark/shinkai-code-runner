@@ -3,10 +3,15 @@ use tokio::{
     sync::Mutex,
 };
 
-use crate::tools::deno_execution_storage::DenoExecutionStorage;
+use crate::tools::{deno_execution_storage::DenoExecutionStorage, path_buf_ext::PathBufExt};
 
 use super::{container_utils::DockerStatus, deno_runner_options::DenoRunnerOptions};
-use std::{collections::HashMap, path, sync::Arc, time::Duration};
+use std::{
+    collections::HashMap,
+    path::{self},
+    sync::Arc,
+    time::Duration,
+};
 
 #[derive(Default)]
 pub struct DenoRunner {
@@ -52,9 +57,7 @@ impl DenoRunner {
         envs: Option<HashMap<String, String>>,
         max_execution_timeout: Option<Duration>,
     ) -> anyhow::Result<Vec<String>> {
-        let force_deno_in_host =
-            std::env::var("CI_FORCE_DENO_IN_HOST").unwrap_or(String::from("false")) == *"true";
-        if !force_deno_in_host
+        if !self.options.force_deno_in_host
             && super::container_utils::is_docker_available() == DockerStatus::Running
         {
             self.run_in_docker(code, envs, max_execution_timeout).await
@@ -81,15 +84,15 @@ impl DenoRunner {
 
         let mount_dirs = [
             (
-                execution_storage.normalize(execution_storage.code.clone()),
+                execution_storage.code.as_normalized_string(),
                 execution_storage.relative_to_root(execution_storage.code.clone()),
             ),
             (
-                execution_storage.normalize(execution_storage.deno_cache.clone()),
+                execution_storage.deno_cache.as_normalized_string(),
                 execution_storage.relative_to_root(execution_storage.deno_cache.clone()),
             ),
             (
-                execution_storage.normalize(execution_storage.home.clone()),
+                execution_storage.home.as_normalized_string(),
                 execution_storage.relative_to_root(execution_storage.home.clone()),
             ),
         ];
@@ -105,7 +108,7 @@ impl DenoRunner {
             // TODO: This hardcoded app could be buggy if later we make some changes to the execution storage
             let mount_param = format!(
                 r#"type=bind,source={},target=/app/{}/{}"#,
-                file.to_str().unwrap().replace("\\\\?\\", ""),
+                path::absolute(file).unwrap().as_normalized_string(),
                 execution_storage.relative_to_root(execution_storage.mount.clone()),
                 file.file_name().unwrap().to_str().unwrap()
             );
@@ -116,7 +119,7 @@ impl DenoRunner {
         for file in &self.options.context.assets {
             let mount_param = format!(
                 r#"type=bind,readonly=true,source={},target=/app/{}/{}"#,
-                file.to_str().unwrap().replace("\\\\?\\", ""),
+                path::absolute(file).unwrap().as_normalized_string(),
                 execution_storage.relative_to_root(execution_storage.assets.clone()),
                 file.file_name().unwrap().to_str().unwrap()
             );
@@ -140,7 +143,7 @@ impl DenoRunner {
         let code_entrypoint =
             execution_storage.relative_to_root(execution_storage.code_entrypoint.clone());
         let mut command = tokio::process::Command::new("docker");
-        let mut args = vec!["run", "-it"];
+        let mut args = vec!["run", "--rm"];
         args.extend(mount_params.iter().map(|s| s.as_str()));
         args.extend(container_envs.iter().map(|s| s.as_str()));
         args.extend([
