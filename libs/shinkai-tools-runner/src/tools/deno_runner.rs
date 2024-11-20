@@ -81,63 +81,46 @@ impl DenoRunner {
 
         let mount_dirs = [
             (
-                &execution_storage.code,
-                execution_storage.get_relative_code(),
+                execution_storage.normalize(execution_storage.code.clone()),
+                execution_storage.relative_to_root(execution_storage.code.clone()),
             ),
             (
-                &execution_storage.assets,
-                execution_storage.get_relative_assets(),
+                execution_storage.normalize(execution_storage.deno_cache.clone()),
+                execution_storage.relative_to_root(execution_storage.deno_cache.clone()),
             ),
             (
-                &execution_storage.deno_cache,
-                execution_storage.get_relative_deno_cache(),
-            ),
-            (
-                &execution_storage.home,
-                execution_storage.get_relative_home(),
+                execution_storage.normalize(execution_storage.home.clone()),
+                execution_storage.relative_to_root(execution_storage.home.clone()),
             ),
         ];
 
         for (dir, relative_path) in mount_dirs {
-            let mount_param = format!(
-                r#"type=bind,source={},target=/app/{}"#,
-                dir.to_str().unwrap().replace("\\\\?\\", ""),
-                relative_path.unwrap()
-            );
+            let mount_param = format!(r#"type=bind,source={},target=/app/{}"#, dir, relative_path);
+            log::info!("mount parameter created: {}", mount_param);
             mount_params.extend([String::from("--mount"), mount_param]);
         }
 
         // Mount each writable file to /app/mount
         for file in &self.options.context.mount_files {
-            log::info!(
-                "mounting mount file: {} -> /app/{}/{}",
-                file.to_str().unwrap().replace("\\\\?\\", ""),
-                execution_storage.get_relative_mount().unwrap(),
-                file.file_name().unwrap().to_str().unwrap()
-            );
             // TODO: This hardcoded app could be buggy if later we make some changes to the execution storage
             let mount_param = format!(
                 r#"type=bind,source={},target=/app/{}/{}"#,
                 file.to_str().unwrap().replace("\\\\?\\", ""),
-                execution_storage.get_relative_mount().unwrap(),
+                execution_storage.relative_to_root(execution_storage.mount.clone()),
                 file.file_name().unwrap().to_str().unwrap()
             );
+            log::info!("mount parameter created: {}", mount_param);
             mount_params.extend([String::from("--mount"), mount_param]);
         }
         // Mount each asset file to /app/assets
         for file in &self.options.context.assets {
-            log::info!(
-                "mounting asset file: {} -> /app/{}/{}",
-                file.to_str().unwrap().replace("\\\\?\\", ""),
-                execution_storage.get_relative_assets().unwrap(),
-                file.file_name().unwrap().to_str().unwrap()
-            );
             let mount_param = format!(
                 r#"type=bind,readonly=true,source={},target=/app/{}/{}"#,
                 file.to_str().unwrap().replace("\\\\?\\", ""),
-                execution_storage.get_relative_assets().unwrap(),
+                execution_storage.relative_to_root(execution_storage.assets.clone()),
                 file.file_name().unwrap().to_str().unwrap()
             );
+            log::info!("mount parameter created: {}", mount_param);
             mount_params.extend([String::from("--mount"), mount_param]);
         }
         let mut container_envs = Vec::<String>::new();
@@ -145,7 +128,7 @@ impl DenoRunner {
         container_envs.push(String::from("-e"));
         container_envs.push(format!(
             "DENO_DIR={}",
-            execution_storage.get_relative_deno_cache()?
+            execution_storage.relative_to_root(execution_storage.deno_cache.clone())
         ));
         if let Some(envs) = envs {
             for (key, value) in envs {
@@ -154,7 +137,8 @@ impl DenoRunner {
                 container_envs.push(env);
             }
         }
-        let code_entrypoint = execution_storage.get_relative_code_entrypoint()?;
+        let code_entrypoint =
+            execution_storage.relative_to_root(execution_storage.code_entrypoint.clone());
         let mut command = tokio::process::Command::new("docker");
         let mut args = vec!["run", "-it"];
         args.extend(mount_params.iter().map(|s| s.as_str()));

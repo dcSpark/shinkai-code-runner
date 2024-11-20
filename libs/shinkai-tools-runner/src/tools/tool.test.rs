@@ -239,7 +239,6 @@ async fn test_mount_file_in_mount() {
         }
     "#;
 
-    // Run the code to ensure dependencies are downloaded
     let tool = Tool::new(
         js_code.to_string(),
         serde_json::Value::Null,
@@ -274,7 +273,6 @@ async fn test_mount_and_edit_file_in_mount() {
         .is_test(true)
         .try_init();
 
-    // Create test file with content
     let test_file_path = tempfile::NamedTempFile::new().unwrap().into_temp_path();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
@@ -288,7 +286,6 @@ async fn test_mount_and_edit_file_in_mount() {
         }
     "#;
 
-    // Run the code to ensure dependencies are downloaded
     let tool = Tool::new(
         js_code.to_string(),
         serde_json::Value::Null,
@@ -315,7 +312,6 @@ async fn test_mount_and_edit_file_in_mount() {
     assert!(result.is_ok());
     assert!(result.unwrap().data == serde_json::Value::Null);
 
-    // Verify the temp file content was updated to "2"
     let content = std::fs::read_to_string(&test_file_path).unwrap();
     assert_eq!(content, "2");
 }
@@ -327,7 +323,6 @@ async fn test_mount_file_in_assets() {
         .is_test(true)
         .try_init();
 
-    // Create test file with content
     let test_file_path = tempfile::NamedTempFile::new().unwrap().into_temp_path();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
@@ -342,7 +337,6 @@ async fn test_mount_file_in_assets() {
         }
     "#;
 
-    // Run the code to ensure dependencies are downloaded
     let tool = Tool::new(
         js_code.to_string(),
         serde_json::Value::Null,
@@ -377,7 +371,6 @@ async fn test_fail_when_try_write_assets() {
         .is_test(true)
         .try_init();
 
-    // Create test file with content
     let test_file_path = tempfile::NamedTempFile::new().unwrap().into_temp_path();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
@@ -392,7 +385,6 @@ async fn test_fail_when_try_write_assets() {
     "#;
 
     let context_id = format!("test-mount-file-in-assets-{}", nanoid::nanoid!());
-    // Run the code to ensure dependencies are downloaded
     let tool = Tool::new(
         js_code.to_string(),
         serde_json::Value::Null,

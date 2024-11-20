@@ -100,66 +100,6 @@ impl DenoExecutionStorage {
         Ok(())
     }
 
-    pub fn get_relative_code(&self) -> anyhow::Result<String> {
-        self.code
-            .strip_prefix(&self.root)
-            .map(|p| p.to_string_lossy().to_string())
-            .map_err(|e| {
-                log::error!("failed to get relative path: {}", e);
-                anyhow::anyhow!("failed to get relative path: {}", e)
-            })
-    }
-
-    pub fn get_relative_code_entrypoint(&self) -> anyhow::Result<String> {
-        self.code_entrypoint
-            .strip_prefix(&self.root)
-            .map(|p| p.to_string_lossy().to_string())
-            .map_err(|e| {
-                log::error!("failed to get relative path: {}", e);
-                anyhow::anyhow!("failed to get relative path: {}", e)
-            })
-    }
-
-    pub fn get_relative_deno_cache(&self) -> anyhow::Result<String> {
-        self.deno_cache
-            .strip_prefix(&self.root)
-            .map(|p| p.to_string_lossy().to_string())
-            .map_err(|e| {
-                log::error!("failed to get relative path: {}", e);
-                anyhow::anyhow!("failed to get relative path: {}", e)
-            })
-    }
-
-    pub fn get_relative_home(&self) -> anyhow::Result<String> {
-        self.home
-            .strip_prefix(&self.root)
-            .map(|p| p.to_string_lossy().to_string())
-            .map_err(|e| {
-                log::error!("failed to get relative path: {}", e);
-                anyhow::anyhow!("failed to get relative path: {}", e)
-            })
-    }
-
-    pub fn get_relative_assets(&self) -> anyhow::Result<String> {
-        self.assets
-            .strip_prefix(&self.root)
-            .map(|p| p.to_string_lossy().to_string())
-            .map_err(|e| {
-                log::error!("failed to get relative path: {}", e);
-                anyhow::anyhow!("failed to get relative path: {}", e)
-            })
-    }
-
-    pub fn get_relative_mount(&self) -> anyhow::Result<String> {
-        self.mount
-            .strip_prefix(&self.root)
-            .map(|p| p.to_string_lossy().to_string())
-            .map_err(|e| {
-                log::error!("failed to get relative path: {}", e);
-                anyhow::anyhow!("failed to get relative path: {}", e)
-            })
-    }
-
     pub fn append_log(&self, log: &str) -> anyhow::Result<()> {
         let timestamp = chrono::Local::now().format("%Y%m%d_%H%M%S");
         let log_line = format!(
@@ -176,6 +116,17 @@ impl DenoExecutionStorage {
             })?;
         file.write_all(log_line.as_bytes())?;
         Ok(())
+    }
+
+    pub fn relative_to_root(&self, path: PathBuf) -> String {
+        let path = path.strip_prefix(&self.root).unwrap();
+        self.normalize(path.to_path_buf())
+    }
+
+    pub fn normalize(&self, path: PathBuf) -> String {
+        path.to_string_lossy()
+            .replace("\\\\?\\", "")
+            .replace("\\", "/")
     }
 }
 
