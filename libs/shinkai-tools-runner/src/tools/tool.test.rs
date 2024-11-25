@@ -180,7 +180,7 @@ async fn test_file_persistence_in_home() {
             for await (const entry of Deno.readDir("./")) {
                 console.log(entry.name);
             }
-            await Deno.writeTextFile("./home/test.txt", content);
+            await Deno.writeTextFile(`${process.env.HOME}/test.txt`, content);
             const data = { success: true };
             return data;
         }
@@ -231,11 +231,11 @@ async fn test_mount_file_in_mount() {
     let js_code = r#"
         async function run (c, p) {
             const files = [];
-            for await (const dirEntry of Deno.readDir("./mount")) {
+            for await (const dirEntry of Deno.readDir(`${process.env.HOME}/mount`)) {
                 files.push(dirEntry.name);
             }
             console.log("files in mount:", files);
-            const content = await Deno.readTextFile(`./mount/${process.env.FILE_NAME}`);
+            const content = await Deno.readTextFile(`${process.env.HOME}/mount/${process.env.FILE_NAME}`);
             console.log(content);
             return content;
         }
@@ -381,7 +381,7 @@ async fn test_fail_when_try_write_assets() {
 
     let js_code = r#"
         async function run (c, p) {
-            await Deno.writeTextFile(`./assets/${process.env.FILE_NAME}`);
+            await Deno.writeTextFile(`${process.env.ASSETS}/${process.env.FILE_NAME}`);
             return;
         }
     "#;

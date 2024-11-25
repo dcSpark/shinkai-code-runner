@@ -147,6 +147,15 @@ impl DenoRunner {
             self.options.shinkai_node_location.protocol, self.options.shinkai_node_location.port
         ));
 
+        container_envs.push(String::from("-e"));
+        container_envs.push(String::from("HOME=/app/home"));
+
+        container_envs.push(String::from("-e"));
+        container_envs.push(String::from("ASSETS=/app/assets"));
+
+        container_envs.push(String::from("-e"));
+        container_envs.push(String::from("MOUNT=/app/mount"));
+
         if let Some(envs) = envs {
             for (key, value) in envs {
                 let env = format!("{}={}", key, value);
@@ -269,32 +278,44 @@ impl DenoRunner {
             .to_string();
         log::info!("using deno from host at path: {:?}", binary_path.clone());
         let exec_path = format!("--allow-read={}", binary_path.clone());
-        let deno_permissions_host: Vec<&str> = vec![
+        let mut deno_permissions_host: Vec<String> = vec![
             // Basically all non-file related permissions
-            "--allow-env",
-            "--allow-run",
-            "--allow-net",
-            "--allow-sys",
-            "--allow-scripts",
-            "--allow-ffi",
-            "--allow-import",
+            "--allow-env".to_string(),
+            "--allow-run".to_string(),
+            "--allow-net".to_string(),
+            "--allow-sys".to_string(),
+            "--allow-scripts".to_string(),
+            "--allow-ffi".to_string(),
+            "--allow-import".to_string(),
 
             // Engine folders
-            "--allow-read=.",
-            "--allow-write=./home",
+            "--allow-read=.".to_string(),
+            "--allow-write=./home".to_string(),
 
             // Playwright/Chrome folders
-            &exec_path,
-            "--allow-write=/var/folders",
-            "--allow-read=/var/folders",
-            "--allow-read=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-            "--allow-read=/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
-            "--allow-read=/Applications/Chromium.app/Contents/MacOS/Chromium",
-            "--allow-read=C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
-            "--allow-read=C:\\Program Files (x86)\\Google\\Chrome SxS\\Application\\chrome.exe",
-            "--allow-read=C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe",
-            home_permissions.as_str(),
+            exec_path,
+            "--allow-write=/var/folders".to_string(),
+            "--allow-read=/var/folders".to_string(),
+            "--allow-read=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome".to_string(),
+            "--allow-read=/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary".to_string(),
+            "--allow-read=/Applications/Chromium.app/Contents/MacOS/Chromium".to_string(),
+            "--allow-read=C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe".to_string(),
+            "--allow-read=C:\\Program Files (x86)\\Google\\Chrome SxS\\Application\\chrome.exe".to_string(),
+            "--allow-read=C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe".to_string(),
+            home_permissions,
         ];
+
+        for file in &self.options.context.mount_files {
+            let dest_path = execution_storage.mount.join(file.file_name().unwrap());
+            std::fs::copy(file, &dest_path)?;
+            let mount_param = format!(
+                r#"--allow-read={},--allow-write={}"#,
+                dest_path.to_string_lossy(),
+                dest_path.to_string_lossy()
+            );
+            log::info!("mount parameter created: {}", mount_param);
+            deno_permissions_host.extend(mount_param.split(',').map(String::from));
+        }
 
         let mut command = tokio::process::Command::new(binary_path);
         let command = command
@@ -316,6 +337,10 @@ impl DenoRunner {
                 self.options.shinkai_node_location.port
             ),
         );
+
+        command.env("HOME", execution_storage.home.clone());
+        command.env("ASSETS", execution_storage.assets.clone());
+        command.env("MOUNT", execution_storage.mount.clone());
 
         if let Some(envs) = envs {
             command.envs(envs);
