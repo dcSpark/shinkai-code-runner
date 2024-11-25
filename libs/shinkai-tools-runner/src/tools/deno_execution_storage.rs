@@ -152,22 +152,22 @@ impl DenoExecutionStorage {
 }
 
 // We do best effort to remove ephemereal folders
-// impl Drop for DenoExecutionStorage {
-//     fn drop(&mut self) {
-//         if let Err(e) = std::fs::remove_dir_all(&self.code_folder_path) {
-//             log::warn!(
-//                 "failed to remove code directory {}: {}",
-//                 self.code_folder_path.display(),
-//                 e
-//             );
-//         } else {
-//             log::info!(
-//                 "removed code directory: {}",
-//                 self.code_folder_path.display()
-//             );
-//         }
-//     }
-// }
+impl Drop for DenoExecutionStorage {
+    fn drop(&mut self) {
+        if let Err(e) = std::fs::remove_dir_all(&self.code_folder_path) {
+            log::warn!(
+                "failed to remove code directory {}: {}",
+                self.code_folder_path.display(),
+                e
+            );
+        } else {
+            log::info!(
+                "removed code directory: {}",
+                self.code_folder_path.display()
+            );
+        }
+    }
+}
 
 #[cfg(test)]
 #[path = "deno_execution_storage.test.rs"]
