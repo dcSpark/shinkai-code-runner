@@ -518,3 +518,45 @@ async fn shinkai_tool_param_with_quotes() {
     assert_eq!(result["mixed"], "single ' and double \" quotes");
     assert_eq!(result["escaped"], "escaped \' and \" quotes");
 }
+
+#[tokio::test]
+async fn test_multiple_file_imports() {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let main_code = r#"
+        import { helper } from "./helper.ts";
+        import { data } from "./data.ts";
+        
+        function run() {
+            return helper(data);
+        }
+    "#;
+
+    let helper_code = r#"
+        export function helper(input: string) {
+            return `processed ${input}`;
+        }
+    "#;
+
+    let data_code = r#"
+        export const data = "test data";
+    "#;
+
+    let code_files = CodeFiles {
+        files: HashMap::from([
+            ("main.ts".to_string(), main_code.to_string()),
+            ("helper.ts".to_string(), helper_code.to_string()),
+            ("data.ts".to_string(), data_code.to_string()),
+        ]),
+        entrypoint: "main.ts".to_string(),
+    };
+
+    let tool = Tool::new(code_files, Value::Null, None);
+    let result = tool.run(None, Value::Null, None).await;
+    
+    assert!(result.is_ok());
+    assert_eq!(result.unwrap().data, "processed test data");
+}
