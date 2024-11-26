@@ -423,7 +423,7 @@ async fn test_fail_when_try_write_assets() {
         .is_test(true)
         .try_init();
 
-    let test_file_path = tempfile::NamedTempFile::new().unwrap().into_temp_path();
+    let test_file_path = tempfile::NamedTempFile::new_in("./shinkai-tools-runner-execution-storage").unwrap().into_temp_path();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
 
@@ -434,8 +434,8 @@ async fn test_fail_when_try_write_assets() {
             "main.ts".to_string(),
             r#"
                 async function run (c, p) {
-                    console.log('assetcitos', Deno.env.get("ASSETS"));
                     const assets = Deno.env.get("ASSETS").split(',');
+                    console.log('writing', assets[0]);
                     await Deno.writeTextFile(assets[0], "2");
                     return;
                 }

@@ -503,12 +503,17 @@ impl DenoRunner {
             format!("--allow-read={}", exec_path.to_string()),
             "--allow-write=/var/folders".to_string(),
             "--allow-read=/var/folders".to_string(),
+            "--allow-read=C:\\Users\\agall\\AppData\\Local\\Temp".to_string(),
+            "--allow-write=C:\\Users\\agall\\AppData\\Local\\Temp".to_string(),
             "--allow-read=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome".to_string(),
             "--allow-read=/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary".to_string(),
             "--allow-read=/Applications/Chromium.app/Contents/MacOS/Chromium".to_string(),
             "--allow-read=C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe".to_string(),
             "--allow-read=C:\\Program Files (x86)\\Google\\Chrome SxS\\Application\\chrome.exe".to_string(),
             "--allow-read=C:\\Program Files (x86)\\Chromium\\Application\\chrome.exe".to_string(),
+            "--allow-read=C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe".to_string(),
+            "--allow-read=C:\\Program Files\\Google\\Chrome SxS\\Application\\chrome.exe".to_string(),
+            "--allow-read=C:\\Program Files\\Chromium\\Application\\chrome.exe".to_string(),
             "--allow-read=/usr/bin/chromium".to_string(),
         ];
 
