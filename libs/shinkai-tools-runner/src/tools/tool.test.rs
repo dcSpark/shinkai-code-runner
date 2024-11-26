@@ -400,7 +400,7 @@ async fn test_mount_file_in_assets() {
         Some(DenoRunnerOptions {
             context: ExecutionContext {
                 storage: execution_storage.clone(),
-                assets: vec![test_file_path.to_path_buf().clone()],
+                assets_files: vec![test_file_path.to_path_buf().clone()],
                 ..Default::default()
             },
             ..Default::default()
@@ -455,7 +455,7 @@ async fn test_fail_when_try_write_assets() {
                 storage: execution_storage.clone(),
                 context_id: context_id.clone(),
                 code_id: "js_code".into(),
-                assets: vec![test_file_path.to_path_buf().clone()],
+                assets_files: vec![test_file_path.to_path_buf().clone()],
                 ..Default::default()
             },
             ..Default::default()

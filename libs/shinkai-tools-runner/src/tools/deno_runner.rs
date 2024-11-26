@@ -127,7 +127,7 @@ impl DenoRunner {
             mount_params.extend([String::from("--mount"), mount_param]);
         }
         // Mount each asset file to /app/assets
-        for file in &self.options.context.assets {
+        for file in &self.options.context.assets_files {
             let mount_param = format!(
                 r#"type=bind,readonly=true,source={},target=/app/{}/{}"#,
                 path::absolute(file).unwrap().as_normalized_string(),
@@ -312,7 +312,7 @@ impl DenoRunner {
         ];
 
         for file in &self.options.context.mount_files {
-            let dest_path = execution_storage.mount.join(file.file_name().unwrap());
+            let dest_path = execution_storage.mount_folder_path.join(file.file_name().unwrap());
             std::fs::copy(file, &dest_path)?;
             let mount_param = format!(
                 r#"--allow-read={},--allow-write={}"#,
@@ -344,9 +344,9 @@ impl DenoRunner {
             ),
         );
 
-        command.env("HOME", execution_storage.home.clone());
-        command.env("ASSETS", execution_storage.assets.clone());
-        command.env("MOUNT", execution_storage.mount.clone());
+        command.env("HOME", execution_storage.home_folder_path.clone());
+        command.env("ASSETS", execution_storage.assets_folder_path.clone());
+        command.env("MOUNT", execution_storage.mount_folder_path.clone());
 
         if let Some(envs) = envs {
             command.envs(envs);
