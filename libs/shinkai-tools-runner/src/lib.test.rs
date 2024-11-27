@@ -511,9 +511,14 @@ async fn shinkai_tool_playwright_example(#[case] runner_type: RunnerType) {
         files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
         entrypoint: "main.ts".to_string(),
     };
+
     let tool = Tool::new(
         code_files,
-        serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
+        if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
+            serde_json::json!({})
+        } else {
+            serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
+        },
         Some(DenoRunnerOptions {
             force_runner_type: Some(runner_type),
             ..Default::default()
@@ -558,7 +563,11 @@ async fn shinkai_tool_defillama_lending_tvl_rankings(#[case] runner_type: Runner
     };
     let tool = Tool::new(
         code_files,
-        serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
+        if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
+            serde_json::json!({})
+        } else {
+            serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
+        },
         Some(DenoRunnerOptions {
             force_runner_type: Some(runner_type),
             ..Default::default()
@@ -578,33 +587,6 @@ async fn shinkai_tool_defillama_lending_tvl_rankings(#[case] runner_type: Runner
     assert!(run_result.is_ok());
     assert_eq!(run_result.unwrap().data["rowsCount"], 43);
 }
-
-// // TODO: enable this test again when fix the tool
-// #[tokio::test]
-// async fn shinkai_tool_aave_loan_requester() {
-//     let _ = env_logger::builder()
-//         .filter_level(log::LevelFilter::Info)
-//         .is_test(true)
-//         .try_init();
-//     let tool_definition = get_tool("shinkai-tool-aave-loan-requester").unwrap();
-//     let code_files = CodeFiles {
-//         files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
-//         entrypoint: "main.ts".to_string(),
-//     };
-//     let tool = Tool::new(
-//         code_files,
-//         serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) }),
-//         None,
-//     );
-//     let run_result = tool
-//         .run(
-//             None,
-//             serde_json::json!({ "inputValue": "0.005", "assetSymbol": "ETH" }),
-//             None,
-//         )
-//         .await;
-//     assert!(run_result.is_ok());
-// }
 
 #[rstest]
 #[case::host(RunnerType::Host)]
