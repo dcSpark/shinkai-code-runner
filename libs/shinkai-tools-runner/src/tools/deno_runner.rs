@@ -190,7 +190,7 @@ impl DenoRunner {
         }
 
         let deno_permissions = self.get_deno_permissions(
-            "/deno",
+            "/usr/bin/deno",
             "/app/home",
             &self
                 .options
