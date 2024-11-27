@@ -51,6 +51,7 @@ impl DenoRunner {
                     .to_str()
                     .unwrap(),
             ])
+            .current_dir(execution_storage.code_folder_path.clone())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);

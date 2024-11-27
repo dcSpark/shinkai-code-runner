@@ -1,14 +1,20 @@
 use std::collections::HashMap;
 
+use rstest::rstest;
 use serde_json::Value;
 
 use crate::tools::{
-    code_files::CodeFiles, deno_runner_options::DenoRunnerOptions,
-    execution_context::ExecutionContext, tool::Tool,
+    code_files::CodeFiles,
+    deno_runner_options::{DenoRunnerOptions, RunnerType},
+    execution_context::ExecutionContext,
+    tool::Tool,
 };
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn get_tool_definition() {
+async fn get_tool_definition(#[case] runner_type: RunnerType) {
     // Just for a simple test, it could be any tool
     let code = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -23,15 +29,25 @@ async fn get_tool_definition() {
 
     let configurations = serde_json::json!({});
 
-    let tool = Tool::new(code_files, configurations, None);
+    let tool = Tool::new(
+        code_files,
+        configurations,
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
 
     let definition = tool.definition().await.unwrap();
 
     assert_eq!(definition.id, "shinkai-tool-echo");
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn run_tool() {
+async fn run_tool(#[case] runner_type: RunnerType) {
     // Just for a simple test, it could be any tool
     let code = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -46,7 +62,14 @@ async fn run_tool() {
 
     let configurations = Value::Null;
 
-    let tool = Tool::new(code_files, configurations, None);
+    let tool = Tool::new(
+        code_files,
+        configurations,
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
 
     let result = tool
         .run(
@@ -65,8 +88,11 @@ async fn run_tool() {
     );
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn shinkai_tool_with_env() {
+async fn shinkai_tool_with_env(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -82,7 +108,14 @@ async fn shinkai_tool_with_env() {
         entrypoint: "main.ts".to_string(),
     };
 
-    let tool = Tool::new(code_files, serde_json::Value::Null, None);
+    let tool = Tool::new(
+        code_files,
+        serde_json::Value::Null,
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
     let mut envs = HashMap::<String, String>::new();
     envs.insert("BAR".to_string(), "bar".to_string());
     let run_result = tool
@@ -92,8 +125,11 @@ async fn shinkai_tool_with_env() {
     assert_eq!(run_result.unwrap().data["foo"], "bar");
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn shinkai_tool_run_concurrency() {
+async fn shinkai_tool_run_concurrency(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -159,6 +195,7 @@ async fn shinkai_tool_run_concurrency() {
                 code_id: "js_code1".into(),
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type),
             ..Default::default()
         }),
     );
@@ -206,8 +243,11 @@ async fn shinkai_tool_run_concurrency() {
     assert_eq!(run_result3.data["foo"], 10);
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn test_file_persistence_in_home() {
+async fn file_persistence_in_home(#[case] runner_type: RunnerType) {
     let js_code = r#"
         async function run(c, p) {
             const content = "Hello from tool!";
@@ -240,6 +280,7 @@ async fn test_file_persistence_in_home() {
                 code_id: "js_code".into(),
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type),
             ..Default::default()
         }),
     );
@@ -251,8 +292,11 @@ async fn test_file_persistence_in_home() {
     assert!(file_path.exists());
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn test_mount_file_in_mount() {
+async fn mount_file_in_mount(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -288,6 +332,7 @@ async fn test_mount_file_in_mount() {
                 mount_files: vec![test_file_path.to_path_buf().clone()],
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type),
             ..Default::default()
         }),
     );
@@ -306,8 +351,11 @@ async fn test_mount_file_in_mount() {
     assert!(result.unwrap().data == "1");
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn test_mount_and_edit_file_in_mount() {
+async fn mount_and_edit_file_in_mount(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -341,6 +389,7 @@ async fn test_mount_and_edit_file_in_mount() {
                 mount_files: vec![test_file_path.to_path_buf().clone()],
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type),
             ..Default::default()
         }),
     );
@@ -362,8 +411,11 @@ async fn test_mount_and_edit_file_in_mount() {
     assert_eq!(content, "2");
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn test_mount_file_in_assets() {
+async fn mount_file_in_assets(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -397,6 +449,7 @@ async fn test_mount_file_in_assets() {
                 assets_files: vec![test_file_path.to_path_buf().clone()],
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type),
             ..Default::default()
         }),
     );
@@ -416,14 +469,20 @@ async fn test_mount_file_in_assets() {
     assert!(result.unwrap().data == "1");
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn test_fail_when_try_write_assets() {
+async fn fail_when_try_write_assets(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
         .try_init();
 
-    let test_file_path = tempfile::NamedTempFile::new_in("./shinkai-tools-runner-execution-storage").unwrap().into_temp_path();
+    let test_file_path =
+        tempfile::NamedTempFile::new_in("./shinkai-tools-runner-execution-storage")
+            .unwrap()
+            .into_temp_path();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
 
@@ -455,6 +514,7 @@ async fn test_fail_when_try_write_assets() {
                 assets_files: vec![test_file_path.to_path_buf().clone()],
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type),
             ..Default::default()
         }),
     );
@@ -478,8 +538,11 @@ async fn test_fail_when_try_write_assets() {
         .contains("NotCapable"));
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn shinkai_tool_param_with_quotes() {
+async fn shinkai_tool_param_with_quotes(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -499,7 +562,14 @@ async fn shinkai_tool_param_with_quotes() {
         files: HashMap::from([("main.ts".to_string(), js_code.to_string())]),
         entrypoint: "main.ts".to_string(),
     };
-    let tool = Tool::new(code_files, serde_json::Value::Null, None);
+    let tool = Tool::new(
+        code_files,
+        serde_json::Value::Null,
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
     let run_result = tool
         .run(
             None,
@@ -522,8 +592,11 @@ async fn shinkai_tool_param_with_quotes() {
     assert_eq!(result["escaped"], "escaped \' and \" quotes");
 }
 
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn test_multiple_file_imports() {
+async fn multiple_file_imports(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -557,7 +630,14 @@ async fn test_multiple_file_imports() {
         entrypoint: "main.ts".to_string(),
     };
 
-    let tool = Tool::new(code_files, Value::Null, None);
+    let tool = Tool::new(
+        code_files,
+        Value::Null,
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
     let result = tool.run(None, Value::Null, None).await;
 
     assert!(result.is_ok());
