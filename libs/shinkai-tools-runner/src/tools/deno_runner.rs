@@ -122,6 +122,7 @@ impl DenoRunner {
         }
 
         let mut mount_env = String::from("");
+        log::info!("mount files: {:?}", self.options.context.mount_files);
         // Mount each writable file to /app/mount
         for file in &self.options.context.mount_files {
             let target_path = format!(
@@ -136,7 +137,7 @@ impl DenoRunner {
                 path::absolute(file).unwrap().as_normalized_string(),
                 target_path.clone()
             );
-            log::debug!("mount parameter created: {}", mount_param);
+            log::info!("mount parameter created: {}", mount_param);
             mount_env += &format!("{},", target_path);
             mount_params.extend([String::from("--mount"), mount_param]);
         }
@@ -188,7 +189,7 @@ impl DenoRunner {
             }
         }
 
-        let deno_permissions_host = self.get_deno_permissions(
+        let deno_permissions = self.get_deno_permissions(
             "/deno",
             "/app/home",
             &self
@@ -237,7 +238,7 @@ impl DenoRunner {
             "--ext",
             "ts",
         ]);
-        args.extend(deno_permissions_host.iter().map(|s| s.as_str()));
+        args.extend(deno_permissions.iter().map(|s| s.as_str()));
         args.extend([code_entrypoint.as_str()]);
         let command = command
             .args(args)
@@ -485,7 +486,9 @@ impl DenoRunner {
         mount_files: &[PathBuf],
         assets_files: &[PathBuf],
     ) -> Vec<String> {
-        let mut deno_permissions_host: Vec<String> = vec![
+        log::info!("mount files: {:?}", mount_files);
+        log::info!("assets files: {:?}", assets_files);
+        let mut deno_permissions: Vec<String> = vec![
             // Basically all non-file related permissions
             "--allow-env".to_string(),
             "--allow-run".to_string(),
@@ -503,8 +506,10 @@ impl DenoRunner {
             format!("--allow-read={}", exec_path.to_string()),
             "--allow-write=/var/folders".to_string(),
             "--allow-read=/var/folders".to_string(),
-            "--allow-read=C:\\Users\\agall\\AppData\\Local\\Temp".to_string(),
-            "--allow-write=C:\\Users\\agall\\AppData\\Local\\Temp".to_string(),
+            "--allow-read=/tmp".to_string(),
+            "--allow-write=/tmp".to_string(),
+            format!("--allow-read={}", std::env::temp_dir().to_string_lossy()),
+            format!("--allow-write={}", std::env::temp_dir().to_string_lossy()),
             "--allow-read=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome".to_string(),
             "--allow-read=/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary".to_string(),
             "--allow-read=/Applications/Chromium.app/Contents/MacOS/Chromium".to_string(),
@@ -520,20 +525,18 @@ impl DenoRunner {
         for file in mount_files {
             let mount_param = format!(
                 r#"--allow-read={},--allow-write={}"#,
-                path::absolute(file).unwrap().to_string_lossy(),
-                path::absolute(file).unwrap().to_string_lossy()
+                file.to_string_lossy(),
+                file.to_string_lossy()
             );
-            deno_permissions_host.extend(mount_param.split(',').map(String::from));
+            deno_permissions.extend(mount_param.split(',').map(String::from));
         }
 
         for file in assets_files {
-            let asset_param = format!(
-                r#"--allow-read={}"#,
-                path::absolute(file).unwrap().to_string_lossy()
-            );
-            deno_permissions_host.push(asset_param);
+            let asset_param = format!(r#"--allow-read={}"#, file.to_string_lossy());
+            deno_permissions.push(asset_param);
         }
-        deno_permissions_host
+        log::info!("deno permissions: {}", deno_permissions.join(" "));
+        deno_permissions
     }
 }
 
