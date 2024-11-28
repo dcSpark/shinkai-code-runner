@@ -36,7 +36,7 @@ type ExtendedToolDefinition = ToolDefinition<any> & {
 
 // Parse command line arguments
 console.log('📝 Parsing command line arguments...');
-const args = minimist(Deno.args.slice(2));
+const args = minimist(Deno.args);
 const entryFile: string = join(Deno.cwd(), args.entry);
 const outputFolder: string = join(Deno.cwd(), args.outputFolder);
 const outputFile: string = join(outputFolder, 'index.ts');
