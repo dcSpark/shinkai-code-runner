@@ -14,39 +14,6 @@ use crate::tools::{
 #[case::host(RunnerType::Host)]
 #[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn get_tool_definition(#[case] runner_type: RunnerType) {
-    // Just for a simple test, it could be any tool
-    let code = include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../../apps/shinkai-tool-echo/src/index.ts"
-    ))
-    .to_string();
-
-    let code_files = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), code.to_string())]),
-        entrypoint: "main.ts".to_string(),
-    };
-
-    let configurations = serde_json::json!({});
-
-    let tool = Tool::new(
-        code_files,
-        configurations,
-        Some(DenoRunnerOptions {
-            force_runner_type: Some(runner_type),
-            ..Default::default()
-        }),
-    );
-
-    let definition = tool.definition().await.unwrap();
-
-    assert_eq!(definition.id, "shinkai-tool-echo");
-}
-
-#[rstest]
-#[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
-#[tokio::test]
 async fn run_tool(#[case] runner_type: RunnerType) {
     // Just for a simple test, it could be any tool
     let code = include_str!(concat!(
