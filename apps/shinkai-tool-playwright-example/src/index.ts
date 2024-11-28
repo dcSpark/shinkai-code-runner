@@ -1,6 +1,5 @@
 import * as playwright from 'npm:playwright@1.48.2';
 import chromePaths from 'npm:chrome-paths@1.0.1';
-import process from 'node:process';
 
 type Configurations = {
   chromePath?: string;
