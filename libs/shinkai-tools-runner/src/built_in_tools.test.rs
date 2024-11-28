@@ -1,11 +1,4 @@
-use std::collections::HashMap;
-
-use serde_json::Value;
-
-use crate::{
-    built_in_tools::{get_tool, get_tools},
-    tools::code_files::CodeFiles,
-};
+use crate::built_in_tools::{get_tool, get_tools};
 
 #[tokio::test]
 async fn list_tools_count() {

@@ -330,7 +330,7 @@ impl DenoRunner {
         });
 
         #[allow(clippy::let_underscore_future)]
-        let _ = tokio::spawn(async move {
+        let std_tasks = tokio::spawn(async move {
             let _ = futures::future::join_all(vec![stdout_task, stderr_task]).await;
         });
 
@@ -350,6 +350,7 @@ impl DenoRunner {
             log::info!("executing command without timeout");
             child.wait_with_output().await?
         };
+        let _ = std_tasks.await;
         if !output.status.success() {
             let stderr = stderr_lines.lock().await.to_vec().join("\n");
             log::error!("command execution failed: {}", stderr);
@@ -489,7 +490,7 @@ impl DenoRunner {
         });
 
         #[allow(clippy::let_underscore_future)]
-        let _ = tokio::spawn(async move {
+        let std_tasks = tokio::spawn(async move {
             let _ = futures::future::join_all(vec![stdout_task, stderr_task]).await;
         });
 
@@ -509,6 +510,7 @@ impl DenoRunner {
             log::info!("executing command without timeout");
             child.wait_with_output().await?
         };
+        let _ = std_tasks.await;
         if !output.status.success() {
             let stderr = stderr_lines.lock().await.to_vec().join("\n");
             log::error!("command execution failed: {}", stderr);

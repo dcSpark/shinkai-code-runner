@@ -4,7 +4,7 @@ use serde_json::Value;
 
 use super::{
     code_files::CodeFiles, deno_runner::DenoRunner, deno_runner_options::DenoRunnerOptions,
-    execution_error::ExecutionError, run_result::RunResult, tool_definition::ToolDefinition,
+    execution_error::ExecutionError, run_result::RunResult,
 };
 
 pub struct Tool {
