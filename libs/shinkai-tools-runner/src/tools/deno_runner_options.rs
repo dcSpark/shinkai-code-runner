@@ -9,7 +9,6 @@ use super::{
 pub struct DenoRunnerOptions {
     pub context: ExecutionContext,
     pub deno_binary_path: PathBuf,
-    pub python_binary_path: PathBuf,
     pub code_runner_docker_image_name: String,
     pub force_runner_type: Option<RunnerType>,
     pub shinkai_node_location: ShinkaiNodeLocation,
@@ -24,11 +23,6 @@ impl Default for DenoRunnerOptions {
                 "./shinkai-tools-runner-resources/deno.exe"
             } else {
                 "./shinkai-tools-runner-resources/deno"
-            }),
-            python_binary_path: PathBuf::from(if cfg!(windows) {
-                "C://Users/agall/AppData/Local/Microsoft/WindowsApps/python"
-            } else {
-                "python"
             }),
             force_runner_type: None,
             shinkai_node_location: ShinkaiNodeLocation {
