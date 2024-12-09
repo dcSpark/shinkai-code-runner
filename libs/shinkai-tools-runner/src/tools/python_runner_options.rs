@@ -22,7 +22,7 @@ impl Default for PythonRunnerOptions {
             uv_binary_path: PathBuf::from(if cfg!(windows) {
                 format!("C:\\Users\\{}\\.local\\bin\\uv.exe", whoami::username())
             } else {
-                format!("/Users/{}\\.local\\bin\\uv", whoami::username())
+                format!("/Users/{}/.local/bin/uv", whoami::username())
             }),
             force_runner_type: None,
             shinkai_node_location: ShinkaiNodeLocation {
