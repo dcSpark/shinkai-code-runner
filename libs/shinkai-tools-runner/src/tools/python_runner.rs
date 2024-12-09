@@ -46,17 +46,21 @@ impl PythonRunner {
             ExecutionStorage::new(self.code.clone(), self.options.context.clone());
         execution_storage.init_for_python(None)?;
 
-        let binary_path = path::absolute(self.options.python_binary_path.clone())
+        let binary_path = path::absolute(self.options.uv_binary_path.clone())
             .unwrap()
             .to_string_lossy()
             .to_string();
         let mut command = tokio::process::Command::new(binary_path);
+        println!(
+            "compiling code in folder: {}",
+            execution_storage.code_folder_path.to_str().unwrap()
+        );
         command
             .args([
                 "-m",
-                "py_compile",
+                "compileall",
                 execution_storage
-                    .code_entrypoint_file_path
+                    .code_folder_path
                     .to_str()
                     .unwrap(),
             ])
@@ -278,7 +282,7 @@ print("</shinkai-code-result>")
             .to_string_lossy()
             .to_string();
         let python_start_script = format!(
-            "source /app/cache/python-venv/bin/activate && python -m pipreqs.pipreqs --encoding utf-8 --force {} && pip install -r {}/requirements.txt && python {}",
+            "source /app/cache/python-venv/bin/activate && python -m pipreqs.pipreqs --encoding utf-8 --force {} && python -m pip install -r {}/requirements.txt && python {}",
             code_folder.clone().as_str(),
             code_folder.clone().as_str(),
             code_entrypoint.clone().as_str(),
@@ -384,21 +388,21 @@ print("</shinkai-code-result>")
         let execution_storage = ExecutionStorage::new(code_files, self.options.context.clone());
         execution_storage.init_for_python(None)?;
 
-        let python_binary_path_at_host = path::absolute(self.options.python_binary_path.clone())
+        let uv_binary_path_at_host = path::absolute(self.options.uv_binary_path.clone())
             .unwrap()
             .to_string_lossy()
             .to_string();
         log::info!(
             "using python from host at path: {:?}",
-            python_binary_path_at_host.clone()
+            uv_binary_path_at_host.clone()
         );
 
         // Ensure venv exists at python cache location
         let venv_path = execution_storage.python_cache_folder_path();
-        log::info!("Creating new venv at {:?}", venv_path);
-        let mut venv_command = tokio::process::Command::new(&python_binary_path_at_host);
+        log::info!("Creating new venv with uv {:?}", venv_path);
+        let mut venv_command = tokio::process::Command::new(&uv_binary_path_at_host);
         venv_command
-            .args(["-m", "venv", venv_path.to_str().unwrap()])
+            .args(["venv", "--seed", venv_path.to_str().unwrap(), "--python", "3.13"])
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);
