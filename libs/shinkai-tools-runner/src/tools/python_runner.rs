@@ -85,8 +85,9 @@ impl PythonRunner {
             ExecutionStorage::new(self.code.clone(), self.options.context.clone());
         execution_storage.init_for_python(None)?;
 
-        let python_binary_path: String =
-            self.ensure_python_venv(execution_storage.python_cache_folder_path()).await?;
+        let python_binary_path: String = self
+            .ensure_python_venv(execution_storage.python_cache_folder_path())
+            .await?;
 
         log::info!(
             "using python from host at path: {:?}",
@@ -102,7 +103,10 @@ impl PythonRunner {
             .args([
                 "-m",
                 "py_compile",
-                execution_storage.code_entrypoint_file_path.to_str().unwrap(),
+                execution_storage
+                    .code_entrypoint_file_path
+                    .to_str()
+                    .unwrap(),
             ])
             .current_dir(execution_storage.code_folder_path.clone())
             .stdout(std::process::Stdio::piped())
@@ -325,7 +329,7 @@ print("</shinkai-code-result>")
             .to_string_lossy()
             .to_string();
         let python_start_script = format!(
-            "source /app/cache/python-venv/bin/activate && python -m pipreqs.pipreqs --encoding utf-8 --force {} && python -m pip install -r {}/requirements.txt && python {}",
+            "source /app/cache/python-venv/bin/activate && python -m pipreqs.pipreqs --encoding utf-8 --force {} && uv pip install -r {}/requirements.txt && python {}",
             code_folder.clone().as_str(),
             code_folder.clone().as_str(),
             code_entrypoint.clone().as_str(),
@@ -431,17 +435,31 @@ print("</shinkai-code-result>")
         let execution_storage = ExecutionStorage::new(code_files, self.options.context.clone());
         execution_storage.init_for_python(None)?;
 
-        let python_binary_path: String =
-            self.ensure_python_venv(execution_storage.python_cache_folder_path()).await?;
+        let python_binary_path: String = self
+            .ensure_python_venv(execution_storage.python_cache_folder_path())
+            .await?;
 
         log::info!(
             "using python from host at path: {:?}",
             python_binary_path.clone()
         );
 
-        let mut ensure_pip_command = tokio::process::Command::new(&python_binary_path);
+        let uv_binary_path = path::absolute(self.options.uv_binary_path.clone())
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .to_string();
+
+        let mut ensure_pip_command = tokio::process::Command::new(&uv_binary_path);
         ensure_pip_command
-            .args(["-m", "pip", "install", "pipreqs"])
+            .args(["pip", "install", "pipreqs"])
+            .env(
+                "VIRTUAL_ENV",
+                execution_storage
+                    .python_cache_folder_path()
+                    .to_str()
+                    .unwrap(),
+            )
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);
@@ -475,9 +493,16 @@ print("</shinkai-code-result>")
             )));
         }
 
-        let mut pip_install_command = tokio::process::Command::new(&python_binary_path);
+        let mut pip_install_command = tokio::process::Command::new(&uv_binary_path);
         pip_install_command
-            .args(["-m", "pip", "install", "-r", "requirements.txt"])
+            .args(["pip", "install", "-r", "requirements.txt"])
+            .env(
+                "VIRTUAL_ENV",
+                execution_storage
+                    .python_cache_folder_path()
+                    .to_str()
+                    .unwrap(),
+            )
             .current_dir(execution_storage.code_folder_path.clone())
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
