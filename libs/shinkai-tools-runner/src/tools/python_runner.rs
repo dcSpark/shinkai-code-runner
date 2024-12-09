@@ -68,6 +68,8 @@ impl PythonRunner {
             )));
         }
 
+        log::info!("successfully created Python venv at {:?}", venv_path);
+
         let python_path_at_venv = venv_path
             .join(if cfg!(windows) { "Scripts" } else { "bin" })
             .join(if cfg!(windows) {
@@ -77,6 +79,7 @@ impl PythonRunner {
             });
 
         let python_binary_path = python_path_at_venv.to_string_lossy().to_string();
+        log::info!("python binary path: {}", python_binary_path);
         Ok(python_binary_path)
     }
 
