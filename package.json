@@ -60,7 +60,7 @@
   "dependencies": {
     "@coinbase/coinbase-sdk": "^0.0.16",
     "@nestjs/axios": "^3.0.4",
-    "ajv": "^7.2.5",
+    "ajv": "^7.2.4",
     "chrome-paths": "^1.0.1",
     "expr-eval": "^2.0.2",
     "fastify": "^4.28.1",
