@@ -58,12 +58,12 @@
     "npm": "10.x.x"
   },
   "dependencies": {
-    "@coinbase/coinbase-sdk": "^0.0.17",
+    "@coinbase/coinbase-sdk": "^0.0.16",
     "@nestjs/axios": "^3.0.4",
     "ajv": "^7.2.5",
     "chrome-paths": "^1.0.1",
     "expr-eval": "^2.0.2",
-    "fastify": "^4.29.1",
+    "fastify": "^4.28.1",
     "fastify-type-provider-zod": "^2.0.0",
     "micro-eth-signer": "^0.10.0",
     "minimist": "^1.2.8",
