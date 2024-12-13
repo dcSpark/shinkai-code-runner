@@ -310,6 +310,11 @@ async fn run_with_import_library(#[case] runner_type: RunnerType) {
         files: HashMap::from([(
             "main.py".to_string(),
             r#"
+# /// script
+# dependencies = [
+#     "requests"
+# ]
+# ///
 import requests
 def run(configurations, parameters):
     response = requests.get('https://jsonplaceholder.typicode.com/todos/1')
@@ -351,6 +356,11 @@ async fn shinkai_tool_run_concurrency(#[case] runner_type: RunnerType) {
         .is_test(true)
         .try_init();
     let js_code1 = r#"
+# /// script
+# dependencies = [
+#     "requests"
+# ]
+# ///
 import requests
 def run(configurations, params):
     response = requests.get('https://jsonplaceholder.typicode.com/todos/1')
@@ -904,4 +914,271 @@ def run(configurations, parameters):
         .unwrap();
 
     assert_eq!(result.data.get("kind").unwrap(), "vegetable");
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
+#[tokio::test]
+async fn run_pip_lib_name_neq_to_import_name(#[case] runner_type: RunnerType) {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+# /// script
+# dependencies = [
+#   "googlesearch-python",
+# ]
+# ///
+from googlesearch import search, SearchResult
+from typing import List
+from dataclasses import dataclass
+
+class CONFIG:
+    pass
+
+class INPUTS:
+    query: str
+    num_results: int = 10
+
+class OUTPUT:
+    results: List[SearchResult]
+    query: str
+
+async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
+    query = p.query
+    if not query:
+        raise ValueError("No search query provided")
+
+    results = []
+    try:
+        results = search(query, num_results=p.num_results, advanced=True)
+    except Exception as e:
+        raise RuntimeError(f"Search failed: {str(e)}")
+
+    output = OUTPUT()
+    output.results = results
+    output.query = query
+    return output
+    "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(
+            None,
+            serde_json::json!({ "query": "macbook pro m4", "num_results": 5 }),
+            None,
+        )
+        .await
+        .map_err(|e| {
+            log::error!("Failed to run python code: {}", e);
+            e
+        })
+        .unwrap();
+
+    let results_length = result
+        .data
+        .get("results")
+        .unwrap()
+        .as_array()
+        .unwrap()
+        .len();
+    assert!(
+        results_length > 0 && results_length <= 5,
+        "results should be an array with 0 to 5 elements"
+    );
+    assert!(!result
+        .data
+        .get("query")
+        .unwrap()
+        .as_str()
+        .unwrap()
+        .is_empty());
+}
+
+/*
+    This test utilizes the hidden `tricky_json_dump` function, which is part of the engine. 
+    This function serves as a tricky way to test the engine's serialization capabilities 
+    without requiring extensive setup.
+*/
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
+#[tokio::test]
+async fn tricky_json_dump(#[case] runner_type: RunnerType) {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+# /// script
+# dependencies = [
+#   "googlesearch-python",
+# ]
+# ///
+
+import asyncio
+from googlesearch import SearchResult
+from typing import List
+
+from datetime import datetime
+from typing import Dict, Optional
+
+class CONFIG:
+    pass
+
+class INPUTS:
+    pass
+
+class OUTPUT:
+    pass
+
+class AnyClass1:
+    query: str
+    num_results: int = 10
+    timestamp: datetime
+    def __init__(self, query: str):
+        self.query = query
+        self.timestamp = datetime.now()
+        self.num_results = 10
+
+    def any_method_1(self):
+        return "any_method_1"
+
+class AnyClass2:
+    results: List[SearchResult]
+    query: str
+    status_code: Optional[int] = None
+
+class VeryComplexClass:
+    results: List[SearchResult]
+    query: str
+    input: AnyClass1
+    number: int
+    output: AnyClass2
+    unique_ids: set
+    metadata: Dict[str, str]
+    additional_info: Optional[str]  # New attribute for extra information
+    status: str  # New attribute to track the status of the class
+    creation_date: datetime  # New attribute to track the creation date
+    slice: slice  # New attribute to represent a slice of data
+    complex_number: complex
+    byte_array: bytearray
+    memoryview: memoryview
+    frozen_set: frozenset
+    def cry(self):
+        return "cry"
+
+def create_very_complex_class():
+    search_result = SearchResult(title="potato", url="https://potato.com", description="potato is a vegetable")
+    search_result2 = SearchResult(title="tomato", url="https://tomato.com", description="tomato is a fruit")  # Additional search result
+    
+    search_results = list[SearchResult]()
+    search_results.append(search_result)
+    search_results.append(search_result2)
+
+    any_class_2 = AnyClass2()
+    any_class_2.results = iter(search_results)
+    any_class_2.query = "something about potatoes and tomatoes"  # Updated query
+    any_class_2.status_code = 200
+
+    very_complex_class = VeryComplexClass()
+    very_complex_class.results = any_class_2.results
+    very_complex_class.query = any_class_2.query
+    very_complex_class.number = 5
+    very_complex_class.input = AnyClass1(query="potato")
+    very_complex_class.output = any_class_2
+    very_complex_class.unique_ids = set()
+    very_complex_class.metadata = {"source": "google", "category": "vegetable"}
+    
+    very_complex_class.unique_ids.add("potato_id_1")
+    very_complex_class.unique_ids.add("tomato_id_1")  # Adding unique ID for the new search result
+    very_complex_class.metadata["potato_name"] = "potato"
+    very_complex_class.metadata["tomato_name"] = "tomato"  # New metadata for tomato
+    very_complex_class.metadata["potato_search_results"] = str(search_results)
+    very_complex_class.metadata["additional_info"] = "This class contains search results for vegetables and fruits."  # New metadata
+    very_complex_class.status = "active"  # Setting the status
+    very_complex_class.creation_date = datetime.now()  # Setting the creation date
+    very_complex_class.slice = slice(6)  # Example slice initialization
+    very_complex_class.complex_number = 4+3j
+    very_complex_class.byte_array = bytearray(b"Hello, World!")
+    very_complex_class.memoryview = memoryview(b"Hello, World!")
+    very_complex_class.frozen_set = frozenset([1, 2, 3])
+    return very_complex_class
+
+async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
+    very_complex_class = create_very_complex_class()
+    json_dump = tricky_json_dump(very_complex_class)
+    print("json:", json_dump)
+
+    loaded_data = json.loads(json_dump)
+
+    # Assertions to validate the loaded data
+    assert isinstance(loaded_data, dict), "Loaded data should be a dictionary"
+    assert "results" in loaded_data, "'results' key should be present in the loaded data"
+    assert isinstance(loaded_data["results"], list), "'results' should be a list"
+    assert len(loaded_data["results"]) == 2, "There should be two search results"
+    assert all("title" in result for result in loaded_data["results"]), "Each result should have a 'title'"
+    assert all("url" in result for result in loaded_data["results"]), "Each result should have a 'url'"
+    assert all("description" in result for result in loaded_data["results"]), "Each result should have a 'description'"
+
+    # Additional assertions for metadata
+    assert "query" in loaded_data, "'query' key should be present in the loaded data"
+    assert loaded_data["query"] == "something about potatoes and tomatoes", "Query should match the expected value"
+    assert "status_code" in loaded_data.get("output", {}), "'status_code' key should be present in the loaded data"
+    assert loaded_data.get("output", {}).get("status_code") == 200, "Status code should be 200"
+    assert "metadata" in loaded_data, "'metadata' key should be present in the loaded data"
+    assert "source" in loaded_data.get("metadata", {}), "'source' should be present in metadata"
+    assert len(loaded_data.get("output", {}).get("results")) == 2, "output.results should be 2"
+
+    return loaded_data
+    "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(
+            None,
+            serde_json::json!({ "query": "macbook pro m4", "num_results": 5 }),
+            None,
+        )
+        .await
+        .map_err(|e| {
+            log::error!("Failed to run python code: {}", e);
+            e
+        });
+
+    assert!(result.is_ok());
 }

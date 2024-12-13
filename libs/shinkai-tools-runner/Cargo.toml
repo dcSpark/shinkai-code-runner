@@ -34,6 +34,7 @@ anyhow = { version = "1.0.93" }
 chrono = { version = "0.4.38" }
 tar = "0.4"
 flate2 = "1.0"
+toml_edit = "0.22.22"
 
 [dev-dependencies]
 rstest = "0.23.0"
