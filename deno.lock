@@ -23,7 +23,7 @@
     "npm:@coinbase/coinbase-sdk@0.0.16": "0.0.16_axios@1.7.7",
     "npm:@coinbase/coinbase-sdk@0.10.0": "0.10.0_typescript@5.6.3_zod@3.23.8_axios@1.7.7",
     "npm:@coinbase/coinbase-sdk@^0.0.16": "0.0.16_axios@1.7.7",
-    "npm:@nestjs/axios@^3.0.3": "3.1.0_@nestjs+common@10.4.6__reflect-metadata@0.2.2__rxjs@7.8.1_axios@1.7.7_rxjs@7.8.1_reflect-metadata@0.2.2",
+    "npm:@nestjs/axios@^3.0.4": "3.1.3_@nestjs+common@10.4.15__reflect-metadata@0.2.2__rxjs@7.8.1_axios@1.7.7_rxjs@7.8.1_reflect-metadata@0.2.2",
     "npm:@nx/eslint-plugin@^19.3.1": "19.8.8_@typescript-eslint+parser@7.18.0__eslint@8.57.1__typescript@5.6.3_eslint-config-prettier@9.1.0__eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_eslint@8.57.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc+helpers@0.5.13",
     "npm:@nx/eslint@^19.3.1": "19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13",
     "npm:@nx/jest@^19.3.1": "19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
@@ -89,7 +89,7 @@
     "npm:openai@4.71.0": "4.71.0_zod@3.23.8",
     "npm:openai@^4.57.2": "4.68.4_zod@3.23.8",
     "npm:path@*": "0.12.7",
-    "npm:playwright-chromium@^1.45.3": "1.48.2",
+    "npm:playwright-chromium@^1.46.1": "1.49.1",
     "npm:playwright-extra@^4.3.6": "4.3.6_playwright@1.48.2",
     "npm:playwright@*": "1.48.2",
     "npm:playwright@1.48.2": "1.48.2",
@@ -114,6 +114,7 @@
     "npm:util@~0.12.5": "0.12.5",
     "npm:viem@*": "2.21.35_typescript@5.6.3_zod@3.23.8_ws@8.18.0",
     "npm:viem@^2.19.6": "2.21.35_typescript@5.6.3_zod@3.23.8_ws@8.18.0",
+    "npm:viem@^2.19.7": "2.21.35_typescript@5.6.3_zod@3.23.8_ws@8.18.0",
     "npm:whatwg-url@*": "14.0.0",
     "npm:whatwg-url@14": "14.0.0",
     "npm:whatwg-url@14.0.0": "14.0.0",
@@ -1658,21 +1659,21 @@
         "@tybys/wasm-util"
       ]
     },
-    "@nestjs/axios@3.1.0_@nestjs+common@10.4.6__reflect-metadata@0.2.2__rxjs@7.8.1_axios@1.7.7_rxjs@7.8.1_reflect-metadata@0.2.2": {
-      "integrity": "sha512-CpeK2ickH//ml+H7kX+QPIpeTwER4yedVcw6GPe6Nv58cmKTa0sb+3A3It7ChKD4deW4UKNvZIpYkUk18q78YQ==",
+    "@nestjs/axios@3.1.3_@nestjs+common@10.4.15__reflect-metadata@0.2.2__rxjs@7.8.1_axios@1.7.7_rxjs@7.8.1_reflect-metadata@0.2.2": {
+      "integrity": "sha512-RZ/63c1tMxGLqyG3iOCVt7A72oy4x1eM6QEhd4KzCYpaVWW0igq0WSREeRoEZhIxRcZfDfIIkvsOMiM7yfVGZQ==",
       "dependencies": [
         "@nestjs/common",
         "axios",
         "rxjs"
       ]
     },
-    "@nestjs/common@10.4.6_reflect-metadata@0.2.2_rxjs@7.8.1": {
-      "integrity": "sha512-KkezkZvU9poWaNq4L+lNvx+386hpOxPJkfXBBeSMrcqBOx8kVr36TGN2uYkF4Ta4zNu1KbCjmZbc0rhHSg296g==",
+    "@nestjs/common@10.4.15_reflect-metadata@0.2.2_rxjs@7.8.1": {
+      "integrity": "sha512-vaLg1ZgwhG29BuLDxPA9OAcIlgqzp9/N8iG0wGapyUNTf4IY4O6zAHgN6QalwLhFxq7nOI021vdRojR1oF3bqg==",
       "dependencies": [
         "iterare",
         "reflect-metadata",
         "rxjs",
-        "tslib@2.7.0",
+        "tslib@2.8.1",
         "uid"
       ]
     },
@@ -6595,14 +6596,17 @@
         "find-up@4.1.0"
       ]
     },
-    "playwright-chromium@1.48.2": {
-      "integrity": "sha512-bMBvYPlj5X6yyifahATDy5ZQySyNRDD75Q8ZCMcvn234CCA7m8vxgJIlrbJq+jcmuZVsCzNybRtEJHVGqg+v4w==",
+    "playwright-chromium@1.49.1": {
+      "integrity": "sha512-XAQDkZ1Eem1OONhfS8B2LM2mgHG/i5jIxooxjvqjbF/9GnLnRTJHdQamNjo1e4FZvt7J0BFD/15+qAcT0eKlfA==",
       "dependencies": [
-        "playwright-core"
+        "playwright-core@1.49.1"
       ]
     },
     "playwright-core@1.48.2": {
       "integrity": "sha512-sjjw+qrLFlriJo64du+EK0kJgZzoQPsabGF4lBvsid+3CNIZIYLgnMj9V6JY5VhM2Peh20DJWIVpVljLLnlawA=="
+    },
+    "playwright-core@1.49.1": {
+      "integrity": "sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg=="
     },
     "playwright-extra@4.3.6_playwright@1.48.2": {
       "integrity": "sha512-q2rVtcE8V8K3vPVF1zny4pvwZveHLH8KBuVU2MoE3Jw4OKVoBWsHI9CH9zPydovHHOCDxjGN2Vg+2m644q3ijA==",
@@ -6615,7 +6619,7 @@
       "integrity": "sha512-NjYvYgp4BPmiwfe31j4gHLa3J7bD2WiBz8Lk2RoSsmX38SVIARZ18VYjxLjAcDsAhA+F4iSEXTSGgjua0rrlgQ==",
       "dependencies": [
         "fsevents",
-        "playwright-core"
+        "playwright-core@1.48.2"
       ]
     },
     "possible-typed-array-names@1.0.0": {
@@ -7463,6 +7467,9 @@
     "tslib@2.8.0": {
       "integrity": "sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA=="
     },
+    "tslib@2.8.1": {
+      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
+    },
     "turndown@7.2.0": {
       "integrity": "sha512-eCZGBN4nNNqM9Owkv9HAtWRYfLA4h909E/WGAWWBpmB275ehNhZyk87/Tpvjbp0jjNl9XwCsbe6bm6CqFsgD+A==",
       "dependencies": [
@@ -7944,7 +7951,7 @@
     "packageJson": {
       "dependencies": [
         "npm:@coinbase/coinbase-sdk@^0.0.16",
-        "npm:@nestjs/axios@^3.0.3",
+        "npm:@nestjs/axios@^3.0.4",
         "npm:@nx/eslint-plugin@^19.3.1",
         "npm:@nx/eslint@^19.3.1",
         "npm:@nx/jest@^19.3.1",
@@ -7987,7 +7994,7 @@
         "npm:nunjucks@^3.2.4",
         "npm:nx@19.3.1",
         "npm:openai@^4.57.2",
-        "npm:playwright-chromium@^1.45.3",
+        "npm:playwright-chromium@^1.46.1",
         "npm:playwright-extra@^4.3.6",
         "npm:playwright@^1.46.1",
         "npm:prettier@^3.3.2",
@@ -8005,7 +8012,7 @@
         "npm:turndown@^7.2.0",
         "npm:typescript@^5.5.2",
         "npm:util@~0.12.5",
-        "npm:viem@^2.19.6",
+        "npm:viem@^2.19.7",
         "npm:whatwg-url@14",
         "npm:youtube-transcript@^1.2.1",
         "npm:zod@^3.23.8"
