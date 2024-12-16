@@ -1,0 +1,7 @@
+{
+  "imports": {
+    "std/": "https://deno.land/std@0.208.0/",
+    "npm:minimist": "https://esm.sh/minimist@1.2.8",
+    "npm:axios": "https://esm.sh/axios@1.7.7"
+  }
+}
