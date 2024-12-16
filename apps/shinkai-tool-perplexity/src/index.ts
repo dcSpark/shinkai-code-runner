@@ -32,7 +32,12 @@ export const run: Run<Configurations, Parameters, Result> = async (
     chromePaths.chromium;
   const browser = await puppeteer.launch({
     executablePath: chromePath,
-    args: ['--disable-blink-features=AutomationControlled'],
+    ignoreDefaultArgs: ['--disable-extensions'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-blink-features=AutomationControlled'
+    ],
   });
   const page = await browser.newPage();
 

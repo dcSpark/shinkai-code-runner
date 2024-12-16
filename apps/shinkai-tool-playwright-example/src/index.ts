@@ -22,6 +22,7 @@ export const run: Run<Configurations, Parameters, Result> = async (
   console.log('executing chrome from', chromePath);
   const browser = await playwright['chromium'].launch({
     executablePath: chromePath,
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-extensions']
   });
   try {
     const context = await browser.newContext();
