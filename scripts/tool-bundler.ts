@@ -50,9 +50,15 @@ console.log('📂 Output file:', outputFile);
  * @param prompt Text to generate embeddings for
  * @returns Array of embedding numbers
  */
-async function getEmbeddings(prompt: string): Promise<number[]> {
+export async function getEmbeddings(prompt: string): Promise<number[]> {
   console.log('🔍 Fetching embeddings from model...');
-  const apiUrl = process.env.EMBEDDING_API_URL || 'http://localhost:11434';
+  const apiUrl = Deno.env.get("EMBEDDING_API_URL") || 'http://localhost:11434';
+
+  if (apiUrl === 'debug') {
+    console.log('🔧 Using mock embeddings for debug mode');
+    return Array(384).fill(0.1);
+  }
+
   const response = await axios.post(`${apiUrl}/api/embeddings`, {
     model: 'snowflake-arctic-embed:xs',
     prompt,
