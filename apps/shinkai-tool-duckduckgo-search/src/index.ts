@@ -1,5 +1,3 @@
-import { URL } from 'npm:whatwg-url@14.0.0';
-import axios from 'npm:axios@1.7.7';
 import process from 'node:process';
 
 type Configurations = {};
@@ -26,12 +24,19 @@ function buildQueryString(params: Record<string, string>): string {
 const getVQD = async (keywords: string): Promise<string> => {
   const body = buildQueryString({ q: keywords });
   await process.nextTick(() => {});
-  const response = await axios.post('https://duckduckgo.com', body, {
+  const response = await fetch('https://duckduckgo.com', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
+    body,
   });
-  const text = response.data;
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const text = await response.text();
 
   // Extract vqd token using a regular expression
   const vqdMatch = text.match(/vqd=\\?"([^\\"]+)\\?"/);
@@ -85,14 +90,18 @@ const textSearch = async (keywords: string): Promise<any[]> => {
   url.searchParams.append('ex', '-1');
 
   await process.nextTick(() => {});
-  const response = await axios.get(url.toString(), {
+  const response = await fetch(url.toString(), {
     headers: {
       'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     },
   });
-  const text = response.data;
 
-  // Parse the response using the custom parser
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const text = await response.text();
   const results = parseDuckDuckGoResponse(text);
   if (results.length === 0) {
     throw new Error('Failed to extract search results');
