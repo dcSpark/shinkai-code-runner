@@ -84,8 +84,6 @@ const textSearch = async (keywords: string): Promise<any[]> => {
   url.searchParams.append('df', '');
   url.searchParams.append('ex', '-1');
 
-  const urlString = url.toString();
-
   await process.nextTick(() => {});
   const response = await axios.get(url.toString(), {
     headers: {
