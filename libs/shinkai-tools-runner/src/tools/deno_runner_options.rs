@@ -9,6 +9,7 @@ use super::{
 pub struct DenoRunnerOptions {
     pub context: ExecutionContext,
     pub deno_binary_path: PathBuf,
+    pub chrome_binary_path: Option<PathBuf>,
     pub code_runner_docker_image_name: String,
     pub force_runner_type: Option<RunnerType>,
     pub shinkai_node_location: ShinkaiNodeLocation,
@@ -24,6 +25,7 @@ impl Default for DenoRunnerOptions {
             } else {
                 "./shinkai-tools-runner-resources/deno"
             }),
+            chrome_binary_path: None,
             force_runner_type: None,
             shinkai_node_location: ShinkaiNodeLocation {
                 protocol: String::from("http"),
