@@ -563,11 +563,9 @@ async fn shinkai_tool_defillama_lending_tvl_rankings(#[case] runner_type: Runner
     };
     let tool = DenoRunner::new(
         code_files,
-        if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
-            serde_json::json!({})
-        } else {
-            serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
-        },
+        serde_json::json!({
+            "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string())
+        }),
         Some(DenoRunnerOptions {
             force_runner_type: Some(runner_type),
             ..Default::default()
