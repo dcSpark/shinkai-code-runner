@@ -503,7 +503,7 @@ async fn run_tool(#[case] runner_type: RunnerType) {
     // Just for a simple test, it could be any tool
     let code = include_str!(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../../apps/shinkai-tool-echo/src/index.ts"
+        "/../../apps/demo_shinkai-tool-echo/src/index.ts"
     ))
     .to_string();
 
