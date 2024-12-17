@@ -138,16 +138,6 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-aave-loan-requester",
-            &*Box::leak(Box::new(
-                serde_json::from_str::<ToolDefinition>(include_str!(concat!(
-                    env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-aave-loan-requester/definition.json"
-                )))
-                .unwrap(),
-          )),
-        );
-          m.insert(
             "shinkai-tool-coinbase-call-faucet",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
