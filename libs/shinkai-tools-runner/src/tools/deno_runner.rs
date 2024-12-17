@@ -242,12 +242,6 @@ impl DenoRunner {
 
         let mut container_envs = Vec::<String>::new();
 
-        // Add Chrome path to environment variables if configured
-        if let Some(chrome_path) = &self.options.chrome_binary_path {
-            container_envs.push(String::from("-e"));
-            container_envs.push(format!("CHROME_PATH={}", chrome_path.to_string_lossy()));
-        }
-
         container_envs.push(String::from("-e"));
         container_envs.push("NO_COLOR=true".to_string());
 
