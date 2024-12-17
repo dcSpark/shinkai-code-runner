@@ -1,5 +1,3 @@
-import { URL } from 'npm:whatwg-url@14.0.0';
-import axios from 'npm:axios@1.7.7';
 import process from 'node:process';
 
 type Configurations = {};
@@ -26,22 +24,26 @@ function buildQueryString(params: Record<string, string>): string {
 const getVQD = async (keywords: string): Promise<string> => {
   const body = buildQueryString({ q: keywords });
   await process.nextTick(() => {});
-  const response = await axios.post('https://duckduckgo.com', body, {
+  const response = await fetch('https://duckduckgo.com', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
+    body,
   });
-  const text = response.data;
-  // console.log('DuckDuckGo response HTML:', text);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const text = await response.text();
 
   // Extract vqd token using a regular expression
   const vqdMatch = text.match(/vqd=\\?"([^\\"]+)\\?"/);
-  // console.log('vqdMatch: ', vqdMatch);
   if (!vqdMatch || vqdMatch.length < 2) {
     throw new Error('Failed to retrieve vqd token');
   }
   const vqd = vqdMatch[1];
-  // console.log('vqd: ', vqd);
   return vqd;
 };
 
@@ -72,17 +74,12 @@ const parseDuckDuckGoResponse = (response: string): SearchResult[] => {
         result.title && result.description && result.url,
     );
 
-  // console.log('results: ', results);
-  // Convert to JSON string
   return results;
 };
 
 const textSearch = async (keywords: string): Promise<any[]> => {
-  console.log('textSearch: ', keywords);
   const vqd = await getVQD(keywords);
-  console.log('vqd: ', vqd);
   const url = new URL('https://links.duckduckgo.com/d.js');
-  console.log('before url.searchParams.append');
   url.searchParams.append('q', keywords);
   url.searchParams.append('vqd', vqd);
   url.searchParams.append('kl', 'wt-wt');
@@ -92,21 +89,19 @@ const textSearch = async (keywords: string): Promise<any[]> => {
   url.searchParams.append('df', '');
   url.searchParams.append('ex', '-1');
 
-  console.log('before urlString');
-  const urlString = url.toString();
-  console.log('urlString: ', urlString);
-
   await process.nextTick(() => {});
-  const response = await axios.get(url.toString(), {
+  const response = await fetch(url.toString(), {
     headers: {
       'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     },
   });
-  console.log('response: ', response);
-  const text = response.data;
-  console.log('DuckDuckGo search response:', text);
 
-  // Parse the response using the custom parser
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const text = await response.text();
   const results = parseDuckDuckGoResponse(text);
   if (results.length === 0) {
     throw new Error('Failed to extract search results');
@@ -119,12 +114,8 @@ export const run: Run<Configurations, Parameters, Result> = async (
   _configurations: Configurations,
   params: Parameters,
 ): Promise<Result> => {
-  console.log('run duckduckgo search from js', 4);
-  console.log('second message', 4);
-  console.log('params: ', params);
   try {
     const results = await textSearch(params.message);
-    console.log('results: ', results);
     return { message: JSON.stringify(results) };
   } catch (error) {
     let errorMessage = 'An unknown error occurred';
