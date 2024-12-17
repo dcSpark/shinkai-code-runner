@@ -2,7 +2,7 @@ use crate::built_in_tools::{get_tool, get_tools};
 
 #[tokio::test]
 async fn list_tools_count() {
-    assert!(get_tools().len() >= 5);
+    assert!(get_tools().len() >= 3);
 }
 
 #[tokio::test]

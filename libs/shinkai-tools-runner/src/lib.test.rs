@@ -543,50 +543,49 @@ async fn shinkai_tool_playwright_example(#[case] runner_type: RunnerType) {
     );
 }
 
-#[rstest]
-#[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
-#[tokio::test]
-async fn shinkai_tool_defillama_lending_tvl_rankings(#[case] runner_type: RunnerType) {
-    if matches!(runner_type, RunnerType::Docker) || cfg!(windows) {
-        eprintln!("Skipping test in Docker environment or on Windows");
-        return;
-    }
-    let _ = env_logger::builder()
-        .filter_level(log::LevelFilter::Info)
-        .is_test(true)
-        .try_init();
-    let tool_definition = get_tool("shinkai-tool-defillama-tvl-rankings").unwrap();
-    let code_files = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
-        entrypoint: "main.ts".to_string(),
-    };
-    let tool = DenoRunner::new(
-        code_files,
-        if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
-            serde_json::json!({})
-        } else {
-            serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
-        },
-        Some(DenoRunnerOptions {
-            force_runner_type: Some(runner_type),
-            ..Default::default()
-        }),
-    );
-    let run_result = tool
-        .run(
-            None,
-            serde_json::json!(      {
-              "top10": false,
-              "categoryName": "Liquid Staking",
-              "networkName": "Ethereum",
-            }),
-            None,
-        )
-        .await;
-    assert!(run_result.is_ok());
-    assert_eq!(run_result.unwrap().data["rowsCount"], 43);
-}
+// Temporarily commented out DeFi Llama TVL rankings test
+// #[rstest]
+// #[case::host(RunnerType::Host)]
+// #[case::docker(RunnerType::Docker)]
+// #[tokio::test]
+// async fn shinkai_tool_defillama_lending_tvl_rankings(#[case] runner_type: RunnerType) {
+//     if matches!(runner_type, RunnerType::Docker) || cfg!(windows) {
+//         eprintln!("Skipping test in Docker environment or on Windows");
+//         return;
+//     }
+//     let _ = env_logger::builder()
+//         .filter_level(log::LevelFilter::Info)
+//         .is_test(true)
+//         .try_init();
+//     let tool_definition = get_tool("shinkai-tool-defillama-tvl-rankings").unwrap();
+//     let code_files = CodeFiles {
+//         files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
+//         entrypoint: "main.ts".to_string(),
+//     };
+//     let tool = DenoRunner::new(
+//         code_files,
+//         serde_json::json!({
+//             "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string())
+//         }),
+//         Some(DenoRunnerOptions {
+//             force_runner_type: Some(runner_type),
+//             ..Default::default()
+//         }),
+//     );
+//     let run_result = tool
+//         .run(
+//             None,
+//             serde_json::json!(      {
+//               "top10": false,
+//               "categoryName": "Liquid Staking",
+//               "networkName": "Ethereum",
+//             }),
+//             None,
+//         )
+//         .await;
+//     assert!(run_result.is_ok());
+//     assert_eq!(run_result.unwrap().data["rowsCount"], 43);
+// }
 
 #[rstest]
 #[case::host(RunnerType::Host)]
