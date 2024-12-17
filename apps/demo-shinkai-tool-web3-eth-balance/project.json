@@ -1,7 +1,7 @@
 {
-  "name": "@shinkai_protocol/demo_shinkai-tool-token-price",
+  "name": "@shinkai_protocol/demo-shinkai-tool-web3-eth-balance",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/demo_shinkai-tool-token-price/src",
+  "sourceRoot": "apps/demo-shinkai-tool-web3-eth-balance/src",
   "projectType": "library",
   "tags": ["tool"],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "command": "deno task tool-bundler --entry ./apps/demo_shinkai-tool-token-price/src/index.ts --outputFolder ./dist/apps/demo_shinkai-tool-token-price"
+        "command": "deno task tool-bundler --entry ./apps/demo-shinkai-tool-web3-eth-balance/src/index.ts --outputFolder ./dist/apps/demo-shinkai-tool-web3-eth-balance"
       },
       "configurations": {
         "development": {},
@@ -19,13 +19,13 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "deno lint apps/demo_shinkai-tool-token-price/src/index.ts"
+        "command": "deno lint apps/demo-shinkai-tool-web3-eth-balance/src/index.ts"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "deno test --no-check --allow-all apps/demo_shinkai-tool-token-price/src/**/*.test.ts"
+        "command": "deno test --no-check --allow-all apps/demo-shinkai-tool-web3-eth-balance/src/**/*.test.ts"
       }
     }
   }
