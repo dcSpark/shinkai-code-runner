@@ -97,7 +97,7 @@ const withPage = async <T>(
 ): Promise<T> => {
   const browser = await playwright['chromium'].launch({
     executablePath: chromePath,
-    headless: true,
+    headless: false,
   });
 
   const context = await browser.newContext({
@@ -135,7 +135,7 @@ const getHeaders = async (
   page: playwright.Page,
 ): Promise<(string | null)[]> => {
   const locator = page.locator(
-    '#table-header > div > div:nth-child(3) > span > span',
+    '#table-header > div > div:nth-child(3) > span',
     { hasText: 'Name' },
   );
   await locator.waitFor({ state: 'visible' });

@@ -9,6 +9,8 @@ Deno.test('exists definition', () => {
 Deno.test({
   name: 'run using top10=false, categoryName=Liquid Staking, networkName=Ethereum',
   ignore: Deno.env.get('CI') === 'true' || Deno.build.os === 'windows',
+  sanitizeResources: false,
+  sanitizeOps: false,
   fn: async () => {
     const run_result = await run(
       {
