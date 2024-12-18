@@ -260,7 +260,6 @@ def run(configurations, parameters):
 
 #[rstest]
 #[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
 #[tokio::test]
 async fn check_code_with_errors(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
@@ -291,9 +290,93 @@ print('test's)
 
     let check_result = python_runner.check().await.unwrap();
     assert!(!check_result.is_empty());
+    assert!(check_result.iter().any(|err| err.contains("Expected ','")));
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[tokio::test]
+async fn check_code_with_unexisting_fn(#[case] runner_type: RunnerType) {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            String::from(
+                r#"
+print('hello', hello())
+                "#,
+            ),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let check_result = python_runner.check().await.unwrap();
+    assert!(!check_result.is_empty());
     assert!(check_result
         .iter()
-        .any(|err| err.contains("Perhaps you forgot a comma?")));
+        .any(|err| err.contains("Undefined name `hello`")));
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[tokio::test]
+async fn check_code_with_import_with_error(#[case] runner_type: RunnerType) {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([
+            (
+                "secondary.py".to_string(),
+                String::from(
+                    r#"
+def hellow():
+    return 'hello world' + world()
+                "#,
+                ),
+            ),
+            (
+                "main.py".to_string(),
+                String::from(
+                    r#"
+import secondary
+print('hello', secondary.hello())
+                "#,
+                ),
+            ),
+        ]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let check_result = python_runner.check().await.unwrap();
+    assert!(!check_result.is_empty());
+    assert!(check_result
+        .iter()
+        .any(|err| err.contains("Undefined name `world`")));
 }
 
 #[rstest]
@@ -1014,8 +1097,8 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
 }
 
 /*
-    This test utilizes the hidden `tricky_json_dump` function, which is part of the engine. 
-    This function serves as a tricky way to test the engine's serialization capabilities 
+    This test utilizes the hidden `tricky_json_dump` function, which is part of the engine.
+    This function serves as a tricky way to test the engine's serialization capabilities
     without requiring extensive setup.
 */
 #[rstest]

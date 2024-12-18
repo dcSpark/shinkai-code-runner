@@ -7,41 +7,41 @@ lazy_static! {
     static ref TOOLS_PATHS: HashMap<&'static str, &'static ToolDefinition> = {
         let mut m = HashMap::new();
         m.insert(
-            "shinkai-tool-echo",
+            "demo-shinkai-tool-echo",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-echo/definition.json"
+                    "/tools/demo-shinkai-tool-echo/definition.json"
                 )))
                 .unwrap(),
             )),
         );
         m.insert(
-            "shinkai-tool-weather-by-city",
+            "demo-shinkai-tool-weather-by-city",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-weather-by-city/definition.json"
+                    "/tools/demo-shinkai-tool-weather-by-city/definition.json"
                 )))
                 .unwrap(),
             )),
         );
         m.insert(
-            "shinkai-tool-web3-eth-balance",
+            "demo-shinkai-tool-web3-eth-balance",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-web3-eth-balance/definition.json"
+                    "/tools/demo-shinkai-tool-web3-eth-balance/definition.json"
                 )))
                 .unwrap(),
             )),
         );
         m.insert(
-            "shinkai-tool-web3-eth-uniswap",
+            "demo-shinkai-tool-web3-eth-uniswap",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-web3-eth-uniswap/definition.json"
+                    "/tools/demo-shinkai-tool-web3-eth-uniswap/definition.json"
                 )))
                 .unwrap(),
             )),
@@ -67,42 +67,42 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-foobar",
+            "demo-shinkai-tool-foobar",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-foobar/definition.json"
+                    "/tools/demo-shinkai-tool-foobar/definition.json"
                 )))
                 .unwrap(),
             )),
         );
         m.insert(
-            "shinkai-tool-leiden",
+            "demo-shinkai-tool-leiden",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-leiden/definition.json"
+                    "/tools/demo-shinkai-tool-leiden/definition.json"
                 )))
                 .unwrap(),
             )),
         );
         m.insert(
-            "shinkai-tool-ethplorer-tokens",
+            "demo-shinkai-tool-ethplorer-tokens",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-ethplorer-tokens/definition.json"
+                    "/tools/demo-shinkai-tool-ethplorer-tokens/definition.json"
                 )))
                 .unwrap(),
             )),
         );
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1681809
         m.insert(
-          "shinkai-tool-token-price",
+          "demo-shinkai-tool-token-price",
           &*Box::leak(Box::new(
               serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                   env!("CARGO_MANIFEST_DIR"),
-                  "/tools/shinkai-tool-token-price/definition.json"
+                  "/tools/demo-shinkai-tool-token-price/definition.json"
               )))
               .unwrap(),
           )),
@@ -118,11 +118,11 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-playwright-example",
+            "demo-shinkai-tool-playwright-example",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-playwright-example/definition.json"
+                    "/tools/demo-shinkai-tool-playwright-example/definition.json"
                 )))
                 .unwrap(),
             )),
@@ -138,16 +138,6 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-aave-loan-requester",
-            &*Box::leak(Box::new(
-                serde_json::from_str::<ToolDefinition>(include_str!(concat!(
-                    env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-aave-loan-requester/definition.json"
-                )))
-                .unwrap(),
-          )),
-        );
-          m.insert(
             "shinkai-tool-coinbase-call-faucet",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
@@ -238,11 +228,11 @@ lazy_static! {
             )),
         );
         m.insert(
-            "shinkai-tool-json-to-md",
+            "demo-shinkai-tool-json-to-md",
             &*Box::leak(Box::new(
                 serde_json::from_str::<ToolDefinition>(include_str!(concat!(
                     env!("CARGO_MANIFEST_DIR"),
-                    "/tools/shinkai-tool-json-to-md/definition.json"
+                    "/tools/demo-shinkai-tool-json-to-md/definition.json"
                 )))
                 .unwrap(),
             )),

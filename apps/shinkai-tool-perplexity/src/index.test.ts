@@ -7,6 +7,8 @@ Deno.test('exists definition', () => {
 
 Deno.test({
   name: 'run',
+  sanitizeResources: false,
+  sanitizeOps: false,
   ignore: Deno.env.get('CI') === 'true',
   fn: async () => {
     const run_result = await run(

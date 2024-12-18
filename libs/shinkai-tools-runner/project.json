@@ -18,7 +18,7 @@
       "options": {
         "cwd": "libs/shinkai-tools-runner",
         "commands": [
-          "npx copyfiles --up 4 --verbose ./../../dist/apps/shinkai-tool-*/definition.json ./tools/",
+          "npx copyfiles --up 4 --verbose ./../../dist/apps/*shinkai-tool-*/definition.json ./tools/",
           "cargo build"
         ],
         "parallel": false
