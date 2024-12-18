@@ -62,13 +62,13 @@ jobs:
       - name: Run NX lint
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          EMBEDDING_API_URL : ${{ vars.EMBEDDING_API_URL }}
+          EMBEDDING_API_URL : debug
         run: |
           npx nx run-many -t lint --verbose
           
       - name: Run NX test
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
-          EMBEDDING_API_URL : ${{ vars.EMBEDDING_API_URL }}
+          EMBEDDING_API_URL : debug
         run: |
           npx nx run-many -t test --parallel=false --skip-nx-cache

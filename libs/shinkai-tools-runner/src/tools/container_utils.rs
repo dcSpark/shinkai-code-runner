@@ -25,19 +25,6 @@ pub enum DockerStatus {
 ///   - Docker daemon is not running
 ///   - User lacks permissions
 ///   - Other Docker configuration issues
-///
-/// # Example
-///
-/// ```
-/// use shinkai_tools_runner::tools::container_utils;
-///
-/// let docker_available = container_utils::is_docker_available();
-/// if docker_available {
-///     println!("docker is available and ready to use");
-/// } else {
-///     println!("docker is not available - check installation and permissions");
-/// }
-/// ```
 pub fn is_docker_available() -> DockerStatus {
     let docker_check = Command::new("docker").arg("info").output();
 

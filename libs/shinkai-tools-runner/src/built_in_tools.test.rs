@@ -13,6 +13,6 @@ async fn get_tool_unexisting() {
 
 #[tokio::test]
 async fn get_tools_existing() {
-    let tool = get_tool("shinkai-tool-echo");
+    let tool = get_tool("demo-shinkai-tool-echo");
     assert!(tool.is_some());
 }
