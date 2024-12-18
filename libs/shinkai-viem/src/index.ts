@@ -30,11 +30,28 @@ class ViemProvider {
     });
   }
 
-  async enable() {
+  enable(): Promise<`0x${string}`[]> {
     return this.requestAccounts();
   }
 
-  async request({ method, params }: { method: string; params: any[] }) {
+  request({
+    method,
+    params,
+  }: {
+    method: string;
+    params: any[];
+  }):
+    | ReturnType<typeof this.getTransaction>
+    | ReturnType<typeof this.getTransactionReceipt>
+    | ReturnType<typeof this.getTransactionCount>
+    | ReturnType<typeof this.getBlockNumber>
+    | ReturnType<typeof this.getChainId>
+    | ReturnType<typeof this.getNetworkId>
+    | Promise<ReturnType<typeof this.getAccounts>>
+    | ReturnType<typeof this.sendTransaction>
+    | ReturnType<typeof this.sign>
+    | ReturnType<typeof this.personalSign>
+    | ReturnType<typeof this.signTypedData> {
     console.log('request', method, params);
     switch (method) {
       case 'eth_requestAccounts':
@@ -66,7 +83,9 @@ class ViemProvider {
     }
   }
 
-  async getTransaction(hash: viem.Hex) {
+  async getTransaction(
+    hash: viem.Hex,
+  ): ReturnType<typeof this.client.getTransaction> {
     const transaction = await this.client.getTransaction({ hash });
     console.log('getTransaction', transaction);
 
@@ -78,7 +97,9 @@ class ViemProvider {
     return transaction;
   }
 
-  async getTransactionReceipt(hash: viem.Hex) {
+  async getTransactionReceipt(
+    hash: viem.Hex,
+  ): ReturnType<typeof this.client.getTransactionReceipt> {
     const receipt = await this.client.getTransactionReceipt({ hash });
     console.log('getTransactionReceipt', receipt);
 
@@ -95,30 +116,34 @@ class ViemProvider {
     return receipt;
   }
 
-  async getTransactionCount(address: viem.Address) {
+  async getTransactionCount(
+    address: viem.Address,
+  ): Promise<ReturnType<typeof this.client.getTransactionCount>> {
     const transactionCount = await this.client.getTransactionCount({ address });
     console.log('transactionCount', transactionCount);
     return transactionCount;
   }
 
-  async getBlockNumber() {
+  async getBlockNumber(): ReturnType<typeof this.client.getBlockNumber> {
     const blockNumber = await this.client.getBlockNumber();
     console.log('blockNumber', blockNumber);
     return blockNumber;
   }
 
-  async requestAccounts() {
+  async requestAccounts(): Promise<`0x${string}`[]> {
     const [address] = await this.client.getAddresses();
     console.log('requestAccounts', address);
     this.selectedAddress = address;
     return [address];
   }
 
-  async getAccounts() {
+  getAccounts(): `0x${string}`[] {
     return this.selectedAddress ? [this.selectedAddress] : [];
   }
 
-  async sendTransaction(tx: any) {
+  async sendTransaction(
+    tx: any,
+  ): ReturnType<typeof this.client.sendTransaction> {
     if (!this.selectedAddress) {
       throw new Error('No accounts available');
     }
@@ -169,21 +194,30 @@ class ViemProvider {
     // return hash;
   }
 
-  async sign(address: viem.Hex, message: string) {
+  sign(
+    address: viem.Hex,
+    message: string,
+  ): ReturnType<typeof this.client.signMessage> {
     if (address !== this.selectedAddress) {
       throw new Error('Address mismatch');
     }
     return this.client.signMessage({ account: address, message });
   }
 
-  async personalSign(message: string, address: viem.Hex) {
+  personalSign(
+    message: string,
+    address: viem.Hex,
+  ): ReturnType<typeof this.client.signMessage> {
     if (address !== this.selectedAddress) {
       throw new Error('Address mismatch');
     }
     return this.client.signMessage({ account: address, message });
   }
 
-  async signTypedData(address: viem.Hex, typedData: any) {
+  signTypedData(
+    address: viem.Hex,
+    typedData: any,
+  ): ReturnType<typeof this.client.signTypedData> {
     if (address !== this.selectedAddress) {
       throw new Error('Address mismatch');
     }
@@ -245,7 +279,11 @@ function addEip6963Listener(info: EIP6963ProviderInfo, provider: ViemProvider) {
 }
 
 // Function to initialize and assign the provider to window.ethereum
-function initializeViemProvider(chain: any, providerInfo: EIP6963ProviderInfo, sk: string) {
+function initializeViemProvider(
+  chain: any,
+  providerInfo: EIP6963ProviderInfo,
+  sk: string,
+) {
   const provider = new ViemProvider(chain, sk);
 
   (window as any).ethereum = {
