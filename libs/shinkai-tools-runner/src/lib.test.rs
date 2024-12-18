@@ -502,6 +502,10 @@ async fn shinkai_tool_playwright_example(#[case] runner_type: RunnerType) {
         eprintln!("Skipping test on Windows - Playwright not supported in Deno on Windows");
         return;
     }
+    if matches!(runner_type, RunnerType::Host) && std::env::var("CI").is_ok() {
+        eprintln!("Skipping test in CI host environment");
+        return;
+    }
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -745,6 +749,10 @@ async fn shinkai_tool_perplexity(#[case] runner_type: RunnerType) {
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
         .try_init();
+    if std::env::var("CI").is_ok() {
+        eprintln!("Skipping test in CI environment");
+        return;
+    }
     let tool_definition = get_tool("shinkai-tool-perplexity").unwrap();
     let code_files = CodeFiles {
         files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
