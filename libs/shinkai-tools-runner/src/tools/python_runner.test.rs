@@ -1408,7 +1408,7 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
 
     let context_id = nanoid::nanoid!();
     let context = ExecutionContext {
-        storage: match (cfg!(windows), runner_type) {
+        storage: match (cfg!(windows), runner_type.clone()) {
             (true, RunnerType::Host) => PathBuf::from("C:/shinkai-tools-runner-execution-storage/storage"),
             _ => PathBuf::from("./shinkai-tools-runner-execution-storage/storage"),
         },
