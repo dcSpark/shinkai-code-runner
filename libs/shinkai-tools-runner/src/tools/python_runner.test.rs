@@ -1265,3 +1265,221 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
 
     assert!(result.is_ok());
 }
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+//#[case::docker(RunnerType::Docker)]
+#[tokio::test]
+async fn override_python_version(#[case] runner_type: RunnerType) {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+# /// script
+# requires-python = "==3.10"
+# ///
+import sys
+
+class CONFIG:
+    pass
+
+class INPUTS:
+    pass
+
+class OUTPUT:
+    version: str
+    pass
+
+async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
+    import sys
+    print(f"Python version: {sys.version}")
+    output = OUTPUT()
+    output.version = sys.version
+    return output
+    "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(None, serde_json::json!({}), None)
+        .await
+        .map_err(|e| {
+            log::error!("Failed to run python code: {}", e);
+            e
+        })
+        .unwrap();
+
+    let version = result.data.get("version").unwrap().as_str().unwrap();
+    assert!(version.contains("3.10"), "version should be 3.10");
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
+#[tokio::test]
+async fn rembg_with_python_3_10(#[case] runner_type: RunnerType) {
+    use std::path::PathBuf;
+
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+# /// script
+# requires-python = "==3.12.0"
+# dependencies = [
+#   "rembg[cpu]",
+#   "numba==0.59.0",
+# ]
+# ///
+import requests
+import sys
+import os
+from rembg import remove
+
+class CONFIG:
+    pass
+
+class INPUTS:
+    path: str
+
+class OUTPUT:
+    version: str
+    pass
+
+async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
+
+    from urllib.parse import urlparse
+
+    # Get home path from environment variable
+    home_path = os.environ.get('SHINKAI_HOME')
+    output_path = os.path.join(home_path, 'output.png')
+
+    print(f"Home path: {home_path}")
+    print(f"Output path: {output_path}")
+    print(f"Input path: {p.path}")
+
+    # If input is URL, download it first
+    if urlparse(p.path).scheme in ('http', 'https'):
+        print(f"Downloading from URL: {p.path}")
+        response = requests.get(p.path)
+        response.raise_for_status()
+        temp_path = output_path.replace('.png', '.tmp.png')
+        with open(temp_path, 'wb') as f:
+            f.write(response.content)
+        p.path = temp_path
+        print(f"Downloaded to: {p.path}")
+
+    print(f"Processing image: {p.path}")
+    with open(p.path, 'rb') as i:
+        with open(output_path, 'wb') as o:
+            input = i.read()
+            print("Removing background...")
+            output = remove(input)
+            o.write(output)
+            print(f"Saved result to: {output_path}")
+            
+            return None
+    "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let context_id = nanoid::nanoid!();
+    let context = ExecutionContext {
+        storage: match (cfg!(windows), runner_type.clone()) {
+            (true, RunnerType::Host) => PathBuf::from("C:/shinkai-tools-runner-execution-storage/storage"),
+            _ => PathBuf::from("./shinkai-tools-runner-execution-storage/storage"),
+        },
+        context_id: context_id.clone(),
+        ..Default::default()
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            context: context.clone(),
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(
+            None,
+            serde_json::json!({
+                "path": "https://images.unsplash.com/photo-1514151458560-b9d0291a8676?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGRvZyUyMGZvcmVzdHxlbnwwfHwwfHx8MA%3D%3D"
+            }),
+            None,
+        )
+        .await
+        .map_err(|e| {
+            log::error!("Failed to run python code: {}", e);
+            e
+        });
+    assert!(result.is_ok());
+    
+    let output_path = context.storage.join(context_id).join("home/output.png");
+    assert!(output_path.exists());
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[tokio::test]
+async fn check_with_wrong_class_instance(#[case] runner_type: RunnerType) {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            String::from(
+                r#"
+class OUTPUT:
+    success: bool
+    file_path: str
+
+output = OUTPUT(success=False, file_path="None")
+                "#,
+            ),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let check_result = python_runner.check().await.unwrap();
+    assert!(!check_result.is_empty());
+    assert!(check_result.iter().any(|err| err.contains("No parameter named \"success\"")));
+}
