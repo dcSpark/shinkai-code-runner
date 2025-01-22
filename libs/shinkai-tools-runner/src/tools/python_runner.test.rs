@@ -1382,9 +1382,10 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
         print(f"Downloading from URL: {p.path}")
         response = requests.get(p.path)
         response.raise_for_status()
-        with open(output_path + '.tmp', 'wb') as f:
+        temp_path = output_path.replace('.png', '.tmp.png')
+        with open(temp_path, 'wb') as f:
             f.write(response.content)
-        p.path = output_path.replace('.png', 'temp.png')
+        p.path = temp_path
         print(f"Downloaded to: {p.path}")
 
     print(f"Processing image: {p.path}")
