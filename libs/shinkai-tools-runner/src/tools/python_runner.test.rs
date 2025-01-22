@@ -1330,10 +1330,12 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
 }
 
 #[rstest]
-// #[case::host(RunnerType::Host)]
+#[case::host(RunnerType::Host)]
 #[case::docker(RunnerType::Docker)]
 #[tokio::test]
 async fn rembg_with_python_3_10(#[case] runner_type: RunnerType) {
+    use std::path::PathBuf;
+
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
@@ -1406,6 +1408,10 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
 
     let context_id = nanoid::nanoid!();
     let context = ExecutionContext {
+        storage: match (cfg!(windows), runner_type) {
+            (true, RunnerType::Host) => PathBuf::from("C:/shinkai-tools-runner-execution-storage/storage"),
+            _ => PathBuf::from("./shinkai-tools-runner-execution-storage/storage"),
+        },
         context_id: context_id.clone(),
         ..Default::default()
     };
