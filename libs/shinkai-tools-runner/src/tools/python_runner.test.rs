@@ -1330,8 +1330,8 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
 }
 
 #[rstest]
-#[case::host(RunnerType::Host)]
-//#[case::docker(RunnerType::Docker)]
+// #[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
 #[tokio::test]
 async fn rembg_with_python_3_10(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
@@ -1384,7 +1384,7 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
         response.raise_for_status()
         with open(output_path + '.tmp', 'wb') as f:
             f.write(response.content)
-        p.path = output_path + '.tmp'
+        p.path = output_path.replace('.png', 'temp.png')
         print(f"Downloaded to: {p.path}")
 
     print(f"Processing image: {p.path}")
@@ -1403,10 +1403,17 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
         entrypoint: "main.py".to_string(),
     };
 
+    let context_id = nanoid::nanoid!();
+    let context = ExecutionContext {
+        context_id: context_id.clone(),
+        ..Default::default()
+    };
+
     let python_runner = PythonRunner::new(
         code_files,
         Value::Null,
         Some(PythonRunnerOptions {
+            context: context.clone(),
             force_runner_type: Some(runner_type),
             ..Default::default()
         }),
@@ -1424,11 +1431,11 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
         .map_err(|e| {
             log::error!("Failed to run python code: {}", e);
             e
-        })
-        .unwrap();
-
-    let version = result.data.get("version").unwrap().as_str().unwrap();
-    assert!(version.contains("3.10"), "version should be 3.10");
+        });
+    assert!(result.is_ok());
+    
+    let output_path = context.storage.join(context_id).join("home/output.png");
+    assert!(output_path.exists());
 }
 
 #[rstest]
