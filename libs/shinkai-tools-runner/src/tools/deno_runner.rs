@@ -286,15 +286,7 @@ impl DenoRunner {
                 .context
                 .mount_files
                 .iter()
-                .map(|p| {
-                    let path_in_docker = format!(
-                        "/app/{}/{}",
-                        execution_storage
-                            .relative_to_root(execution_storage.mount_folder_path.clone()),
-                        p.file_name().unwrap().to_str().unwrap()
-                    );
-                    PathBuf::from(path_in_docker)
-                })
+                .map(|p| path::absolute(p).unwrap())
                 .collect::<Vec<_>>(),
             &self
                 .options
