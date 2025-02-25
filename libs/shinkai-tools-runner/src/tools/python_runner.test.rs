@@ -667,12 +667,15 @@ def run(c, p):
 #[case::docker(RunnerType::Docker)]
 #[tokio::test]
 async fn mount_and_edit_file_in_mount(#[case] runner_type: RunnerType) {
+    use std::path;
+
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
         .is_test(true)
         .try_init();
 
-    let test_file_path = tempfile::NamedTempFile::new().unwrap().into_temp_path();
+    let tp = tempfile::NamedTempFile::new().unwrap().path().to_path_buf();
+    let test_file_path = path::absolute(tp).unwrap();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
 
