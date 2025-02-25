@@ -495,59 +495,59 @@ async fn shinkai_tool_duckduckgo_search(#[case] runner_type: RunnerType) {
     assert!(search_results[0].get("description").is_some());
 }
 
-#[rstest]
-#[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
-#[tokio::test]
-async fn shinkai_tool_playwright_example(#[case] runner_type: RunnerType) {
-    if cfg!(windows) {
-        eprintln!("Skipping test on Windows - Playwright not supported in Deno on Windows");
-        return;
-    }
-    if matches!(runner_type, RunnerType::Host) && std::env::var("CI").is_ok() {
-        eprintln!("Skipping test in CI host environment");
-        return;
-    }
-    let _ = env_logger::builder()
-        .filter_level(log::LevelFilter::Info)
-        .is_test(true)
-        .try_init();
-    let tool_definition = get_tool("demo-shinkai-tool-playwright-example").unwrap();
-    let code_files = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
-        entrypoint: "main.ts".to_string(),
-    };
+// #[rstest]
+// #[case::host(RunnerType::Host)]
+// #[case::docker(RunnerType::Docker)]
+// #[tokio::test]
+// async fn shinkai_tool_playwright_example(#[case] runner_type: RunnerType) {
+//     if cfg!(windows) {
+//         eprintln!("Skipping test on Windows - Playwright not supported in Deno on Windows");
+//         return;
+//     }
+//     if matches!(runner_type, RunnerType::Host) && std::env::var("CI").is_ok() {
+//         eprintln!("Skipping test in CI host environment");
+//         return;
+//     }
+//     let _ = env_logger::builder()
+//         .filter_level(log::LevelFilter::Info)
+//         .is_test(true)
+//         .try_init();
+//     let tool_definition = get_tool("demo-shinkai-tool-playwright-example").unwrap();
+//     let code_files = CodeFiles {
+//         files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
+//         entrypoint: "main.ts".to_string(),
+//     };
 
-    let tool = DenoRunner::new(
-        code_files,
-        if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
-            serde_json::json!({})
-        } else {
-            serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
-        },
-        Some(DenoRunnerOptions {
-            force_runner_type: Some(runner_type),
-            ..Default::default()
-        }),
-    );
-    let run_result = tool
-        .run(
-            None,
-            serde_json::json!({
-                "url": "https://shinkai.com"
-            }),
-            None,
-        )
-        .await;
-    assert!(run_result.is_ok());
-    assert_eq!(
-        run_result.unwrap().data["title"]
-            .as_str()
-            .unwrap()
-            .to_string(),
-        "Shinkai | Fully Local AI (Models, Files and Agents)".to_string()
-    );
-}
+//     let tool = DenoRunner::new(
+//         code_files,
+//         if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
+//             serde_json::json!({})
+//         } else {
+//             serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
+//         },
+//         Some(DenoRunnerOptions {
+//             force_runner_type: Some(runner_type),
+//             ..Default::default()
+//         }),
+//     );
+//     let run_result = tool
+//         .run(
+//             None,
+//             serde_json::json!({
+//                 "url": "https://shinkai.com"
+//             }),
+//             None,
+//         )
+//         .await;
+//     assert!(run_result.is_ok());
+//     assert_eq!(
+//         run_result.unwrap().data["title"]
+//             .as_str()
+//             .unwrap()
+//             .to_string(),
+//         "Shinkai | Fully Local AI (Models, Files and Agents)".to_string()
+//     );
+// }
 
 // Temporarily commented out DeFi Llama TVL rankings test
 // #[rstest]
@@ -742,50 +742,50 @@ async fn shinkai_tool_json_to_md(#[case] runner_type: RunnerType) {
         .is_empty());
 }
 
-#[rstest]
-#[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
-#[tokio::test]
-async fn shinkai_tool_perplexity(#[case] runner_type: RunnerType) {
-    let _ = env_logger::builder()
-        .filter_level(log::LevelFilter::Info)
-        .is_test(true)
-        .try_init();
-    if std::env::var("CI").is_ok() {
-        eprintln!("Skipping test in CI environment");
-        return;
-    }
-    let tool_definition = get_tool("shinkai-tool-perplexity").unwrap();
-    let code_files = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
-        entrypoint: "main.ts".to_string(),
-    };
+// #[rstest]
+// #[case::host(RunnerType::Host)]
+// #[case::docker(RunnerType::Docker)]
+// #[tokio::test]
+// async fn shinkai_tool_perplexity(#[case] runner_type: RunnerType) {
+//     let _ = env_logger::builder()
+//         .filter_level(log::LevelFilter::Info)
+//         .is_test(true)
+//         .try_init();
+//     if std::env::var("CI").is_ok() {
+//         eprintln!("Skipping test in CI environment");
+//         return;
+//     }
+//     let tool_definition = get_tool("shinkai-tool-perplexity").unwrap();
+//     let code_files = CodeFiles {
+//         files: HashMap::from([("main.ts".to_string(), tool_definition.code.clone().unwrap())]),
+//         entrypoint: "main.ts".to_string(),
+//     };
 
-    let tool = DenoRunner::new(
-        code_files,
-        if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
-            serde_json::json!({})
-        } else {
-            serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
-        },
-        Some(DenoRunnerOptions {
-            force_runner_type: Some(runner_type),
-            ..Default::default()
-        }),
-    );
-    let run_result = tool
-        .run(
-            None,
-            serde_json::json!({
-                "query": "what's the roman empire?"
-            }),
-            None,
-        )
-        .await;
-    assert!(run_result.is_ok());
-    assert!(!run_result.unwrap().data["response"]
-        .as_str()
-        .unwrap()
-        .to_string()
-        .is_empty());
-}
+//     let tool = DenoRunner::new(
+//         code_files,
+//         if matches!(runner_type, RunnerType::Docker) && std::env::var("CI").is_ok() {
+//             serde_json::json!({})
+//         } else {
+//             serde_json::json!({ "chromePath": std::env::var("CHROME_PATH").ok().unwrap_or("".to_string()) })
+//         },
+//         Some(DenoRunnerOptions {
+//             force_runner_type: Some(runner_type),
+//             ..Default::default()
+//         }),
+//     );
+//     let run_result = tool
+//         .run(
+//             None,
+//             serde_json::json!({
+//                 "query": "what's the roman empire?"
+//             }),
+//             None,
+//         )
+//         .await;
+//     assert!(run_result.is_ok());
+//     assert!(!run_result.unwrap().data["response"]
+//         .as_str()
+//         .unwrap()
+//         .to_string()
+//         .is_empty());
+// }
