@@ -205,20 +205,16 @@ impl DenoRunner {
         log::info!("mount files: {:?}", self.options.context.mount_files);
         // Mount each writable file to /app/mount
         for file in &self.options.context.mount_files {
-            let target_path = format!(
-                "/app/{}/{}",
-                execution_storage.relative_to_root(execution_storage.mount_folder_path.clone()),
-                file.file_name().unwrap().to_str().unwrap()
-            );
-
-            // TODO: This hardcoded app could be buggy if later we make some changes to the execution storage
+            // Copy the files to the exact same path in the volume.
+            // This will allow to run the same code in the host and in the container.
+            let absolute_target_path = path::absolute(file).unwrap().as_normalized_string();
             let mount_param = format!(
                 r#"type=bind,source={},target={}"#,
-                path::absolute(file).unwrap().as_normalized_string(),
-                target_path.clone()
+                absolute_target_path,
+                absolute_target_path
             );
             log::info!("mount parameter created: {}", mount_param);
-            mount_env += &format!("{},", target_path);
+            mount_env += &format!("{},", absolute_target_path);
             mount_params.extend([String::from("--mount"), mount_param]);
         }
 

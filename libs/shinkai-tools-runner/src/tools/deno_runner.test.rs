@@ -359,7 +359,7 @@ async fn check_code_success() {
     };
 
     // Run the code to ensure dependencies are downloaded
-    let mut deno_runner = DenoRunner::new(
+    let deno_runner = DenoRunner::new(
         code,
         json!({}),
         Some(DenoRunnerOptions {
@@ -396,7 +396,7 @@ async fn check_code_with_errors(#[case] runner_type: RunnerType) {
     };
 
     // Run the code to ensure dependencies are downloaded
-    let mut deno_runner = DenoRunner::new(
+    let deno_runner = DenoRunner::new(
         code,
         json!({}),
         Some(DenoRunnerOptions {
@@ -441,7 +441,7 @@ async fn check_with_wrong_import_path(#[case] runner_type: RunnerType) {
     };
 
     // Run the code to ensure dependencies are downloaded
-    let mut deno_runner = DenoRunner::new(
+    let deno_runner = DenoRunner::new(
         code,
         json!({}),
         Some(DenoRunnerOptions {
@@ -480,7 +480,7 @@ async fn check_with_wrong_lib_version() {
     };
 
     // Run the code to ensure dependencies are downloaded
-    let mut deno_runner = DenoRunner::new(
+    let deno_runner = DenoRunner::new(
         code,
         json!({}),
         Some(DenoRunnerOptions {
