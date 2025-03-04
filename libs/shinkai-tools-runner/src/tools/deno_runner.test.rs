@@ -3,8 +3,8 @@ use serde_json::json;
 use serde_json::Value;
 
 use crate::tools::{
-    code_files::CodeFiles, execution_storage::ExecutionStorage, deno_runner::DenoRunner,
-    deno_runner_options::DenoRunnerOptions, execution_context::ExecutionContext,
+    code_files::CodeFiles, deno_runner::DenoRunner, deno_runner_options::DenoRunnerOptions,
+    execution_context::ExecutionContext, execution_storage::ExecutionStorage,
     runner_type::RunnerType, shinkai_node_location::ShinkaiNodeLocation,
 };
 
@@ -192,10 +192,7 @@ async fn execution_storage_cache_contains_files(#[case] runner_type: RunnerType)
         },
     );
 
-    log::info!(
-        "Deno cache folder: {}",
-        storage.cache_folder_path.display()
-    );
+    log::info!("Deno cache folder: {}", storage.cache_folder_path.display());
     assert!(storage.cache_folder_path.exists());
     let cache_files = std::fs::read_dir(&storage.cache_folder_path).unwrap();
     assert!(cache_files.count() > 0);
@@ -822,6 +819,7 @@ async fn mount_and_edit_file_in_mount(#[case] runner_type: RunnerType) {
     let js_code = r#"
         async function run (c, p) {
             const mount = Deno.env.get("SHINKAI_MOUNT").split(',');
+            console.log("mount", mount);
             await Deno.writeTextFile(mount[0], "2");
             return;
         }
