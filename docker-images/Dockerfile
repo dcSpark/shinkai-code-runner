@@ -12,19 +12,19 @@ ENV CHROME_PATH=/usr/bin/chromium
 
 RUN apt-get install -y curl
 
-WORKDIR /app
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.local/bin:${PATH}"
-
-RUN source $HOME/.local/bin/env && uv venv --seed cache/python-venv --python 3.13 && source cache/python-venv/bin/activate && uv pip install pipreqs && uv tool install ruff
-
-RUN ls $HOME/.cache/ms-playwright
-
 RUN groupadd -r shinkai-code-runner-user && useradd -r -g shinkai-code-runner-user -G audio,video shinkai-code-runner-user \
     && mkdir -p /home/shinkai-code-runner-user/Downloads \
     && chown -R shinkai-code-runner-user:shinkai-code-runner-user /home/shinkai-code-runner-user
 
 # Run everything after as non-privileged user.
 USER shinkai-code-runner-user
+
+ENV HOME=/home/shinkai-code-runner-user
+
+WORKDIR /app
+
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="${HOME}/.local/bin:${PATH}"
+RUN source $HOME/.local/bin/env && uv venv --seed cache/python-venv --python 3.13 && source cache/python-venv/bin/activate && uv pip install pipreqs && uv tool install ruff
 
 ENTRYPOINT ["/tini", "--"]
