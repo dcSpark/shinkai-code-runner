@@ -31,7 +31,6 @@ export const run: Run<Configurations, Parameters, Result> = async (
     chromePaths.chrome ||
     chromePaths.chromium;
   const browser = await puppeteer.launch({
-    headless: false,
     executablePath: chromePath,
     args: ['--disable-blink-features=AutomationControlled'],
   });
@@ -54,7 +53,7 @@ export const run: Run<Configurations, Parameters, Result> = async (
   await page.click('button svg.tabler-icon-arrow-right');
 
   console.log('Waiting for results to load...');
-  await page.waitForSelector('text=Related');
+  await page.waitForSelector('text=Rewrite');
 
   console.log('Extracting HTML content...');
   const htmlContent = await page.evaluate(() => {

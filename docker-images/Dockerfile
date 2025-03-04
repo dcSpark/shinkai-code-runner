@@ -20,5 +20,11 @@ RUN source $HOME/.local/bin/env && uv venv --seed cache/python-venv --python 3.1
 
 RUN ls $HOME/.cache/ms-playwright
 
+RUN groupadd -r shinkai-code-runner-user && useradd -r -g shinkai-code-runner-user -G audio,video shinkai-code-runner-user \
+    && mkdir -p /home/shinkai-code-runner-user/Downloads \
+    && chown -R shinkai-code-runner-user:shinkai-code-runner-user /home/shinkai-code-runner-user
+
+# Run everything after as non-privileged user.
+USER shinkai-code-runner-user
 
 ENTRYPOINT ["/tini", "--"]

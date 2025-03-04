@@ -621,6 +621,10 @@ impl DenoRunner {
             "--allow-read=/usr/bin/chromium".to_string(),
         ];
 
+        if matches!(runner_type, RunnerType::Docker) {
+            deno_permissions.push("--allow-read=/".to_string());
+        }
+
         for file in mount_files {
             let path = match runner_type {
                 RunnerType::Host => file.to_string_lossy().to_string(),
