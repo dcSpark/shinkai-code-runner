@@ -13,15 +13,13 @@
  * 1. Read and bundle the tool code from the entry file
  * 2. Write the bundled code to index.ts in the output folder
  * 3. Import the tool definition from the bundled code
- * 4. Generate embeddings for the tool's metadata using the snowflake-arctic-embed model
- * 5. Create an extended tool definition with code and embeddings
- * 6. Write the extended definition to definition.json in the output folder
+ * 4. Create an extended tool definition with code and embeddings
+ * 5. Write the extended definition to definition.json in the output folder
  */
 
 import { join } from 'node:path';
 import minimist from 'npm:minimist';
 import fs from 'node:fs';
-import axios from 'npm:axios';
 
 console.log('🚀 Starting Shinkai Tool bundler...');
 
@@ -45,32 +43,6 @@ console.log('📂 Entry file:', entryFile);
 console.log('📂 Output folder:', outputFolder);
 console.log('📂 Output file:', outputFile);
 
-/**
- * Fetches embeddings for a given prompt using the snowflake-arctic-embed model
- * @param prompt Text to generate embeddings for
- * @returns Array of embedding numbers
- */
-export async function getEmbeddings(prompt: string): Promise<number[]> {
-  console.log('🔍 Fetching embeddings from model...');
-  const apiUrl = Deno.env.get("EMBEDDING_API_URL") || 'http://localhost:11434';
-
-  if (apiUrl === 'debug') {
-    console.log('🔧 Using mock embeddings for debug mode');
-    return Array(384).fill(0.1);
-  }
-
-  const response = await axios.post(`${apiUrl}/api/embeddings`, {
-    model: 'snowflake-arctic-embed:xs',
-    prompt,
-  });
-
-  if (response.status !== 200) {
-    throw new Error(`Failed to fetch embeddings: ${response.statusText}`);
-  }
-
-  return response.data.embedding;
-}
-
 console.log('📦 Starting tool processing...');
 fs.promises
   .readFile(entryFile, 'utf-8')
@@ -89,11 +61,6 @@ fs.promises
 
     console.log('✨ Tool definition loaded:', definition.name);
 
-    // Generate embeddings from tool metadata
-    console.log('🧮 Generating embeddings for tool metadata...');
-    const prompt = `${definition.id} ${definition.name} ${definition.description} ${definition.author} ${definition.keywords.join(' ')}`;
-    const embeddings = await getEmbeddings(prompt);
-
     // Create extended tool definition with code and embeddings
     console.log('🔨 Creating extended tool definition...');
     const toolDefinition: ExtendedToolDefinition = {
@@ -101,7 +68,7 @@ fs.promises
       code,
       embedding_metadata: {
         model_name: 'snowflake-arctic-embed:xs',
-        embeddings,
+        embeddings: [], // Empty embeddings while we remove completely the built-in tools feature
       },
     };
 

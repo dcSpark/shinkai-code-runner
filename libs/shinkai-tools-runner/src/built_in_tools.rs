@@ -237,7 +237,6 @@ lazy_static! {
                 .unwrap(),
             )),
         );
-        // ntim: New tools will be inserted here, don't remove this comment
         m
     };
 }
