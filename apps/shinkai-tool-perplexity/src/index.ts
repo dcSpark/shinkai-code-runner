@@ -31,16 +31,14 @@ export const run: Run<Configurations, Parameters, Result> = async (
     chromePaths.chrome ||
     chromePaths.chromium;
   const browser = await puppeteer.launch({
+    headless: false,
     executablePath: chromePath,
     args: ['--disable-blink-features=AutomationControlled'],
   });
   const page = await browser.newPage();
 
   console.log("Navigating to Perplexity's website...");
-  await page.goto('https://www.perplexity.ai/');
-
-  console.log('Waiting for the page to load...');
-  await page.waitForNetworkIdle({ timeout: 2500 });
+  await page.goto('https://www.perplexity.ai/', { waitUntil: 'networkidle0' });
 
   console.log('Filling textarea with query:', params.query);
   await page.type('textarea', params.query);
@@ -53,10 +51,7 @@ export const run: Run<Configurations, Parameters, Result> = async (
   }
 
   console.log('Clicking the button with the specified SVG...');
-  await page.click('button:has(svg[data-icon="arrow-right"])');
-
-  console.log('Waiting for the button with the specified SVG to be visible...');
-  await page.waitForSelector('button:has(svg[data-icon="arrow-right"])');
+  await page.click('button svg.tabler-icon-arrow-right');
 
   console.log('Waiting for results to load...');
   await page.waitForSelector('text=Related');
