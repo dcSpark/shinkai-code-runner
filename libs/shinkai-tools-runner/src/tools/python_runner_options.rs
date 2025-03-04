@@ -18,7 +18,7 @@ impl Default for PythonRunnerOptions {
     fn default() -> Self {
         Self {
             context: ExecutionContext::default(),
-            code_runner_docker_image_name: String::from("dcspark/shinkai-code-runner:0.9.2"),
+            code_runner_docker_image_name: String::from("dcspark/shinkai-code-runner:0.9.3"),
             uv_binary_path: PathBuf::from(if cfg!(windows) {
                 "./shinkai-tools-runner-resources/uv.exe"
             } else {

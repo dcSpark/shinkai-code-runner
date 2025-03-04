@@ -131,6 +131,7 @@ async fn shinkai_tool_inline_non_json_return(#[case] runner_type: RunnerType) {
     assert_eq!(run_result.data, 5);
 }
 
+
 #[rstest]
 #[case::host(RunnerType::Host)]
 #[case::docker(RunnerType::Docker)]
@@ -285,6 +286,7 @@ async fn max_execution_time(#[case] runner_type: RunnerType) {
     assert!(run_result.is_err());
     assert!(run_result.err().unwrap().message().contains("timed out"));
 }
+
 
 #[rstest]
 #[case::host(RunnerType::Host)]

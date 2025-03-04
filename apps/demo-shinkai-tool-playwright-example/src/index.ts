@@ -1,4 +1,4 @@
-import * as playwright from 'npm:playwright@1.48.2';
+import * as playwright from 'npm:playwright@1.50.1';
 import chromePaths from 'npm:chrome-paths@1.0.1';
 
 type Configurations = {

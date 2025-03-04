@@ -5,7 +5,7 @@ use tokio::{
 };
 
 use crate::tools::{
-    execution_storage::ExecutionStorage, path_buf_ext::PathBufExt, runner_type::RunnerType,
+    execution_storage::ExecutionStorage, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType
 };
 
 use super::{
@@ -205,20 +205,15 @@ impl DenoRunner {
         log::info!("mount files: {:?}", self.options.context.mount_files);
         // Mount each writable file to /app/mount
         for file in &self.options.context.mount_files {
-            let target_path = format!(
-                "/app/{}/{}",
-                execution_storage.relative_to_root(execution_storage.mount_folder_path.clone()),
-                file.file_name().unwrap().to_str().unwrap()
-            );
-
-            // TODO: This hardcoded app could be buggy if later we make some changes to the execution storage
+            // Copy the files to the exact same path in the volume.
+            // This will allow to run the same code in the host and in the container.
+            let path = normalize_for_docker_path(file.to_path_buf());
             let mount_param = format!(
                 r#"type=bind,source={},target={}"#,
-                path::absolute(file).unwrap().as_normalized_string(),
-                target_path.clone()
+                path, path
             );
             log::info!("mount parameter created: {}", mount_param);
-            mount_env += &format!("{},", target_path);
+            mount_env += &format!("{},", path);
             mount_params.extend([String::from("--mount"), mount_param]);
         }
 
@@ -283,6 +278,7 @@ impl DenoRunner {
         }
 
         let deno_permissions = self.get_deno_permissions(
+            RunnerType::Docker,
             "/usr/bin/deno",
             "/app/home",
             &self
@@ -290,15 +286,7 @@ impl DenoRunner {
                 .context
                 .mount_files
                 .iter()
-                .map(|p| {
-                    let path_in_docker = format!(
-                        "/app/{}/{}",
-                        execution_storage
-                            .relative_to_root(execution_storage.mount_folder_path.clone()),
-                        p.file_name().unwrap().to_str().unwrap()
-                    );
-                    PathBuf::from(path_in_docker)
-                })
+                .map(|p| path::absolute(p).unwrap())
                 .collect::<Vec<_>>(),
             &self
                 .options
@@ -432,6 +420,7 @@ impl DenoRunner {
         log::info!("using deno from host at path: {:?}", binary_path.clone());
 
         let deno_permissions: Vec<String> = self.get_deno_permissions(
+            RunnerType::Host,
             binary_path.clone().as_str(),
             execution_storage
                 .home_folder_path
@@ -590,6 +579,7 @@ impl DenoRunner {
 
     fn get_deno_permissions(
         &self,
+        runner_type: RunnerType,
         exec_path: &str,
         home_path: &str,
         mount_files: &[PathBuf],
@@ -631,12 +621,16 @@ impl DenoRunner {
             "--allow-read=/usr/bin/chromium".to_string(),
         ];
 
+        if matches!(runner_type, RunnerType::Docker) {
+            deno_permissions.push("--allow-read=/".to_string());
+        }
+
         for file in mount_files {
-            let mount_param = format!(
-                r#"--allow-read={},--allow-write={}"#,
-                file.to_string_lossy(),
-                file.to_string_lossy()
-            );
+            let path = match runner_type {
+                RunnerType::Host => file.to_string_lossy().to_string(),
+                RunnerType::Docker => normalize_for_docker_path(file.to_path_buf()),
+            };
+            let mount_param = format!(r#"--allow-read={},--allow-write={}"#, path, path);
             deno_permissions.extend(mount_param.split(',').map(String::from));
         }
 
