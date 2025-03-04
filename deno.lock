@@ -82,6 +82,7 @@
     "npm:networkanalysis-ts@*": "1.0.0",
     "npm:networkanalysis-ts@1": "1.0.0",
     "npm:networkanalysis-ts@1.0.0": "1.0.0",
+    "npm:node-gyp-build@4.8.2": "4.8.2",
     "npm:nunjucks@*": "3.2.4",
     "npm:nunjucks@3.2.4": "3.2.4",
     "npm:nunjucks@^3.2.4": "3.2.4",
