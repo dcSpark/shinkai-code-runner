@@ -124,7 +124,7 @@ version = "0.0.1"
 dependencies = [
     "jsonpickle~=4.0.0",
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.10"
         "#;
         let mut pyproject_toml = pyproject_toml_string
             .parse::<DocumentMut>()
