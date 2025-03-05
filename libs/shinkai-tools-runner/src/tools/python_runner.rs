@@ -12,8 +12,7 @@ use tokio::{
 use toml_edit::DocumentMut;
 
 use crate::tools::{
-    execution_error::ExecutionError, file_name_utils::normalize_for_docker_path,
-    path_buf_ext::PathBufExt, run_result::RunResult,
+    check_utils::normalize_error_message, execution_error::ExecutionError, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, run_result::RunResult
 };
 
 use super::{
@@ -255,7 +254,8 @@ requires-python = ">=3.10"
             }
         };
 
-        let lint_message = String::from_utf8(output.stdout)?;
+        let mut lint_message = String::from_utf8(output.stdout)?;
+        lint_message = normalize_error_message(lint_message, &execution_storage.code_folder_path);
         let lint_message_lines: Vec<String> = lint_message.lines().map(|s| s.to_string()).collect();
 
         for line in &lint_message_lines {

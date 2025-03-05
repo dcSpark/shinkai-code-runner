@@ -5,8 +5,7 @@ use tokio::{
 };
 
 use crate::tools::{
-    execution_storage::ExecutionStorage, file_name_utils::normalize_for_docker_path,
-    path_buf_ext::PathBufExt, runner_type::RunnerType,
+    check_utils::normalize_error_message, execution_storage::ExecutionStorage, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType
 };
 
 use super::{
@@ -78,11 +77,8 @@ impl DenoRunner {
         match output.status.success() {
             true => Ok(Vec::new()),
             false => {
-                let file_prefix_deno = "file:///";
-                let file_prefix_runner = execution_storage.code_folder_path.as_normalized_string() + "/";
-                let error_message = String::from_utf8(output.stderr)?
-                    .replace(file_prefix_deno, "")
-                    .replace(file_prefix_runner.as_str(), "./");
+                let error_message = String::from_utf8(output.stderr)?;
+                let error_message = normalize_error_message(error_message, &execution_storage.code_folder_path);
                 log::error!("deno check error: {}", error_message);
                 let error_lines: Vec<String> =
                     error_message.lines().map(|s| s.to_string()).collect();

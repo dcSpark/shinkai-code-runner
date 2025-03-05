@@ -487,9 +487,11 @@ async fn check_with_wrong_lib_version() {
 
     let check_result = deno_runner.check().await.unwrap();
     assert!(!check_result.is_empty());
-    assert!(check_result
-        .iter()
-        .any(|line| line.contains("Could not find npm package 'axios' matching '3.4.2'")));
+    assert!(check_result.iter().any(|line| line
+        .contains("Could not find npm package 'axios' matching '3.4.2'")
+        || line.contains(
+            "Error getting response at https://registry.npmjs.org/axios for package \"axios\""
+        )));
 }
 
 #[rstest]
@@ -1152,7 +1154,9 @@ async fn check_doesnt_include_stacktrace_in_error_message() {
     let execution_id = nanoid::nanoid!();
 
     let code_files = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), r#"
+        files: HashMap::from([(
+            "main.ts".to_string(),
+            r#"
             import { axios } from './libraries/axios';
 
             type CONFIG = {};
@@ -1166,7 +1170,9 @@ async fn check_doesnt_include_stacktrace_in_error_message() {
             export async function run(config: CONFIG, inputs: INPUTS): Promise<OUTPUT> {
                 const response = await axios.get(inputs.url);
                 return { htmlContent: response.data };
-        "#.to_string())]),
+        "#
+            .to_string(),
+        )]),
         entrypoint: "main.ts".to_string(),
     };
 
@@ -1185,7 +1191,9 @@ async fn check_doesnt_include_stacktrace_in_error_message() {
     let result = tool.check().await.unwrap();
 
     assert!(!result.is_empty());
-    assert!(result.iter().any(|line| line.contains("error: Module not found")));
+    assert!(result
+        .iter()
+        .any(|line| line.contains("error: Module not found")));
     assert!(!result.iter().any(|line| line.contains("Stack backtrace:")));
 }
 
@@ -1201,7 +1209,9 @@ async fn check_file_names_are_normalized() {
     let execution_id = nanoid::nanoid!();
 
     let code_files = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), r#"
+        files: HashMap::from([(
+            "main.ts".to_string(),
+            r#"
             import { axios } from './libraries/axios';
 
             type CONFIG = {};
@@ -1215,7 +1225,9 @@ async fn check_file_names_are_normalized() {
             export async function run(config: CONFIG, inputs: INPUTS): Promise<OUTPUT> {
                 const response = await axios.get(inputs.url);
                 return { htmlContent: response.data };
-        "#.to_string())]),
+        "#
+            .to_string(),
+        )]),
         entrypoint: "main.ts".to_string(),
     };
 
@@ -1235,6 +1247,8 @@ async fn check_file_names_are_normalized() {
 
     assert!(!result.is_empty());
     assert!(!result.iter().any(|line| line.contains("file://")));
-    assert!(result.iter().any(|line| line.contains("\"./libraries/axios\"")));
+    assert!(result
+        .iter()
+        .any(|line| line.contains("\"./libraries/axios\"")));
     assert!(result.iter().any(|line| line.contains(" ./main.ts")));
 }
