@@ -217,6 +217,7 @@ requires-python = ">=3.10"
 
         let mut create_check_venv_command = tokio::process::Command::new(uv_binary_path);
         let command = create_check_venv_command
+            .env_clear()
             .args([
                 "venv",
                 execution_storage

@@ -1139,3 +1139,102 @@ async fn context_and_execution_id(#[case] runner_type: RunnerType) {
     assert_eq!(result.data["contextId"], context_id);
     assert_eq!(result.data["executionId"], execution_id);
 }
+
+#[rstest]
+#[tokio::test]
+async fn check_doesnt_include_stacktrace_in_error_message() {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let context_id = nanoid::nanoid!();
+    let execution_id = nanoid::nanoid!();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([("main.ts".to_string(), r#"
+            import { axios } from './libraries/axios';
+
+            type CONFIG = {};
+            type INPUTS = {
+                url: string;
+            };
+            type OUTPUT = {
+                htmlContent: string;
+            };
+
+            export async function run(config: CONFIG, inputs: INPUTS): Promise<OUTPUT> {
+                const response = await axios.get(inputs.url);
+                return { htmlContent: response.data };
+        "#.to_string())]),
+        entrypoint: "main.ts".to_string(),
+    };
+
+    let tool = DenoRunner::new(
+        code_files,
+        Value::Null,
+        Some(DenoRunnerOptions {
+            context: ExecutionContext {
+                context_id: context_id.clone(),
+                execution_id: execution_id.clone(),
+                ..Default::default()
+            },
+            ..Default::default()
+        }),
+    );
+    let result = tool.check().await.unwrap();
+
+    assert!(!result.is_empty());
+    assert!(result.iter().any(|line| line.contains("error: Module not found")));
+    assert!(!result.iter().any(|line| line.contains("Stack backtrace:")));
+}
+
+#[rstest]
+#[tokio::test]
+async fn check_file_names_are_normalized() {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let context_id = nanoid::nanoid!();
+    let execution_id = nanoid::nanoid!();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([("main.ts".to_string(), r#"
+            import { axios } from './libraries/axios';
+
+            type CONFIG = {};
+            type INPUTS = {
+                url: string;
+            };
+            type OUTPUT = {
+                htmlContent: string;
+            };
+
+            export async function run(config: CONFIG, inputs: INPUTS): Promise<OUTPUT> {
+                const response = await axios.get(inputs.url);
+                return { htmlContent: response.data };
+        "#.to_string())]),
+        entrypoint: "main.ts".to_string(),
+    };
+
+    let tool = DenoRunner::new(
+        code_files,
+        Value::Null,
+        Some(DenoRunnerOptions {
+            context: ExecutionContext {
+                context_id: context_id.clone(),
+                execution_id: execution_id.clone(),
+                ..Default::default()
+            },
+            ..Default::default()
+        }),
+    );
+    let result = tool.check().await.unwrap();
+
+    assert!(!result.is_empty());
+    assert!(!result.iter().any(|line| line.contains("file://")));
+    assert!(result.iter().any(|line| line.contains("\"./libraries/axios\"")));
+    assert!(result.iter().any(|line| line.contains(" ./main.ts")));
+}
