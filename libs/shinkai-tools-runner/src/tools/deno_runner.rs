@@ -5,7 +5,7 @@ use tokio::{
 };
 
 use crate::tools::{
-    execution_storage::ExecutionStorage, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType
+    check_utils::normalize_error_message, execution_storage::ExecutionStorage, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType
 };
 
 use super::{
@@ -67,6 +67,7 @@ impl DenoRunner {
                     .to_str()
                     .unwrap(),
             ])
+            .env_clear()
             .env("NO_COLOR", "true")
             .current_dir(execution_storage.code_folder_path.clone())
             .stdout(std::process::Stdio::piped())
@@ -77,11 +78,10 @@ impl DenoRunner {
             true => Ok(Vec::new()),
             false => {
                 let error_message = String::from_utf8(output.stderr)?;
+                let error_message = normalize_error_message(error_message, &execution_storage.code_folder_path);
+                log::error!("deno check error: {}", error_message);
                 let error_lines: Vec<String> =
                     error_message.lines().map(|s| s.to_string()).collect();
-                for error in &error_lines {
-                    log::error!("deno check error: {}", error);
-                }
                 Ok(error_lines)
             }
         }
@@ -208,10 +208,7 @@ impl DenoRunner {
             // Copy the files to the exact same path in the volume.
             // This will allow to run the same code in the host and in the container.
             let path = normalize_for_docker_path(file.to_path_buf());
-            let mount_param = format!(
-                r#"type=bind,source={},target={}"#,
-                path, path
-            );
+            let mount_param = format!(r#"type=bind,source={},target={}"#, path, path);
             log::info!("mount parameter created: {}", mount_param);
             mount_env += &format!("{},", path);
             mount_params.extend([String::from("--mount"), mount_param]);
