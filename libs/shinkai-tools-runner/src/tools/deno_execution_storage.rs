@@ -1,14 +1,27 @@
-use super::execution_storage::ExecutionStorage;
+use super::{execution_storage::ExecutionStorage, runner_type::RunnerType};
 
 impl ExecutionStorage {
-    pub fn deno_cache_folder_path(&self) -> std::path::PathBuf {
-        self.cache_folder_path.join("deno")
+    fn deno_cache_folder_path_host(&self) -> std::path::PathBuf {
+        self.global_cache_folder_path.join("deno-cache-host")
     }
-    pub fn init_for_deno(&self, pristine_cache: Option<bool>) -> anyhow::Result<()> {
+    fn deno_cache_folder_path_docker(&self) -> std::path::PathBuf {
+        self.global_cache_folder_path.join("deno-cache-docker")
+    }
+    pub fn deno_cache_folder_path(&self, runner_type: RunnerType) -> std::path::PathBuf {
+        match runner_type {
+            RunnerType::Host => self.deno_cache_folder_path_host(),
+            RunnerType::Docker => self.deno_cache_folder_path_docker(),
+        }
+    }
+    pub fn init_for_deno(
+        &self,
+        pristine_cache: Option<bool>,
+        runner_type: RunnerType,
+    ) -> anyhow::Result<()> {
         self.init(pristine_cache)?;
 
         log::info!("creating deno cache directory");
-        let deno_cache_dir = self.deno_cache_folder_path();
+        let deno_cache_dir = self.deno_cache_folder_path(runner_type);
         std::fs::create_dir_all(&deno_cache_dir).map_err(|e| {
             log::error!("failed to create deno cache directory: {}", e);
             e

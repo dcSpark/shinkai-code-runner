@@ -5,7 +5,8 @@ use tokio::{
 };
 
 use crate::tools::{
-    check_utils::normalize_error_message, execution_storage::ExecutionStorage, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType
+    check_utils::normalize_error_message, execution_storage::ExecutionStorage,
+    file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType,
 };
 
 use super::{
@@ -52,7 +53,7 @@ impl DenoRunner {
     pub async fn check(&self) -> anyhow::Result<Vec<String>> {
         let execution_storage =
             ExecutionStorage::new(self.code.clone(), self.options.context.clone());
-        execution_storage.init_for_deno(None)?;
+        execution_storage.init_for_deno(None, RunnerType::Host)?;
 
         let binary_path = path::absolute(self.options.deno_binary_path.clone())
             .unwrap()
@@ -78,7 +79,8 @@ impl DenoRunner {
             true => Ok(Vec::new()),
             false => {
                 let error_message = String::from_utf8(output.stderr)?;
-                let error_message = normalize_error_message(error_message, &execution_storage.code_folder_path);
+                let error_message =
+                    normalize_error_message(error_message, &execution_storage.code_folder_path);
                 log::error!("deno check error: {}", error_message);
                 let error_lines: Vec<String> =
                     error_message.lines().map(|s| s.to_string()).collect();
@@ -174,7 +176,7 @@ impl DenoRunner {
         );
 
         let execution_storage = ExecutionStorage::new(code_files, self.options.context.clone());
-        execution_storage.init_for_deno(None)?;
+        execution_storage.init_for_deno(None, RunnerType::Docker)?;
 
         let mut mount_params = Vec::<String>::new();
 
@@ -185,10 +187,13 @@ impl DenoRunner {
             ),
             (
                 execution_storage
-                    .deno_cache_folder_path()
+                    .deno_cache_folder_path(RunnerType::Docker)
                     .as_normalized_string(),
-                execution_storage
-                    .relative_to_root(execution_storage.deno_cache_folder_path().clone()),
+                execution_storage.relative_to_global_cache(
+                    execution_storage
+                        .deno_cache_folder_path(RunnerType::Docker)
+                        .clone(),
+                ),
             ),
             (
                 execution_storage.home_folder_path.as_normalized_string(),
@@ -240,7 +245,11 @@ impl DenoRunner {
         container_envs.push(String::from("-e"));
         container_envs.push(format!(
             "DENO_DIR={}",
-            execution_storage.relative_to_root(execution_storage.deno_cache_folder_path().clone())
+            execution_storage.relative_to_global_cache(
+                execution_storage
+                    .deno_cache_folder_path(RunnerType::Docker)
+                    .clone()
+            )
         ));
 
         container_envs.push(String::from("-e"));
@@ -408,7 +417,7 @@ impl DenoRunner {
         max_execution_timeout: Option<Duration>,
     ) -> anyhow::Result<Vec<String>> {
         let execution_storage = ExecutionStorage::new(code_files, self.options.context.clone());
-        execution_storage.init_for_deno(None)?;
+        execution_storage.init_for_deno(None, RunnerType::Host)?;
 
         let binary_path = path::absolute(self.options.deno_binary_path.clone())
             .unwrap()
@@ -453,7 +462,9 @@ impl DenoRunner {
         command.env("NO_COLOR", "true");
         command.env(
             "DENO_DIR",
-            execution_storage.deno_cache_folder_path().clone(),
+            execution_storage
+                .deno_cache_folder_path(RunnerType::Host)
+                .clone(),
         );
         command.env(
             "SHINKAI_NODE_LOCATION",
