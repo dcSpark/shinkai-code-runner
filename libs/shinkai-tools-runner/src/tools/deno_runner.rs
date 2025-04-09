@@ -1,3 +1,4 @@
+use regex::Regex;
 use serde_json::Value;
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
@@ -79,12 +80,33 @@ impl DenoRunner {
             true => Ok(Vec::new()),
             false => {
                 let error_message = String::from_utf8(output.stderr)?;
-                let error_message =
+                let mut error_message =
                     normalize_error_message(error_message, &execution_storage.code_folder_path);
                 log::error!("deno check error: {}", error_message);
-                let error_lines: Vec<String> =
-                    error_message.lines().map(|s| s.to_string()).collect();
-                Ok(error_lines)
+
+                // Replace node_modules warning with empty string (it was confusing the llm)
+                let node_modules_regex =
+                    Regex::new(r"(?:Warning.*?not executed:(?:\n┠─.*)+\n┃\n(?:┠─.*\n)*┖─.*)")
+                        .unwrap();
+                error_message = node_modules_regex
+                    .replace_all(&error_message, "")
+                    .to_string();
+
+                let error_match_regex =
+                    Regex::new(r"(?:TS\d+ \[ERROR\]:.*(?:\n.*){2,4}at .*:\d+:\d+)").unwrap();
+                let matched_errors = error_match_regex
+                    .find_iter(&error_message)
+                    .map(|m| m.as_str())
+                    .collect::<Vec<_>>();
+                if matched_errors.is_empty() {
+                    log::warn!(
+                        "no errors found in deno check but the command failed, this could be a bug"
+                    );
+                    let error_lines: Vec<String> =
+                        error_message.lines().map(|s| s.to_string()).collect();
+                    return Ok(error_lines);
+                }
+                Ok(matched_errors.iter().map(|s| s.to_string()).collect())
             }
         }
     }
