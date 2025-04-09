@@ -3,12 +3,13 @@ use std::{
     path::{self, PathBuf},
 };
 
-use super::{code_files::CodeFiles, path_buf_ext::PathBufExt};
+use super::{code_files::CodeFiles, path_buf_ext::PathBufExt, runner_type::RunnerType};
 use super::{execution_context::ExecutionContext, file_name_utils::sanitize_for_file_name};
 use nanoid::nanoid;
 
 #[derive(Default, Clone)]
 pub struct ExecutionStorage {
+    pub global_cache_folder_path: PathBuf,
     pub code_files: CodeFiles,
     pub context: ExecutionContext,
     pub code_id: String,
@@ -34,6 +35,8 @@ impl ExecutionStorage {
                 .clone(),
         )
         .unwrap();
+        let global_cache_folder_path =
+            path::absolute(context.storage.join("global-cache")).unwrap();
         let root_code_folder_path = path::absolute(root_folder_path.join("code")).unwrap();
         let code_folder_path = path::absolute(root_code_folder_path.join(code_id.clone())).unwrap();
         let logs_folder_path = path::absolute(root_folder_path.join("logs")).unwrap();
@@ -59,6 +62,7 @@ impl ExecutionStorage {
             home_folder_path: root_folder_path.join("home"),
             assets_folder_path: root_folder_path.join("assets"),
             mount_folder_path: root_folder_path.join("mount"),
+            global_cache_folder_path,
         }
     }
 
@@ -144,7 +148,17 @@ impl ExecutionStorage {
     }
 
     pub fn relative_to_root(&self, path: PathBuf) -> String {
+        log::info!(
+            "getting relative path from {} to {}",
+            self.root_folder_path.display(),
+            path.display()
+        );
         let path = path.strip_prefix(&self.root_folder_path).unwrap();
+        path.to_path_buf().as_normalized_string()
+    }
+
+    pub fn relative_to_global_cache(&self, path: PathBuf) -> String {
+        let path = path.strip_prefix(&self.global_cache_folder_path).unwrap();
         path.to_path_buf().as_normalized_string()
     }
 }

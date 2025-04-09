@@ -172,7 +172,7 @@ async fn execution_storage_cache_contains_files(#[case] runner_type: RunnerType)
                 context_id: context_id.clone(),
                 ..Default::default()
             },
-            force_runner_type: Some(runner_type),
+            force_runner_type: Some(runner_type.clone()),
             ..Default::default()
         }),
     );
@@ -192,9 +192,15 @@ async fn execution_storage_cache_contains_files(#[case] runner_type: RunnerType)
         },
     );
 
-    log::info!("Deno cache folder: {}", storage.cache_folder_path.display());
-    assert!(storage.cache_folder_path.exists());
-    let cache_files = std::fs::read_dir(&storage.cache_folder_path).unwrap();
+    log::info!(
+        "Deno cache folder: {}",
+        storage
+            .deno_cache_folder_path(runner_type.clone())
+            .display()
+    );
+    assert!(storage.deno_cache_folder_path(runner_type.clone()).exists());
+    let cache_files =
+        std::fs::read_dir(storage.deno_cache_folder_path(runner_type.clone())).unwrap();
     assert!(cache_files.count() > 0);
 }
 
@@ -736,7 +742,7 @@ async fn shinkai_tool_run_concurrency(#[case] runner_type: RunnerType) {
                 code_id: "js_code1".into(),
                 ..Default::default()
             },
-            force_runner_type: Some(runner_type),
+            force_runner_type: Some(runner_type.clone()),
             ..Default::default()
         }),
     );
@@ -751,6 +757,7 @@ async fn shinkai_tool_run_concurrency(#[case] runner_type: RunnerType) {
                 code_id: "js_code2".into(),
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type.clone()),
             ..Default::default()
         }),
     );
@@ -765,6 +772,7 @@ async fn shinkai_tool_run_concurrency(#[case] runner_type: RunnerType) {
                 code_id: "js_code3".into(),
                 ..Default::default()
             },
+            force_runner_type: Some(runner_type.clone()),
             ..Default::default()
         }),
     );
