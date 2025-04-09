@@ -6,7 +6,8 @@ use tokio::{
 };
 
 use crate::tools::{
-    check_utils::normalize_error_message, execution_storage::ExecutionStorage, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType
+    check_utils::normalize_error_message, execution_storage::ExecutionStorage,
+    file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType,
 };
 
 use super::{
@@ -79,8 +80,17 @@ impl DenoRunner {
             true => Ok(Vec::new()),
             false => {
                 let error_message = String::from_utf8(output.stderr)?;
-                let error_message = normalize_error_message(error_message, &execution_storage.code_folder_path);
+                let mut error_message =
+                    normalize_error_message(error_message, &execution_storage.code_folder_path);
                 log::error!("deno check error: {}", error_message);
+
+                // Replace node_modules warning with empty string (it was confusing the llm)
+                let node_modules_regex =
+                    Regex::new(r"(?:Warning.*?not executed:(?:\n┠─.*)+\n┃\n(?:┠─.*\n)*┖─.*)")
+                        .unwrap();
+                error_message = node_modules_regex
+                    .replace_all(&error_message, "")
+                    .to_string();
 
                 let error_match_regex =
                     Regex::new(r"(?:TS\d+ \[ERROR\]:.*(?:\n.*){2,4}at .*:\d+:\d+)").unwrap();

@@ -459,6 +459,51 @@ async fn code_check_no_warnings(#[case] runner_type: RunnerType) {
 
 #[rstest]
 #[case::host(RunnerType::Host)]
+#[tokio::test]
+async fn code_check_no_warnings_when_unparseable_code(#[case] runner_type: RunnerType) {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code = CodeFiles {
+        files: HashMap::from([(
+            "main.ts".to_string(),
+            String::from(
+                r#"
+                    import { Keypair, VersionedTransaction } from "npm:@solana/web3.js";
+                    import bs58 from "npm:bs58";
+                    import { Buffer } from "node:buffer";
+                    async function run(configurations, params) {
+                        console.log('code unparseable's);
+                    }
+                "#,
+            ),
+        )]),
+        entrypoint: "main.ts".to_string(),
+    };
+
+    // Run the code to ensure dependencies are downloaded
+    let deno_runner = DenoRunner::new(
+        code,
+        json!({}),
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            context: ExecutionContext {
+                ..Default::default()
+            },
+            ..Default::default()
+        }),
+    );
+
+    let check_result = deno_runner.check().await.unwrap();
+    println!("check_result: {:?}", check_result);
+    assert!(!check_result.is_empty());
+    assert!(!check_result.iter().any(|err| err.to_lowercase().contains("warning")));
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
 #[case::docker(RunnerType::Docker)]
 #[tokio::test]
 async fn check_with_wrong_import_path(#[case] runner_type: RunnerType) {
