@@ -19,7 +19,7 @@ pub fn normalize_for_docker_path(path: PathBuf) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{normalize_for_docker_path, PathBuf};
     #[cfg(target_os = "windows")]
     #[test]
     fn test_normalize_for_docker_path() {
