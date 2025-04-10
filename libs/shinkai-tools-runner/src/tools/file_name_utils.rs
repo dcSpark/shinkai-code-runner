@@ -19,11 +19,11 @@ pub fn normalize_for_docker_path(path: PathBuf) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::normalize_for_docker_path;
     #[cfg(target_os = "windows")]
     #[test]
     fn test_normalize_for_docker_path() {
         use std::path::PathBuf;
+        use super::normalize_for_docker_path;
         assert_eq!(
             normalize_for_docker_path(PathBuf::from("C:/Users/John/Documents/test.txt")),
             "//c/Users/John/Documents/test.txt".to_string()
