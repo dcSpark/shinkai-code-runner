@@ -12,7 +12,8 @@ use tokio::{
 use toml_edit::DocumentMut;
 
 use crate::tools::{
-    check_utils::normalize_error_message, execution_error::ExecutionError, file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, run_result::RunResult
+    check_utils::normalize_error_message, execution_error::ExecutionError,
+    file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, run_result::RunResult,
 };
 
 use super::{
@@ -204,8 +205,9 @@ requires-python = ">=3.10"
     }
 
     pub async fn check(&self) -> anyhow::Result<Vec<String>> {
-        let execution_storage =
-            ExecutionStorage::new(self.code.clone(), self.options.context.clone());
+        let mut code = Self::extend_with_pyproject_toml(self.code.clone())
+            .map_err(|e| anyhow::anyhow!("failed to create pyproject.toml: {}", e))?;
+        let execution_storage = ExecutionStorage::new(code.clone(), self.options.context.clone());
         execution_storage.init_for_python(None)?;
 
         let uv_binary_path = path::absolute(self.options.uv_binary_path.clone())
