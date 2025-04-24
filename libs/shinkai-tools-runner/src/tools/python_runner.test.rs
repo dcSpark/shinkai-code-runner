@@ -1412,7 +1412,9 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
     let context_id = nanoid::nanoid!();
     let context = ExecutionContext {
         storage: match (cfg!(windows), runner_type.clone()) {
-            (true, RunnerType::Host) => PathBuf::from("C:/shinkai-tools-runner-execution-storage/storage"),
+            (true, RunnerType::Host) => {
+                PathBuf::from("C:/shinkai-tools-runner-execution-storage/storage")
+            }
             _ => PathBuf::from("./shinkai-tools-runner-execution-storage/storage"),
         },
         context_id: context_id.clone(),
@@ -1443,7 +1445,7 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
             e
         });
     assert!(result.is_ok());
-    
+
     let output_path = context.storage.join(context_id).join("home/output.png");
     assert!(output_path.exists());
 }
@@ -1484,5 +1486,78 @@ output = OUTPUT(success=False, file_path="None")
 
     let check_result = python_runner.check().await.unwrap();
     assert!(!check_result.is_empty());
-    assert!(check_result.iter().any(|err| err.contains("No parameter named \"success\"")));
+    assert!(check_result
+        .iter()
+        .any(|err| err.contains("No parameter named \"success\"")));
+}
+
+#[tokio::test]
+async fn check_code_with_third_party_library() {
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            String::from(
+                r#"
+# /// script
+# requires-python = ">=3.10,<3.12"
+# dependencies = [
+#   "requests",
+#   "faster-whisper",
+# ]
+# ///
+import os
+from faster_whisper import WhisperModel
+
+class CONFIG:
+    # configure model-size / device via these fields if you like
+    model_name: str = "base"      # "tiny" | "small" | "medium" | "large-v2" ...
+    device: str = "cpu"           # "cuda" or "cpu"
+    compute_type: str = "float32" # "int8"  | "float16" | "float32"
+    # int8 = fastest CPU; float16 = fastest GPU
+
+class INPUTS:
+    audio_file_path: str
+
+class OUTPUT:
+    transcript: str
+
+async def run(config: CONFIG, inputs: INPUTS) -> OUTPUT:
+    if not os.path.exists(inputs.audio_file_path):
+        raise FileNotFoundError(f"Audio file not found: {inputs.audio_file_path}")
+
+    # initialise faster-whisper
+    model = WhisperModel(
+        config.model_name,
+        device=config.device,
+        compute_type=config.compute_type,
+    )
+
+    # transcribe and concatenate segment texts
+    segments, _ = model.transcribe(inputs.audio_file_path)
+    transcription: str = "".join(seg.text for seg in segments).strip()
+
+    out = OUTPUT()
+    out.transcript = transcription
+    return out
+                "#,
+            ),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            ..Default::default()
+        }),
+    );
+
+    let check_result = python_runner.check().await.unwrap();
+    assert!(check_result.is_empty());
 }
