@@ -358,8 +358,9 @@ impl DenoRunner {
 
         log::info!("spawning docker command");
         let mut child = command.spawn().map_err(|e| {
-            log::error!("failed to spawn command: {}", e);
-            e
+            let error_msg = format!("failed to spawn command: {:?}, error: {}", command, e.to_string());
+            log::error!("{}", error_msg);
+            anyhow::anyhow!("{}", error_msg)
         })?;
 
         let stdout = child.stdout.take().expect("Failed to get stdout");
@@ -534,8 +535,9 @@ impl DenoRunner {
         }
         log::info!("prepared command with arguments: {:?}", command);
         let mut child = command.spawn().map_err(|e| {
-            log::error!("failed to spawn command: {}", e);
-            e
+            let error_msg = format!("failed to spawn command: {:?} error: {}", command, e.to_string());
+            log::error!("{}", error_msg);
+            anyhow::anyhow!("{}", error_msg)
         })?;
 
         let stdout = child.stdout.take().expect("Failed to get stdout");

@@ -1284,7 +1284,7 @@ async fn override_python_version(#[case] runner_type: RunnerType) {
             "main.py".to_string(),
             r#"
 # /// script
-# requires-python = "==3.10"
+# requires-python = "==3.10.*"
 # ///
 import sys
 
@@ -1560,4 +1560,236 @@ async def run(config: CONFIG, inputs: INPUTS) -> OUTPUT:
 
     let check_result = python_runner.check().await.unwrap();
     assert!(check_result.is_empty());
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
+#[tokio::test]
+async fn print_with_python_3_8(#[case] runner_type: RunnerType) {
+    use std::path::PathBuf;
+
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+# /// script
+# requires-python = ">=3.8,<=3.9"
+# dependencies = [
+#   "requests",
+# ]
+# ///
+import requests
+import sys
+import os
+
+class CONFIG:
+    pass
+
+class INPUTS:
+    pass
+
+class OUTPUT:
+    pass
+
+async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
+    print(f"Python version: {sys.version}")
+   
+    "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let context_id = nanoid::nanoid!();
+    let context = ExecutionContext {
+        storage: match (cfg!(windows), runner_type.clone()) {
+            (true, RunnerType::Host) => {
+                PathBuf::from("C:/shinkai-tools-runner-execution-storage/storage")
+            }
+            _ => PathBuf::from("./shinkai-tools-runner-execution-storage/storage"),
+        },
+        context_id: context_id.clone(),
+        ..Default::default()
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            context: context.clone(),
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(None, serde_json::Value::Null, None)
+        .await
+        .map_err(|e| {
+            log::error!("Failed to run python code: {}", e);
+            e
+        });
+    assert!(result.is_ok());
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::docker(RunnerType::Docker)]
+#[tokio::test]
+async fn override_tool_uv_fields(#[case] runner_type: RunnerType) {
+    use std::path::PathBuf;
+
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+# /// script
+# requires-python = "==3.12.*"
+# dependencies = [
+#   "nari-tts @ git+https://github.com/nari-labs/dia",
+# ]
+# [[tool.uv.index]]
+# name = "pytorch-cpu"
+# url = "https://download.pytorch.org/whl/cpu"
+# explicit = true
+# [tool.uv.sources]
+# torch = [
+#   { index = "pytorch-cpu" },
+# ]
+# torchvision = [
+#   { index = "pytorch-cpu" },
+# ]
+# [tool.setuptools.packages.find]
+# where = ["."]
+# include = ["dia"]
+# namespaces = false
+# ///
+import requests
+import sys
+import os
+
+class CONFIG:
+    pass
+
+class INPUTS:
+    pass
+
+class OUTPUT:
+    pass
+
+async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
+    print(f"Python version: {sys.version}")
+   
+    "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let context_id = nanoid::nanoid!();
+    let execution_id = nanoid::nanoid!();
+    let code_id = nanoid::nanoid!();
+    let context = ExecutionContext {
+        storage: match (cfg!(windows), runner_type.clone()) {
+            (true, RunnerType::Host) => {
+                PathBuf::from("C:/shinkai-tools-runner-execution-storage/storage")
+            }
+            _ => PathBuf::from("./shinkai-tools-runner-execution-storage/storage"),
+        },
+        context_id: context_id.clone(),
+        execution_id: execution_id.clone(),
+        code_id: code_id.clone(),
+        ..Default::default()
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            context: context.clone(),
+            force_runner_type: Some(runner_type),
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(None, serde_json::Value::Null, None)
+        .await
+        .map_err(|e| {
+            log::error!("Failed to run python code: {}", e);
+            e
+        });
+    assert!(result.is_ok());
+
+    let pyproject_toml_path = context.storage.join(context_id).join("code").join(code_id).join("pyproject.toml");
+    println!("pyproject_toml_path: {:?}", pyproject_toml_path);
+    assert!(pyproject_toml_path.exists());
+    let pyproject_toml_content = std::fs::read_to_string(pyproject_toml_path).unwrap();
+    assert!(pyproject_toml_content.contains("[tool.setuptools.packages.find]"));
+    assert!(pyproject_toml_content.contains("where = [\".\""));
+    assert!(pyproject_toml_content.contains("include = [\"dia\"]"));
+    assert!(pyproject_toml_content.contains("namespaces = false"));
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[tokio::test]
+async fn run_with_wrong_binary_error_message(#[case] runner_type: RunnerType) {
+    use std::path::PathBuf;
+
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+import sys
+import os
+
+class CONFIG:
+    pass
+
+class INPUTS:
+    pass
+
+class OUTPUT:
+    pass
+
+async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
+    return {"message": "hello world"}
+            "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        Value::Null,
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            uv_binary_path: PathBuf::from("/uvpotato"),
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(None, serde_json::Value::Null, None)
+        .await;
+    assert!(result.is_err());
+    assert!(result.unwrap_err().message().contains("uvpotato"));
 }

@@ -1350,3 +1350,44 @@ async fn check_file_names_are_normalized() {
         .any(|line| line.contains("\"./libraries/axios\"")));
     assert!(result.iter().any(|line| line.contains(" ./main.ts")));
 }
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[tokio::test]
+async fn run_with_wrong_binary_error_message(#[case] runner_type: RunnerType) {
+    use std::path::PathBuf;
+
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.ts".to_string(),
+            r#"
+                async function run(configurations, params) {
+                    return { message: "hello world" };
+                }
+            "#
+            .to_string(),
+        )]),
+        entrypoint: "main.ts".to_string(),
+    };
+
+    let deno_runner = DenoRunner::new(
+        code_files,
+        json!({}),
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            deno_binary_path: PathBuf::from("/denopotato"),
+            ..Default::default()
+        }),
+    );
+
+    let result = deno_runner
+        .run(None, json!({}), None)
+        .await;
+    assert!(result.is_err());
+    assert!(result.unwrap_err().message().contains("denopotato"));
+}

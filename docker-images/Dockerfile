@@ -25,6 +25,7 @@ WORKDIR /app
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="${HOME}/.local/bin:${PATH}"
+RUN uv python install 3.8 3.9 3.10 3.11 3.12 3.13 3.14
 RUN source $HOME/.local/bin/env && uv venv --seed cache/python-venv --python 3.13 && source cache/python-venv/bin/activate && uv pip install pipreqs && uv tool install ruff
 
 ENTRYPOINT ["/tini", "--"]

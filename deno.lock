@@ -25,10 +25,10 @@
     "npm:@coinbase/coinbase-sdk@^0.0.16": "0.0.16_axios@1.7.7",
     "npm:@nestjs/axios@^3.0.3": "3.1.0_@nestjs+common@10.4.6__reflect-metadata@0.2.2__rxjs@7.8.1_axios@1.7.7_rxjs@7.8.1_reflect-metadata@0.2.2",
     "npm:@nx/eslint-plugin@^19.3.1": "19.8.8_@typescript-eslint+parser@7.18.0__eslint@8.57.1__typescript@5.6.3_eslint-config-prettier@9.1.0__eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_eslint@8.57.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc+helpers@0.5.13",
-    "npm:@nx/eslint@^19.3.1": "19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13",
-    "npm:@nx/jest@^19.3.1": "19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
+    "npm:@nx/eslint@^19.3.1": "19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+    "npm:@nx/jest@^19.3.1": "19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13_@types+node@20.17.0",
     "npm:@nx/js@19.3.1": "19.3.1_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
-    "npm:@nx/linter@^19.3.1": "19.8.4_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+helpers@0.5.13",
+    "npm:@nx/linter@^19.3.1": "19.8.4_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+helpers@0.5.13_typescript@5.6.3",
     "npm:@rollup/plugin-typescript@*": "12.1.1_rollup@4.24.3_tslib@2.8.0_typescript@5.6.3",
     "npm:@swc-node/register@~1.9.1": "1.9.2_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
     "npm:@swc/core@~1.5.7": "1.5.29_@swc+helpers@0.5.13",
@@ -56,6 +56,7 @@
     "npm:copyfiles@^2.4.1": "2.4.1",
     "npm:cpy-cli@5": "5.0.0",
     "npm:crypto-browserify@^3.12.0": "3.12.1",
+    "npm:duck-duck-scrape@*": "2.2.7",
     "npm:enhanced-resolve@^4.5.0": "4.5.0",
     "npm:esbuild@*": "0.24.0",
     "npm:esbuild@0.23": "0.23.1",
@@ -70,7 +71,7 @@
     "npm:fastify@^4.28.1": "4.28.1",
     "npm:fs@*": "0.0.1-security",
     "npm:jest-environment-jsdom@^29.4.1": "29.7.0",
-    "npm:jest@^29.4.1": "29.7.0_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+    "npm:jest@^29.4.1": "29.7.0_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0",
     "npm:lodash@*": "4.17.21",
     "npm:lodash@^4.17.21": "4.17.21",
     "npm:micro-eth-signer@*": "0.10.0",
@@ -106,7 +107,7 @@
     "npm:rxjs@^7.8.1": "7.8.1",
     "npm:stream-browserify@3": "3.0.0",
     "npm:text-encoding-utf-8@^1.0.2": "1.0.2",
-    "npm:ts-jest@^29.1.0": "29.2.5_jest@29.7.0__ts-node@10.9.1___@swc+core@1.5.29____@swc+helpers@0.5.13___@types+node@22.5.4___typescript@5.6.3___@swc+helpers@0.5.13__@types+node@22.5.4__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
+    "npm:ts-jest@^29.1.0": "29.2.5_jest@29.7.0__ts-node@10.9.1___@swc+core@1.5.29____@swc+helpers@0.5.13___@types+node@22.5.4___typescript@5.6.3___@swc+helpers@0.5.13__@types+node@22.5.4__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13_@types+node@20.17.0",
     "npm:ts-loader@^9.5.1": "9.5.1_typescript@5.6.3_webpack@5.95.0__acorn@8.14.0",
     "npm:ts-node-dev@2": "2.0.0_typescript@5.6.3_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+helpers@0.5.13",
     "npm:ts-node@10.9.1": "10.9.1_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc+helpers@0.5.13",
@@ -1366,6 +1367,12 @@
     "@eslint/compat@1.2.2": {
       "integrity": "sha512-jhgiIrsw+tRfcBQ4BFl2C3vCrIUw2trCY0cnDvGZpwTtKCEDmZhAtMfrEUP/KpnwM6PrO0T+Ltm+ccW74olG3Q=="
     },
+    "@eslint/compat@1.2.2_eslint@8.57.1": {
+      "integrity": "sha512-jhgiIrsw+tRfcBQ4BFl2C3vCrIUw2trCY0cnDvGZpwTtKCEDmZhAtMfrEUP/KpnwM6PrO0T+Ltm+ccW74olG3Q==",
+      "dependencies": [
+        "eslint"
+      ]
+    },
     "@eslint/eslintrc@2.1.4": {
       "integrity": "sha512-269Z39MS6wVJtsoUl10L60WdkhJVdPG24Q4eZTH3nnF6lpvSShEK3wQjDX9JRWAUPvPh7COouPpU9IrqaZFvtQ==",
       "dependencies": [
@@ -1386,8 +1393,8 @@
     "@fastify/ajv-compiler@3.6.0_ajv@8.17.1": {
       "integrity": "sha512-LwdXQJjmMD+GwLOkP7TVC68qa+pSSogeWWmznRJ/coyTcfe9qA05AHFSe1eZFwK6q+xVRpChnvFUkf1iYaSZsQ==",
       "dependencies": [
-        "ajv@8.17.1",
         "ajv-formats@2.1.1_ajv@8.17.1",
+        "ajv@8.17.1",
         "fast-uri@2.4.0"
       ]
     },
@@ -1459,7 +1466,7 @@
         "exit",
         "graceful-fs",
         "jest-changed-files",
-        "jest-config",
+        "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
         "jest-haste-map",
         "jest-message-util",
         "jest-regex-util",
@@ -1737,16 +1744,34 @@
         "@nx/devkit@19.8.4_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13"
       ]
     },
+    "@nrwl/devkit@19.8.4_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-OoIqDjj2mWzLs3aSF6w5OiC2xywYi/jBxHc7t7Lyi56Vc4dQq8vJMELa9WtG6qH0k05fF7N+jAoKlfvLgbbEFA==",
+      "dependencies": [
+        "@nx/devkit@19.8.4_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
+      ]
+    },
     "@nrwl/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-OoIqDjj2mWzLs3aSF6w5OiC2xywYi/jBxHc7t7Lyi56Vc4dQq8vJMELa9WtG6qH0k05fF7N+jAoKlfvLgbbEFA==",
       "dependencies": [
         "@nx/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13"
       ]
     },
+    "@nrwl/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-OoIqDjj2mWzLs3aSF6w5OiC2xywYi/jBxHc7t7Lyi56Vc4dQq8vJMELa9WtG6qH0k05fF7N+jAoKlfvLgbbEFA==",
+      "dependencies": [
+        "@nx/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
+      ]
+    },
     "@nrwl/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-eikVLG60Zj4vA+mMs+ctH3JhwWYMMwNIelMT+7o7/QRn+ZAJK75EVRhSOQXly4jnRMno++ltIlsaTXxq3uhlrw==",
       "dependencies": [
         "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13"
+      ]
+    },
+    "@nrwl/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-eikVLG60Zj4vA+mMs+ctH3JhwWYMMwNIelMT+7o7/QRn+ZAJK75EVRhSOQXly4jnRMno++ltIlsaTXxq3uhlrw==",
+      "dependencies": [
+        "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
       ]
     },
     "@nrwl/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13": {
@@ -1759,6 +1784,12 @@
       "integrity": "sha512-eikVLG60Zj4vA+mMs+ctH3JhwWYMMwNIelMT+7o7/QRn+ZAJK75EVRhSOQXly4jnRMno++ltIlsaTXxq3uhlrw==",
       "dependencies": [
         "@nx/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13"
+      ]
+    },
+    "@nrwl/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-eikVLG60Zj4vA+mMs+ctH3JhwWYMMwNIelMT+7o7/QRn+ZAJK75EVRhSOQXly4jnRMno++ltIlsaTXxq3uhlrw==",
+      "dependencies": [
+        "@nx/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
       ]
     },
     "@nrwl/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13": {
@@ -1776,7 +1807,13 @@
     "@nrwl/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13": {
       "integrity": "sha512-CtKywLhuYWJ06uxqm7RmW2Sfk0vJDsQg1XHhEQVrqps/XbnkMvu89+Uq3+bauikpuJkSRAsLKVISaj2giw25Yg==",
       "dependencies": [
-        "@nx/jest"
+        "@nx/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13"
+      ]
+    },
+    "@nrwl/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-CtKywLhuYWJ06uxqm7RmW2Sfk0vJDsQg1XHhEQVrqps/XbnkMvu89+Uq3+bauikpuJkSRAsLKVISaj2giw25Yg==",
+      "dependencies": [
+        "@nx/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13_@types+node@20.17.0"
       ]
     },
     "@nrwl/js@19.3.1_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13": {
@@ -1791,10 +1828,22 @@
         "@nx/js@19.8.4_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13"
       ]
     },
+    "@nrwl/js@19.8.4_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-XuPOJc77waJ3zgg42zntTy5eGCKTc6EjVvRVdUSf1iXWaMHAsknPjb4kz16iwdGhoRMQpZxHRr1KjY5WmcWq0A==",
+      "dependencies": [
+        "@nx/js@19.8.4_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3"
+      ]
+    },
     "@nrwl/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13": {
       "integrity": "sha512-k9DtDoTiBzPvUSij+Wa35kkawaIZh36ErKm4ZL1sGkaBdsQ8uKVjyO8n+iGjj5GftBsh01prpCgom9n1qrtPaw==",
       "dependencies": [
         "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13"
+      ]
+    },
+    "@nrwl/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-k9DtDoTiBzPvUSij+Wa35kkawaIZh36ErKm4ZL1sGkaBdsQ8uKVjyO8n+iGjj5GftBsh01prpCgom9n1qrtPaw==",
+      "dependencies": [
+        "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3"
       ]
     },
     "@nrwl/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13": {
@@ -1824,10 +1873,24 @@
         "tslib@2.8.0"
       ]
     },
+    "@nrwl/tao@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-03/+QZ4/6HmKbEmvzCutLI1XIclBspNYtiVHmGPRWuwhnZViqYfnyl8J7RWVdFEoKKA5fhJqpg7e28aGuoMBvQ==",
+      "dependencies": [
+        "nx@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "tslib@2.8.0"
+      ]
+    },
     "@nrwl/tao@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-TJ6NoI7pbdov8v/+QzW8toDLH1u2DNCMvwhNOx29bBPG0ycugmR+g2EqixujBgM1BeBQN99Fqi1ZR/ZOuHkemQ==",
       "dependencies": [
         "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13",
+        "tslib@2.8.0"
+      ]
+    },
+    "@nrwl/tao@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-TJ6NoI7pbdov8v/+QzW8toDLH1u2DNCMvwhNOx29bBPG0ycugmR+g2EqixujBgM1BeBQN99Fqi1ZR/ZOuHkemQ==",
+      "dependencies": [
+        "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
         "tslib@2.8.0"
       ]
     },
@@ -1850,10 +1913,22 @@
         "@nx/workspace@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13"
       ]
     },
+    "@nrwl/workspace@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-ZdzVMuVDkD5nYRXkvBIZe6yUTcbllYanoIh38a7l3MfPqw+2cFY2Cr9uPNfH3LXpzZYgKcr4vffYWwLXeIwbjw==",
+      "dependencies": [
+        "@nx/workspace@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
+      ]
+    },
     "@nrwl/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-O2KTVeswxQ8pSxjod0GJyVPM3SGXqxPasQ/rx3neOUvoL9ke38vNlsp+ldCgQ3BwXlwpaH3wmjwROWFs3e7YHw==",
       "dependencies": [
         "@nx/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13"
+      ]
+    },
+    "@nrwl/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-O2KTVeswxQ8pSxjod0GJyVPM3SGXqxPasQ/rx3neOUvoL9ke38vNlsp+ldCgQ3BwXlwpaH3wmjwROWFs3e7YHw==",
+      "dependencies": [
+        "@nx/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
       ]
     },
     "@nrwl/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13": {
@@ -1892,6 +1967,21 @@
         "yargs-parser@21.1.1"
       ]
     },
+    "@nx/devkit@19.8.4_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-FPFT8gVDFRSEmU0n7nRkT4Rnqy7OMznfPXLfDZtVuzEi5Cl6ftG3UBUvCgJcJFCYJVAZAUuv6vRSRarHd51XFQ==",
+      "dependencies": [
+        "@nrwl/devkit@19.8.4_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "ejs",
+        "enquirer",
+        "ignore",
+        "minimatch@9.0.3",
+        "nx@19.3.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_typescript@5.4.5",
+        "semver@7.6.3",
+        "tmp",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1"
+      ]
+    },
     "@nx/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-FPFT8gVDFRSEmU0n7nRkT4Rnqy7OMznfPXLfDZtVuzEi5Cl6ftG3UBUvCgJcJFCYJVAZAUuv6vRSRarHd51XFQ==",
       "dependencies": [
@@ -1907,10 +1997,40 @@
         "yargs-parser@21.1.1"
       ]
     },
+    "@nx/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-FPFT8gVDFRSEmU0n7nRkT4Rnqy7OMznfPXLfDZtVuzEi5Cl6ftG3UBUvCgJcJFCYJVAZAUuv6vRSRarHd51XFQ==",
+      "dependencies": [
+        "@nrwl/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "ejs",
+        "enquirer",
+        "ignore",
+        "minimatch@9.0.3",
+        "nx@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "semver@7.6.3",
+        "tmp",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1"
+      ]
+    },
     "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-JZtx+2J/9g4OCaNWNxW2udGxEtje0RZ75pybK4ZieiIQVXPsrInN/bpSJSEWW3xt90GlsaFPif39rBkmy6uoHg==",
       "dependencies": [
         "@nrwl/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13",
+        "ejs",
+        "enquirer",
+        "ignore",
+        "minimatch@9.0.3",
+        "nx@19.3.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_typescript@5.4.5",
+        "semver@7.6.3",
+        "tmp",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1"
+      ]
+    },
+    "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-JZtx+2J/9g4OCaNWNxW2udGxEtje0RZ75pybK4ZieiIQVXPsrInN/bpSJSEWW3xt90GlsaFPif39rBkmy6uoHg==",
+      "dependencies": [
+        "@nrwl/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
         "ejs",
         "enquirer",
         "ignore",
@@ -1952,6 +2072,21 @@
         "yargs-parser@21.1.1"
       ]
     },
+    "@nx/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-JZtx+2J/9g4OCaNWNxW2udGxEtje0RZ75pybK4ZieiIQVXPsrInN/bpSJSEWW3xt90GlsaFPif39rBkmy6uoHg==",
+      "dependencies": [
+        "@nrwl/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "ejs",
+        "enquirer",
+        "ignore",
+        "minimatch@9.0.3",
+        "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "semver@7.6.3",
+        "tmp",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1"
+      ]
+    },
     "@nx/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13": {
       "integrity": "sha512-JZtx+2J/9g4OCaNWNxW2udGxEtje0RZ75pybK4ZieiIQVXPsrInN/bpSJSEWW3xt90GlsaFPif39rBkmy6uoHg==",
       "dependencies": [
@@ -1970,7 +2105,7 @@
     "@nx/eslint-plugin@19.8.8_@typescript-eslint+parser@7.18.0__eslint@8.57.1__typescript@5.6.3_eslint-config-prettier@9.1.0__eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_eslint@8.57.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc+helpers@0.5.13": {
       "integrity": "sha512-SxFCNqXMlGYc2P7ES6GQ8gcY17V5pBpenEwqEXdq1aUgWMqquqYUFKHd2rVcBKA5DinD+dKvOwZwZeuM+7ZI5g==",
       "dependencies": [
-        "@eslint/compat",
+        "@eslint/compat@1.2.2_eslint@8.57.1",
         "@nrwl/eslint-plugin-nx",
         "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
         "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
@@ -1998,6 +2133,18 @@
         "typescript@5.4.5"
       ]
     },
+    "@nx/eslint@19.8.4_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-gJGtYd9ThKSM1pbV/iG/PGwtVKg1PwjAly2AjgebYmAey+hgxzwgjQy84Lf+FdkKNUQZjB0sYaKCw26oKXXYaA==",
+      "dependencies": [
+        "@nx/devkit@19.8.4_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/js@19.8.4_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/linter@19.8.4_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+helpers@0.5.13_typescript@5.6.3",
+        "eslint",
+        "semver@7.6.3",
+        "tslib@2.8.0",
+        "typescript@5.4.5"
+      ]
+    },
     "@nx/eslint@19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-g6tJCC6GMxWujDufv9mjOw6gFvMqhAvQecsqN5/ilxBA1nWkdcUUqS0y9KMHwfwmg8CEGmu89PydxpKzvqNNDg==",
       "dependencies": [
@@ -2010,18 +2157,51 @@
         "typescript@5.4.5"
       ]
     },
+    "@nx/eslint@19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-g6tJCC6GMxWujDufv9mjOw6gFvMqhAvQecsqN5/ilxBA1nWkdcUUqS0y9KMHwfwmg8CEGmu89PydxpKzvqNNDg==",
+      "dependencies": [
+        "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/linter@19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "eslint",
+        "semver@7.6.3",
+        "tslib@2.8.0",
+        "typescript@5.4.5"
+      ]
+    },
     "@nx/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13": {
       "integrity": "sha512-CU1FnXj/6xSgzb2IF/OExlFYVqzpxvOAXNnAy327su13lhVKR5MLmk8RhSzx67l9kn7B5lD6c95cqqnIa0KZpA==",
       "dependencies": [
         "@jest/reporters",
         "@jest/test-result",
-        "@nrwl/jest",
+        "@nrwl/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
         "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
         "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
         "@phenomnomnominal/tsquery",
         "chalk",
         "identity-obj-proxy",
-        "jest-config",
+        "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "jest-resolve",
+        "jest-util",
+        "minimatch@9.0.3",
+        "resolve.exports@1.1.0",
+        "semver@7.6.3",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1"
+      ]
+    },
+    "@nx/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-CU1FnXj/6xSgzb2IF/OExlFYVqzpxvOAXNnAy327su13lhVKR5MLmk8RhSzx67l9kn7B5lD6c95cqqnIa0KZpA==",
+      "dependencies": [
+        "@jest/reporters",
+        "@jest/test-result",
+        "@nrwl/jest@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13_@types+node@20.17.0",
+        "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
+        "@phenomnomnominal/tsquery",
+        "chalk",
+        "identity-obj-proxy",
+        "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0",
         "jest-resolve",
         "jest-util",
         "minimatch@9.0.3",
@@ -2100,6 +2280,41 @@
         "tslib@2.8.0"
       ]
     },
+    "@nx/js@19.8.4_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-rBiBi0A9NsxA5cnMcDRXllNXFJYjk+YiNP4T5e+GmqHmicjRjF+mORrhQ4zBZXvZwS2O+ZO9iBOZX41IVqzFaw==",
+      "dependencies": [
+        "@babel/core",
+        "@babel/plugin-proposal-decorators",
+        "@babel/plugin-transform-class-properties",
+        "@babel/plugin-transform-runtime",
+        "@babel/preset-env",
+        "@babel/preset-typescript",
+        "@babel/runtime",
+        "@nrwl/js@19.8.4_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/devkit@19.8.4_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/workspace@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "babel-plugin-const-enum",
+        "babel-plugin-macros",
+        "babel-plugin-transform-typescript-metadata",
+        "chalk",
+        "columnify",
+        "detect-port",
+        "enquirer",
+        "fast-glob@3.2.7",
+        "ignore",
+        "js-tokens",
+        "jsonc-parser",
+        "minimatch@9.0.3",
+        "npm-package-arg",
+        "npm-run-path",
+        "ora",
+        "semver@7.6.3",
+        "source-map-support@0.5.19",
+        "ts-node@10.9.1_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13",
+        "tsconfig-paths@4.2.0",
+        "tslib@2.8.0"
+      ]
+    },
     "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13": {
       "integrity": "sha512-LFBa3gi0qEOKkDlTzPLUowzTV6VHfaDXv2YrQptbtKhRf57f3T4Q/aVf8cy1Nk4JDbfryFINis/X7j03dQxdMA==",
       "dependencies": [
@@ -2113,6 +2328,41 @@
         "@nrwl/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13",
         "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13",
         "@nx/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13",
+        "babel-plugin-const-enum",
+        "babel-plugin-macros",
+        "babel-plugin-transform-typescript-metadata",
+        "chalk",
+        "columnify",
+        "detect-port",
+        "enquirer",
+        "fast-glob@3.2.7",
+        "ignore",
+        "js-tokens",
+        "jsonc-parser",
+        "minimatch@9.0.3",
+        "npm-package-arg",
+        "npm-run-path",
+        "ora",
+        "semver@7.6.3",
+        "source-map-support@0.5.19",
+        "ts-node@10.9.1_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13",
+        "tsconfig-paths@4.2.0",
+        "tslib@2.8.0"
+      ]
+    },
+    "@nx/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-LFBa3gi0qEOKkDlTzPLUowzTV6VHfaDXv2YrQptbtKhRf57f3T4Q/aVf8cy1Nk4JDbfryFINis/X7j03dQxdMA==",
+      "dependencies": [
+        "@babel/core",
+        "@babel/plugin-proposal-decorators",
+        "@babel/plugin-transform-class-properties",
+        "@babel/plugin-transform-runtime",
+        "@babel/preset-env",
+        "@babel/preset-typescript",
+        "@babel/runtime",
+        "@nrwl/js@19.8.8_@babel+core@7.26.0_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/devkit@19.8.8_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
         "babel-plugin-const-enum",
         "babel-plugin-macros",
         "babel-plugin-transform-typescript-metadata",
@@ -2176,10 +2426,22 @@
         "@nx/eslint@19.8.4_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13"
       ]
     },
+    "@nx/linter@19.8.4_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-aK6Bic/iup5nkZDFQgBgilgtqfjuy+dT0agnE6HEdXKOIR++LJXpka5nrJ9VNNglp22DrFtBDAH/hfRpIwm8uw==",
+      "dependencies": [
+        "@nx/eslint@19.8.4_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
+      ]
+    },
     "@nx/linter@19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-gbbYZuQLxv9BtWC0asyvkkPgr1jkgxFkPihTzEjN5JgriuxD3bXEqBiu9yAaWB1wR8nZZJBqugVHeJ08hP7AnA==",
       "dependencies": [
         "@nx/eslint@19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13"
+      ]
+    },
+    "@nx/linter@19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-gbbYZuQLxv9BtWC0asyvkkPgr1jkgxFkPihTzEjN5JgriuxD3bXEqBiu9yAaWB1wR8nZZJBqugVHeJ08hP7AnA==",
+      "dependencies": [
+        "@nx/eslint@19.8.8_eslint@8.57.1_nx@19.3.1__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3"
       ]
     },
     "@nx/nx-darwin-arm64@19.3.1": {
@@ -2296,6 +2558,18 @@
         "yargs-parser@21.1.1"
       ]
     },
+    "@nx/workspace@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-ub4nD2klOj00onF1KrNXIlLB9hXN9ybHs7XSP9YW+52qz79KaJWJm46ebTqeLnDZApYbAcB0vSCp2+kaEV24Ew==",
+      "dependencies": [
+        "@nrwl/workspace@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/devkit@19.8.4_nx@19.8.4__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "chalk",
+        "enquirer",
+        "nx@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1"
+      ]
+    },
     "@nx/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
       "integrity": "sha512-CvD2fSTSt148yJagZVmGjyNIZ+q3IxPfVyAn+imH1Lui+rHz/6aijWWsAgIE62UKkNxBXyG4AV5N//y3Snv+mw==",
       "dependencies": [
@@ -2304,6 +2578,18 @@
         "chalk",
         "enquirer",
         "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1"
+      ]
+    },
+    "@nx/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-CvD2fSTSt148yJagZVmGjyNIZ+q3IxPfVyAn+imH1Lui+rHz/6aijWWsAgIE62UKkNxBXyG4AV5N//y3Snv+mw==",
+      "dependencies": [
+        "@nrwl/workspace@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/devkit@19.8.8_nx@19.8.8__@swc-node+register@1.9.2___@swc+core@1.5.29____@swc+helpers@0.5.13___typescript@5.6.3___@swc+helpers@0.5.13__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.4.5__@swc+helpers@0.5.13_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "chalk",
+        "enquirer",
+        "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
         "tslib@2.8.0",
         "yargs-parser@21.1.1"
       ]
@@ -3894,7 +4180,19 @@
         "chalk",
         "exit",
         "graceful-fs",
-        "jest-config",
+        "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "jest-util",
+        "prompts"
+      ]
+    },
+    "create-jest@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-Adz2bdH0Vq3F53KEMJOoftQFutWCukm6J24wbPWRO4k1kMY7gS7ds/uoJkNuV8wDCtWWnuwGcJwpWcih+zEW1Q==",
+      "dependencies": [
+        "@jest/types",
+        "chalk",
+        "exit",
+        "graceful-fs",
+        "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0",
         "jest-util",
         "prompts"
       ]
@@ -4113,6 +4411,13 @@
     "dotenv@16.4.5": {
       "integrity": "sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg=="
     },
+    "duck-duck-scrape@2.2.7": {
+      "integrity": "sha512-BEcglwnfx5puJl90KQfX+Q2q5vCguqyMpZcSRPBWk8OY55qWwV93+E+7DbIkrGDW4qkqPfUvtOUdi0lXz6lEMQ==",
+      "dependencies": [
+        "html-entities",
+        "needle"
+      ]
+    },
     "duplexer@0.1.2": {
       "integrity": "sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg=="
     },
@@ -4292,15 +4597,15 @@
       "integrity": "sha512-VVNz/9Sa0bs5SELtn3f7qhJCDPCF5oMEl5cO9/SSinpE9hbPVvxbd572HH5AKiP7WD8INO53GgfDDhRjkylHEg==",
       "dependencies": [
         "@esbuild/aix-ppc64@0.23.1",
-        "@esbuild/android-arm@0.23.1",
         "@esbuild/android-arm64@0.23.1",
+        "@esbuild/android-arm@0.23.1",
         "@esbuild/android-x64@0.23.1",
         "@esbuild/darwin-arm64@0.23.1",
         "@esbuild/darwin-x64@0.23.1",
         "@esbuild/freebsd-arm64@0.23.1",
         "@esbuild/freebsd-x64@0.23.1",
-        "@esbuild/linux-arm@0.23.1",
         "@esbuild/linux-arm64@0.23.1",
+        "@esbuild/linux-arm@0.23.1",
         "@esbuild/linux-ia32@0.23.1",
         "@esbuild/linux-loong64@0.23.1",
         "@esbuild/linux-mips64el@0.23.1",
@@ -4321,15 +4626,15 @@
       "integrity": "sha512-FuLPevChGDshgSicjisSooU0cemp/sGXR841D5LHMB7mTVOmsEHcAxaH3irL53+8YDIeVNQEySh4DaYU/iuPqQ==",
       "dependencies": [
         "@esbuild/aix-ppc64@0.24.0",
-        "@esbuild/android-arm@0.24.0",
         "@esbuild/android-arm64@0.24.0",
+        "@esbuild/android-arm@0.24.0",
         "@esbuild/android-x64@0.24.0",
         "@esbuild/darwin-arm64@0.24.0",
         "@esbuild/darwin-x64@0.24.0",
         "@esbuild/freebsd-arm64@0.24.0",
         "@esbuild/freebsd-x64@0.24.0",
-        "@esbuild/linux-arm@0.24.0",
         "@esbuild/linux-arm64@0.24.0",
+        "@esbuild/linux-arm@0.24.0",
         "@esbuild/linux-ia32@0.24.0",
         "@esbuild/linux-loong64@0.24.0",
         "@esbuild/linux-mips64el@0.24.0",
@@ -4619,8 +4924,8 @@
       "integrity": "sha512-KAdnLvy1yu/XrRtP+LJnxbBGrhN+xXu+gt3EUvZhYGKCr3lFHq/7UFJHHFgmJKoqlh6B40bZLEv7w46B0mqn1g==",
       "dependencies": [
         "@fastify/merge-json-schemas",
-        "ajv@8.17.1",
         "ajv-formats@3.0.1_ajv@8.17.1",
+        "ajv@8.17.1",
         "fast-deep-equal",
         "fast-uri@2.4.0",
         "json-schema-ref-resolver",
@@ -5038,6 +5343,9 @@
         "whatwg-encoding"
       ]
     },
+    "html-entities@2.6.0": {
+      "integrity": "sha512-kig+rMn/QOVRvr7c86gQ8lWXq+Hkv6CbAH1hLu+RG338StTpE8Z0b44SDVaqVu7HGKf27frdmUYEs9hTUX/cLQ=="
+    },
     "html-escaper@2.0.2": {
       "integrity": "sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg=="
     },
@@ -5439,10 +5747,26 @@
         "@jest/test-result",
         "@jest/types",
         "chalk",
-        "create-jest",
+        "create-jest@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
         "exit",
         "import-local",
-        "jest-config",
+        "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "jest-util",
+        "jest-validate",
+        "yargs@17.7.2"
+      ]
+    },
+    "jest-cli@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-OVVobw2IubN/GSYsxETi+gOe7Ka59EFMR/twOU3Jb2GnKKeMGJB5SGUUrEz3SFVmJASUdZUzy83sLNNQ2gZslg==",
+      "dependencies": [
+        "@jest/core",
+        "@jest/test-result",
+        "@jest/types",
+        "chalk",
+        "create-jest@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0",
+        "exit",
+        "import-local",
+        "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0",
         "jest-util",
         "jest-validate",
         "yargs@17.7.2"
@@ -5475,6 +5799,35 @@
         "slash@3.0.0",
         "strip-json-comments@3.1.1",
         "ts-node@10.9.1_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc+helpers@0.5.13"
+      ]
+    },
+    "jest-config@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@babel+core@7.26.0_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-uXbpfeQ7R6TZBqI3/TxCU4q4ttk3u0PJeC+E0zbfSoSjq6bJ7buBPxzQPL0ifrkY4DNu4JUdk0ImlBUYi840eQ==",
+      "dependencies": [
+        "@babel/core",
+        "@jest/test-sequencer",
+        "@jest/types",
+        "@types/node@20.17.0",
+        "babel-jest",
+        "chalk",
+        "ci-info",
+        "deepmerge",
+        "glob",
+        "graceful-fs",
+        "jest-circus",
+        "jest-environment-node",
+        "jest-get-type",
+        "jest-regex-util",
+        "jest-resolve",
+        "jest-runner",
+        "jest-util",
+        "jest-validate",
+        "micromatch",
+        "parse-json",
+        "pretty-format",
+        "slash@3.0.0",
+        "strip-json-comments@3.1.1",
+        "ts-node@10.9.1_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0"
       ]
     },
     "jest-diff@29.7.0": {
@@ -5750,7 +6103,16 @@
         "@jest/core",
         "@jest/types",
         "import-local",
-        "jest-cli"
+        "jest-cli@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13"
+      ]
+    },
+    "jest@29.7.0_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-NIy3oAFp9shda19hy4HK0HRTWKtPJmGdnvywu01nOqNC2vZg+Z+fvJDxpMQA88eb2I9EcafcdjYgsDthnYTvGw==",
+      "dependencies": [
+        "@jest/core",
+        "@jest/types",
+        "import-local",
+        "jest-cli@29.7.0_@types+node@22.5.4_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0"
       ]
     },
     "js-tokens@4.0.0": {
@@ -6107,6 +6469,13 @@
     "natural-compare@1.4.0": {
       "integrity": "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw=="
     },
+    "needle@3.3.1": {
+      "integrity": "sha512-6k0YULvhpw+RoLNiQCRKOl09Rv1dPLr8hHnVjHqdolKwDrdNyk+Hmrthi4lIGPPz3r39dLx0hsF5s40sZ3Us4Q==",
+      "dependencies": [
+        "iconv-lite",
+        "sax"
+      ]
+    },
     "neo-async@2.6.2": {
       "integrity": "sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw=="
     },
@@ -6226,8 +6595,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv@16.3.2",
         "dotenv-expand@10.0.0",
+        "dotenv@16.3.2",
         "enquirer",
         "figures",
         "flat",
@@ -6249,8 +6618,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs@17.7.2",
-        "yargs-parser@21.1.1"
+        "yargs-parser@21.1.1",
+        "yargs@17.7.2"
       ]
     },
     "nx@19.3.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_typescript@5.4.5": {
@@ -6267,7 +6636,7 @@
         "@nx/nx-linux-x64-musl@19.3.1",
         "@nx/nx-win32-arm64-msvc@19.3.1",
         "@nx/nx-win32-x64-msvc@19.3.1",
-        "@swc-node/register@1.9.2_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_typescript@5.4.5",
+        "@swc-node/register@1.9.2_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
         "@swc/core",
         "@yarnpkg/lockfile",
         "@yarnpkg/parsers",
@@ -6277,8 +6646,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv@16.3.2",
         "dotenv-expand@10.0.0",
+        "dotenv@16.3.2",
         "enquirer",
         "figures",
         "flat",
@@ -6300,8 +6669,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs@17.7.2",
-        "yargs-parser@21.1.1"
+        "yargs-parser@21.1.1",
+        "yargs@17.7.2"
       ]
     },
     "nx@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
@@ -6329,8 +6698,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv@16.4.5",
         "dotenv-expand@11.0.6",
+        "dotenv@16.4.5",
         "enquirer",
         "figures",
         "flat",
@@ -6351,8 +6720,59 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs@17.7.2",
-        "yargs-parser@21.1.1"
+        "yargs-parser@21.1.1",
+        "yargs@17.7.2"
+      ]
+    },
+    "nx@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-fc833c3UKo6kuoG4z0kSKet17yWym3VzcQ+yPWYspxxxd8GFVVk42+9wieyVQDi9YqtKZQ6PdQfSEPm59/M7SA==",
+      "dependencies": [
+        "@napi-rs/wasm-runtime",
+        "@nrwl/tao@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/nx-darwin-arm64@19.8.4",
+        "@nx/nx-darwin-x64@19.8.4",
+        "@nx/nx-freebsd-x64@19.8.4",
+        "@nx/nx-linux-arm-gnueabihf@19.8.4",
+        "@nx/nx-linux-arm64-gnu@19.8.4",
+        "@nx/nx-linux-arm64-musl@19.8.4",
+        "@nx/nx-linux-x64-gnu@19.8.4",
+        "@nx/nx-linux-x64-musl@19.8.4",
+        "@nx/nx-win32-arm64-msvc@19.8.4",
+        "@nx/nx-win32-x64-msvc@19.8.4",
+        "@swc-node/register@1.9.2_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "@swc/core",
+        "@yarnpkg/lockfile",
+        "@yarnpkg/parsers",
+        "@zkochan/js-yaml",
+        "axios",
+        "chalk",
+        "cli-cursor",
+        "cli-spinners",
+        "cliui@8.0.1",
+        "dotenv-expand@11.0.6",
+        "dotenv@16.4.5",
+        "enquirer",
+        "figures",
+        "flat",
+        "front-matter",
+        "ignore",
+        "jest-diff",
+        "jsonc-parser",
+        "lines-and-columns@2.0.3",
+        "minimatch@9.0.3",
+        "node-machine-id",
+        "npm-run-path",
+        "open",
+        "ora",
+        "semver@7.6.3",
+        "string-width",
+        "strong-log-transformer",
+        "tar-stream@2.2.0",
+        "tmp",
+        "tsconfig-paths@4.2.0",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1",
+        "yargs@17.7.2"
       ]
     },
     "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
@@ -6380,8 +6800,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv@16.4.5",
         "dotenv-expand@11.0.6",
+        "dotenv@16.4.5",
         "enquirer",
         "figures",
         "flat",
@@ -6402,8 +6822,59 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs@17.7.2",
-        "yargs-parser@21.1.1"
+        "yargs-parser@21.1.1",
+        "yargs@17.7.2"
+      ]
+    },
+    "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
+      "integrity": "sha512-Qvxy87uX8/Mre+GgXn5+uf3ehMn1mqO35UwJChVGWbuKJUELqrwvDRPfWcXNfwKniBmUL89gtO18OOZigx8YCw==",
+      "dependencies": [
+        "@napi-rs/wasm-runtime",
+        "@nrwl/tao@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3",
+        "@nx/nx-darwin-arm64@19.8.8",
+        "@nx/nx-darwin-x64@19.8.8",
+        "@nx/nx-freebsd-x64@19.8.8",
+        "@nx/nx-linux-arm-gnueabihf@19.8.8",
+        "@nx/nx-linux-arm64-gnu@19.8.8",
+        "@nx/nx-linux-arm64-musl@19.8.8",
+        "@nx/nx-linux-x64-gnu@19.8.8",
+        "@nx/nx-linux-x64-musl@19.8.8",
+        "@nx/nx-win32-arm64-msvc@19.8.8",
+        "@nx/nx-win32-x64-msvc@19.8.8",
+        "@swc-node/register@1.9.2_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "@swc/core",
+        "@yarnpkg/lockfile",
+        "@yarnpkg/parsers",
+        "@zkochan/js-yaml",
+        "axios",
+        "chalk",
+        "cli-cursor",
+        "cli-spinners",
+        "cliui@8.0.1",
+        "dotenv-expand@11.0.6",
+        "dotenv@16.4.5",
+        "enquirer",
+        "figures",
+        "flat",
+        "front-matter",
+        "ignore",
+        "jest-diff",
+        "jsonc-parser",
+        "lines-and-columns@2.0.3",
+        "minimatch@9.0.3",
+        "node-machine-id",
+        "npm-run-path",
+        "open",
+        "ora",
+        "semver@7.6.3",
+        "string-width",
+        "strong-log-transformer",
+        "tar-stream@2.2.0",
+        "tmp",
+        "tsconfig-paths@4.2.0",
+        "tslib@2.8.0",
+        "yargs-parser@21.1.1",
+        "yargs@17.7.2"
       ]
     },
     "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13": {
@@ -6431,8 +6902,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv@16.4.5",
         "dotenv-expand@11.0.6",
+        "dotenv@16.4.5",
         "enquirer",
         "figures",
         "flat",
@@ -6453,8 +6924,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs@17.7.2",
-        "yargs-parser@21.1.1"
+        "yargs-parser@21.1.1",
+        "yargs@17.7.2"
       ]
     },
     "object-inspect@1.13.2": {
@@ -6523,8 +6994,8 @@
     "openai@4.68.4_zod@3.23.8": {
       "integrity": "sha512-LRinV8iU9VQplkr25oZlyrsYGPGasIwYN8KFMAAFTHHLHjHhejtJ5BALuLFrkGzY4wfbKhOhuT+7lcHZ+F3iEA==",
       "dependencies": [
-        "@types/node@18.19.59",
         "@types/node-fetch",
+        "@types/node@18.19.59",
         "abort-controller",
         "agentkeepalive",
         "form-data-encoder",
@@ -6536,8 +7007,8 @@
     "openai@4.71.0_zod@3.23.8": {
       "integrity": "sha512-jeJ7+6cZvj+ZbIsbX/Ag8+pug2+vjKbrD/v3Hwp6uv3KZyWjSkZa5MdUshzpNC3jsFzakfbUhEEFQXsKWNgm/g==",
       "dependencies": [
-        "@types/node@18.19.59",
         "@types/node-fetch",
+        "@types/node@18.19.59",
         "abort-controller",
         "agentkeepalive",
         "form-data-encoder",
@@ -7212,6 +7683,9 @@
     "safer-buffer@2.1.2": {
       "integrity": "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="
     },
+    "sax@1.4.1": {
+      "integrity": "sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg=="
+    },
     "saxes@6.0.0": {
       "integrity": "sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==",
       "dependencies": [
@@ -7222,8 +7696,8 @@
       "integrity": "sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==",
       "dependencies": [
         "@types/json-schema",
-        "ajv@6.12.6",
-        "ajv-keywords"
+        "ajv-keywords",
+        "ajv@6.12.6"
       ]
     },
     "secp256k1@5.0.1": {
@@ -7645,8 +8119,24 @@
         "bs-logger",
         "ejs",
         "fast-json-stable-stringify",
-        "jest",
         "jest-util",
+        "jest@29.7.0_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "json5@2.2.3",
+        "lodash.memoize",
+        "make-error",
+        "semver@7.6.3",
+        "typescript@5.6.3",
+        "yargs-parser@21.1.1"
+      ]
+    },
+    "ts-jest@29.2.5_jest@29.7.0__ts-node@10.9.1___@swc+core@1.5.29____@swc+helpers@0.5.13___@types+node@22.5.4___typescript@5.6.3___@swc+helpers@0.5.13__@types+node@22.5.4__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_typescript@5.6.3_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-KD8zB2aAZrcKIdGk4OwpJggeLcH1FgrICqDSROWqlnJXGCXK4Mn6FcdK2B6670Xr73lHMG1kHw8R87A0ecZ+vA==",
+      "dependencies": [
+        "bs-logger",
+        "ejs",
+        "fast-json-stable-stringify",
+        "jest-util",
+        "jest@29.7.0_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0",
         "json5@2.2.3",
         "lodash.memoize",
         "make-error",
@@ -7714,6 +8204,27 @@
         "@tsconfig/node14",
         "@tsconfig/node16",
         "@types/node@22.5.4",
+        "acorn",
+        "acorn-walk",
+        "arg",
+        "create-require",
+        "diff",
+        "make-error",
+        "typescript@5.6.3",
+        "v8-compile-cache-lib",
+        "yn"
+      ]
+    },
+    "ts-node@10.9.1_@swc+core@1.5.29__@swc+helpers@0.5.13_@types+node@22.5.4_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0": {
+      "integrity": "sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==",
+      "dependencies": [
+        "@cspotcode/source-map-support",
+        "@swc/core",
+        "@tsconfig/node10",
+        "@tsconfig/node12",
+        "@tsconfig/node14",
+        "@tsconfig/node16",
+        "@types/node@20.17.0",
         "acorn",
         "acorn-walk",
         "arg",
