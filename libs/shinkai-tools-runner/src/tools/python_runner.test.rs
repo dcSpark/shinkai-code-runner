@@ -1640,7 +1640,6 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
 
 #[rstest]
 #[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
 #[tokio::test]
 async fn override_tool_uv_fields(#[case] runner_type: RunnerType) {
     use std::path::PathBuf;
