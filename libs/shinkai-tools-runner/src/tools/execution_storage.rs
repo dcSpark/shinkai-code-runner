@@ -27,7 +27,7 @@ pub struct ExecutionStorage {
 
 impl ExecutionStorage {
     pub fn new(code: CodeFiles, context: ExecutionContext) -> Self {
-        let code_id = format!("{}-{}", context.code_id, nanoid!());
+        let code_id = context.code_id.clone();
         let root_folder_path = path::absolute(
             context
                 .storage
