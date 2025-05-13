@@ -8,7 +8,7 @@
     "build": {
       "dependsOn": [
         {
-          "projects": ["tag:tool"],
+          "projects": [],
           "target": "build"
         }
       ],
