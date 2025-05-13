@@ -14,8 +14,8 @@ use crate::tools::{
 };
 
 use super::{
-    code_files::CodeFiles, container_utils::DockerStatus, deno_runner_options::DenoRunnerOptions,
-    execution_error::ExecutionError, run_result::RunResult,
+    code_files::CodeFiles, deno_runner_options::DenoRunnerOptions, execution_error::ExecutionError,
+    run_result::RunResult,
 };
 use std::{
     collections::{HashMap, HashSet},
@@ -387,11 +387,7 @@ impl DenoRunner {
 
         log::info!("spawning docker command");
         let mut child = command.spawn().map_err(|e| {
-            let error_msg = format!(
-                "failed to spawn command: {:?}, error: {}",
-                command,
-                e.to_string()
-            );
+            let error_msg = format!("failed to spawn command: {:?}, error: {}", command, e);
             log::error!("{}", error_msg);
             anyhow::anyhow!("{}", error_msg)
         })?;
@@ -568,11 +564,7 @@ impl DenoRunner {
         }
         log::info!("prepared command with arguments: {:?}", command);
         let mut child = command.spawn().map_err(|e| {
-            let error_msg = format!(
-                "failed to spawn command: {:?} error: {}",
-                command,
-                e.to_string()
-            );
+            let error_msg = format!("failed to spawn command: {:?} error: {}", command, e);
             log::error!("{}", error_msg);
             anyhow::anyhow!("{}", error_msg)
         })?;

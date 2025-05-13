@@ -87,6 +87,7 @@
     "npm:nunjucks@3.2.4": "3.2.4",
     "npm:nunjucks@^3.2.4": "3.2.4",
     "npm:nx@19.3.1": "19.3.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+    "npm:nx@19.8.8": "19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
     "npm:openai@*": "4.68.4_zod@3.23.8",
     "npm:openai@4.71.0": "4.71.0_zod@3.23.8",
     "npm:openai@^4.57.2": "4.68.4_zod@3.23.8",
@@ -1393,8 +1394,8 @@
     "@fastify/ajv-compiler@3.6.0_ajv@8.17.1": {
       "integrity": "sha512-LwdXQJjmMD+GwLOkP7TVC68qa+pSSogeWWmznRJ/coyTcfe9qA05AHFSe1eZFwK6q+xVRpChnvFUkf1iYaSZsQ==",
       "dependencies": [
-        "ajv-formats@2.1.1_ajv@8.17.1",
         "ajv@8.17.1",
+        "ajv-formats@2.1.1_ajv@8.17.1",
         "fast-uri@2.4.0"
       ]
     },
@@ -4597,15 +4598,15 @@
       "integrity": "sha512-VVNz/9Sa0bs5SELtn3f7qhJCDPCF5oMEl5cO9/SSinpE9hbPVvxbd572HH5AKiP7WD8INO53GgfDDhRjkylHEg==",
       "dependencies": [
         "@esbuild/aix-ppc64@0.23.1",
-        "@esbuild/android-arm64@0.23.1",
         "@esbuild/android-arm@0.23.1",
+        "@esbuild/android-arm64@0.23.1",
         "@esbuild/android-x64@0.23.1",
         "@esbuild/darwin-arm64@0.23.1",
         "@esbuild/darwin-x64@0.23.1",
         "@esbuild/freebsd-arm64@0.23.1",
         "@esbuild/freebsd-x64@0.23.1",
-        "@esbuild/linux-arm64@0.23.1",
         "@esbuild/linux-arm@0.23.1",
+        "@esbuild/linux-arm64@0.23.1",
         "@esbuild/linux-ia32@0.23.1",
         "@esbuild/linux-loong64@0.23.1",
         "@esbuild/linux-mips64el@0.23.1",
@@ -4626,15 +4627,15 @@
       "integrity": "sha512-FuLPevChGDshgSicjisSooU0cemp/sGXR841D5LHMB7mTVOmsEHcAxaH3irL53+8YDIeVNQEySh4DaYU/iuPqQ==",
       "dependencies": [
         "@esbuild/aix-ppc64@0.24.0",
-        "@esbuild/android-arm64@0.24.0",
         "@esbuild/android-arm@0.24.0",
+        "@esbuild/android-arm64@0.24.0",
         "@esbuild/android-x64@0.24.0",
         "@esbuild/darwin-arm64@0.24.0",
         "@esbuild/darwin-x64@0.24.0",
         "@esbuild/freebsd-arm64@0.24.0",
         "@esbuild/freebsd-x64@0.24.0",
-        "@esbuild/linux-arm64@0.24.0",
         "@esbuild/linux-arm@0.24.0",
+        "@esbuild/linux-arm64@0.24.0",
         "@esbuild/linux-ia32@0.24.0",
         "@esbuild/linux-loong64@0.24.0",
         "@esbuild/linux-mips64el@0.24.0",
@@ -4924,8 +4925,8 @@
       "integrity": "sha512-KAdnLvy1yu/XrRtP+LJnxbBGrhN+xXu+gt3EUvZhYGKCr3lFHq/7UFJHHFgmJKoqlh6B40bZLEv7w46B0mqn1g==",
       "dependencies": [
         "@fastify/merge-json-schemas",
-        "ajv-formats@3.0.1_ajv@8.17.1",
         "ajv@8.17.1",
+        "ajv-formats@3.0.1_ajv@8.17.1",
         "fast-deep-equal",
         "fast-uri@2.4.0",
         "json-schema-ref-resolver",
@@ -6595,8 +6596,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv-expand@10.0.0",
         "dotenv@16.3.2",
+        "dotenv-expand@10.0.0",
         "enquirer",
         "figures",
         "flat",
@@ -6618,8 +6619,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs-parser@21.1.1",
-        "yargs@17.7.2"
+        "yargs@17.7.2",
+        "yargs-parser@21.1.1"
       ]
     },
     "nx@19.3.1_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_typescript@5.4.5": {
@@ -6646,8 +6647,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv-expand@10.0.0",
         "dotenv@16.3.2",
+        "dotenv-expand@10.0.0",
         "enquirer",
         "figures",
         "flat",
@@ -6669,8 +6670,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs-parser@21.1.1",
-        "yargs@17.7.2"
+        "yargs@17.7.2",
+        "yargs-parser@21.1.1"
       ]
     },
     "nx@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
@@ -6698,8 +6699,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv-expand@11.0.6",
         "dotenv@16.4.5",
+        "dotenv-expand@11.0.6",
         "enquirer",
         "figures",
         "flat",
@@ -6720,8 +6721,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs-parser@21.1.1",
-        "yargs@17.7.2"
+        "yargs@17.7.2",
+        "yargs-parser@21.1.1"
       ]
     },
     "nx@19.8.4_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
@@ -6749,8 +6750,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv-expand@11.0.6",
         "dotenv@16.4.5",
+        "dotenv-expand@11.0.6",
         "enquirer",
         "figures",
         "flat",
@@ -6771,8 +6772,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs-parser@21.1.1",
-        "yargs@17.7.2"
+        "yargs@17.7.2",
+        "yargs-parser@21.1.1"
       ]
     },
     "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13": {
@@ -6800,8 +6801,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv-expand@11.0.6",
         "dotenv@16.4.5",
+        "dotenv-expand@11.0.6",
         "enquirer",
         "figures",
         "flat",
@@ -6822,8 +6823,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs-parser@21.1.1",
-        "yargs@17.7.2"
+        "yargs@17.7.2",
+        "yargs-parser@21.1.1"
       ]
     },
     "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.4.5_@swc+helpers@0.5.13_typescript@5.6.3": {
@@ -6851,8 +6852,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv-expand@11.0.6",
         "dotenv@16.4.5",
+        "dotenv-expand@11.0.6",
         "enquirer",
         "figures",
         "flat",
@@ -6873,8 +6874,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs-parser@21.1.1",
-        "yargs@17.7.2"
+        "yargs@17.7.2",
+        "yargs-parser@21.1.1"
       ]
     },
     "nx@19.8.8_@swc-node+register@1.9.2__@swc+core@1.5.29___@swc+helpers@0.5.13__typescript@5.6.3__@swc+helpers@0.5.13_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13": {
@@ -6902,8 +6903,8 @@
         "cli-cursor",
         "cli-spinners",
         "cliui@8.0.1",
-        "dotenv-expand@11.0.6",
         "dotenv@16.4.5",
+        "dotenv-expand@11.0.6",
         "enquirer",
         "figures",
         "flat",
@@ -6924,8 +6925,8 @@
         "tmp",
         "tsconfig-paths@4.2.0",
         "tslib@2.8.0",
-        "yargs-parser@21.1.1",
-        "yargs@17.7.2"
+        "yargs@17.7.2",
+        "yargs-parser@21.1.1"
       ]
     },
     "object-inspect@1.13.2": {
@@ -6994,8 +6995,8 @@
     "openai@4.68.4_zod@3.23.8": {
       "integrity": "sha512-LRinV8iU9VQplkr25oZlyrsYGPGasIwYN8KFMAAFTHHLHjHhejtJ5BALuLFrkGzY4wfbKhOhuT+7lcHZ+F3iEA==",
       "dependencies": [
-        "@types/node-fetch",
         "@types/node@18.19.59",
+        "@types/node-fetch",
         "abort-controller",
         "agentkeepalive",
         "form-data-encoder",
@@ -7007,8 +7008,8 @@
     "openai@4.71.0_zod@3.23.8": {
       "integrity": "sha512-jeJ7+6cZvj+ZbIsbX/Ag8+pug2+vjKbrD/v3Hwp6uv3KZyWjSkZa5MdUshzpNC3jsFzakfbUhEEFQXsKWNgm/g==",
       "dependencies": [
-        "@types/node-fetch",
         "@types/node@18.19.59",
+        "@types/node-fetch",
         "abort-controller",
         "agentkeepalive",
         "form-data-encoder",
@@ -7696,8 +7697,8 @@
       "integrity": "sha512-pN/yOAvcC+5rQ5nERGuwrjLlYvLTbCibnZ1I7B1LaiAz9BRBlE9GMgE/eqV30P7aJQUf7Ddimy/RsbYO/GrVGg==",
       "dependencies": [
         "@types/json-schema",
-        "ajv-keywords",
-        "ajv@6.12.6"
+        "ajv@6.12.6",
+        "ajv-keywords"
       ]
     },
     "secp256k1@5.0.1": {
@@ -8119,8 +8120,8 @@
         "bs-logger",
         "ejs",
         "fast-json-stable-stringify",
-        "jest-util",
         "jest@29.7.0_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13",
+        "jest-util",
         "json5@2.2.3",
         "lodash.memoize",
         "make-error",
@@ -8135,8 +8136,8 @@
         "bs-logger",
         "ejs",
         "fast-json-stable-stringify",
-        "jest-util",
         "jest@29.7.0_ts-node@10.9.1__@swc+core@1.5.29___@swc+helpers@0.5.13__@types+node@22.5.4__typescript@5.6.3__@swc+helpers@0.5.13_@types+node@22.5.4_@swc+core@1.5.29__@swc+helpers@0.5.13_typescript@5.6.3_@swc+helpers@0.5.13_@types+node@20.17.0",
+        "jest-util",
         "json5@2.2.3",
         "lodash.memoize",
         "make-error",

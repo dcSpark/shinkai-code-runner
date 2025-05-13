@@ -460,7 +460,9 @@ async fn code_check_no_warnings(#[case] runner_type: RunnerType) {
     let check_result = deno_runner.check().await.unwrap();
     println!("check_result: {:?}", check_result);
     assert!(!check_result.is_empty());
-    assert!(!check_result.iter().any(|err| err.to_lowercase().contains("warning")));
+    assert!(!check_result
+        .iter()
+        .any(|err| err.to_lowercase().contains("warning")));
 }
 
 #[rstest]
@@ -505,7 +507,9 @@ async fn code_check_no_warnings_when_unparseable_code(#[case] runner_type: Runne
     let check_result = deno_runner.check().await.unwrap();
     println!("check_result: {:?}", check_result);
     assert!(!check_result.is_empty());
-    assert!(!check_result.iter().any(|err| err.to_lowercase().contains("warning")));
+    assert!(!check_result
+        .iter()
+        .any(|err| err.to_lowercase().contains("warning")));
 }
 
 #[rstest]
@@ -588,51 +592,6 @@ async fn check_with_wrong_lib_version() {
         || line.contains(
             "Error getting response at https://registry.npmjs.org/axios for package \"axios\""
         )));
-}
-
-#[rstest]
-#[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
-#[tokio::test]
-async fn run_tool(#[case] runner_type: RunnerType) {
-    // Just for a simple test, it could be any tool
-    let code = include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../../apps/demo-shinkai-tool-echo/src/index.ts"
-    ))
-    .to_string();
-
-    let code = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), code.to_string())]),
-        entrypoint: "main.ts".to_string(),
-    };
-
-    let configurations = Value::Null;
-
-    let tool = DenoRunner::new(
-        code,
-        configurations,
-        Some(DenoRunnerOptions {
-            force_runner_type: Some(runner_type),
-            ..Default::default()
-        }),
-    );
-
-    let result = tool
-        .run(
-            None,
-            serde_json::json!({
-                "message": "hello world"
-            }),
-            None,
-        )
-        .await
-        .unwrap();
-
-    assert_eq!(
-        result.data,
-        serde_json::json!({ "message": "echoing: hello world"})
-    );
 }
 
 #[rstest]
@@ -1385,9 +1344,7 @@ async fn run_with_wrong_binary_error_message(#[case] runner_type: RunnerType) {
         }),
     );
 
-    let result = deno_runner
-        .run(None, json!({}), None)
-        .await;
+    let result = deno_runner.run(None, json!({}), None).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().message().contains("denopotato"));
 }

@@ -8,9 +8,6 @@ ensuring that they run safely and efficiently, while also allowing for seamless 
 This repository is a comprehensive collection of tools and utilities designed to facilitate the integration of JavaScript and Rust code. It provides a framework for executing Deno scripts within a Rust environment, allowing for seamless communication and data exchange between the two languages.
 
 The primary components of this repository include:
-
-- `apps/shinkai-tool-*` These are small Deno tools designed to perform specific tasks. Each tool is a self-contained project with its own configuration and build process, allowing for easy maintenance and updates.
-- `libs/shinkai-tools-builder` type definitions to make tools more readable and easy to code.
 - `libs/shinkai-tools-runner` is a Rust library used to execute a tool in a secured and performant Deno environment, providing a safe and efficient way to run tools within the Shinkai ecosystem.
 
 ## Documentation

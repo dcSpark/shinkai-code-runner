@@ -263,17 +263,20 @@ pub fn copy_uv(
                 let extracted_folder = if cfg!(target_os = "macos") {
                     source_path.join("uv-aarch64-apple-darwin")
                 } else {
-                    source_path.join("uv-x86_64-unknown-linux-gnu") 
+                    source_path.join("uv-x86_64-unknown-linux-gnu")
                 };
-                
+
                 let extracted_binary = extracted_folder.join("uv");
-                println!("moving UV binary from {} to {}", extracted_binary.display(), uv_binary_source_path.display());
+                println!(
+                    "moving UV binary from {} to {}",
+                    extracted_binary.display(),
+                    uv_binary_source_path.display()
+                );
                 fs::rename(extracted_binary, &uv_binary_source_path)
                     .expect("failed to move UV binary from extracted folder");
-                
+
                 // Clean up extracted folder
-                fs::remove_dir_all(extracted_folder)
-                    .expect("failed to remove extracted folder");
+                fs::remove_dir_all(extracted_folder).expect("failed to remove extracted folder");
             }
         }
         println!("successfully extracted zip archive");
