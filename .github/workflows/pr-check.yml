@@ -65,7 +65,11 @@ jobs:
           EMBEDDING_API_URL : debug
         run: |
           npx nx run-many -t lint --verbose
-          
+
+      - name: Build shinkai-code-runner Docker image
+        run: |
+          cd docker-images && docker build -t dcspark/shinkai-code-runner:0.9.4 .
+
       - name: Run NX test
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
