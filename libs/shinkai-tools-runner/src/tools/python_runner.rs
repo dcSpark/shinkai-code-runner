@@ -21,7 +21,7 @@ use crate::tools::{
 };
 
 use super::{
-    code_files::CodeFiles, container_utils::DockerStatus, execution_storage::ExecutionStorage,
+    code_files::CodeFiles, execution_storage::ExecutionStorage,
     python_runner_options::PythonRunnerOptions, runner_type::RunnerType,
 };
 
@@ -271,11 +271,7 @@ requires-python = ">=3.10"
         match command.spawn() {
             Ok(child) => child.wait_with_output().await?,
             Err(e) => {
-                let error_msg = format!(
-                    "failed to spawn command: {:?} error: {}",
-                    command,
-                    e.to_string()
-                );
+                let error_msg = format!("failed to spawn command: {:?} error: {}", command, e);
                 log::error!("{}", error_msg);
                 return Err(anyhow::anyhow!("{}", error_msg));
             }
@@ -296,11 +292,7 @@ requires-python = ">=3.10"
         let output = match command.spawn() {
             Ok(child) => child.wait_with_output().await?,
             Err(e) => {
-                let error_msg = format!(
-                    "failed to spawn command: {:?} error: {}",
-                    command,
-                    e.to_string()
-                );
+                let error_msg = format!("failed to spawn command: {:?} error: {}", command, e);
                 log::error!("{}", error_msg);
                 return Err(anyhow::anyhow!("{}", error_msg));
             }
@@ -725,11 +717,7 @@ print("</shinkai-code-result>")
 
         log::info!("spawning docker command: {:?}", command);
         let mut child = command.spawn().map_err(|e| {
-            let error_msg = format!(
-                "failed to spawn command: {:?} error: {}",
-                command,
-                e.to_string()
-            );
+            let error_msg = format!("failed to spawn command: {:?} error: {}", command, e);
             log::error!("{}", error_msg);
             anyhow::anyhow!("{}", error_msg)
         })?;
@@ -901,11 +889,7 @@ print("</shinkai-code-result>")
         }
         log::info!("prepared command with arguments: {:?}", command);
         let mut child = command.spawn().map_err(|e| {
-            let error_msg = format!(
-                "failed to spawn command: {:?} error: {}",
-                command,
-                e.to_string()
-            );
+            let error_msg = format!("failed to spawn command: {:?} error: {}", command, e);
             log::error!("{}", error_msg);
             anyhow::anyhow!("{}", error_msg)
         })?;

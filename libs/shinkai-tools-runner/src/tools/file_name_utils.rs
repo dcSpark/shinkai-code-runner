@@ -19,7 +19,10 @@ pub fn normalize_for_docker_path(path: PathBuf) -> String {
     }
 }
 
-pub fn adapt_paths_in_value(value: &Value, mount_files: &std::collections::HashSet<String>) -> Value {
+pub fn adapt_paths_in_value(
+    value: &Value,
+    mount_files: &std::collections::HashSet<String>,
+) -> Value {
     match value {
         Value::String(s) => {
             // Check if the string is in the mount_files list
@@ -33,7 +36,7 @@ pub fn adapt_paths_in_value(value: &Value, mount_files: &std::collections::HashS
         }
         Value::Array(arr) => {
             let mut new_arr = Vec::with_capacity(arr.len());
-            for (i, item) in arr.iter().enumerate() {
+            for item in arr.iter() {
                 new_arr.push(adapt_paths_in_value(item, mount_files));
             }
             Value::Array(new_arr)
@@ -45,9 +48,7 @@ pub fn adapt_paths_in_value(value: &Value, mount_files: &std::collections::HashS
             }
             Value::Object(new_obj)
         }
-        _ => {
-            value.clone()
-        }
+        _ => value.clone(),
     }
 }
 

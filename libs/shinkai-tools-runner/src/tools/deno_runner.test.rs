@@ -460,7 +460,9 @@ async fn code_check_no_warnings(#[case] runner_type: RunnerType) {
     let check_result = deno_runner.check().await.unwrap();
     println!("check_result: {:?}", check_result);
     assert!(!check_result.is_empty());
-    assert!(!check_result.iter().any(|err| err.to_lowercase().contains("warning")));
+    assert!(!check_result
+        .iter()
+        .any(|err| err.to_lowercase().contains("warning")));
 }
 
 #[rstest]
@@ -505,7 +507,9 @@ async fn code_check_no_warnings_when_unparseable_code(#[case] runner_type: Runne
     let check_result = deno_runner.check().await.unwrap();
     println!("check_result: {:?}", check_result);
     assert!(!check_result.is_empty());
-    assert!(!check_result.iter().any(|err| err.to_lowercase().contains("warning")));
+    assert!(!check_result
+        .iter()
+        .any(|err| err.to_lowercase().contains("warning")));
 }
 
 #[rstest]
@@ -1340,9 +1344,7 @@ async fn run_with_wrong_binary_error_message(#[case] runner_type: RunnerType) {
         }),
     );
 
-    let result = deno_runner
-        .run(None, json!({}), None)
-        .await;
+    let result = deno_runner.run(None, json!({}), None).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().message().contains("denopotato"));
 }

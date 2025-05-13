@@ -19,7 +19,7 @@ impl ExecutionError {
 }
 
 impl std::fmt::Display for ExecutionError {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-      write!(f, "ExecutionError: {}", self.message)
-  }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "ExecutionError: {}", self.message)
+    }
 }

@@ -47,17 +47,12 @@
       }
     },
     "lint": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "executor": "nx:run-commands",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
       "options": {
         "cwd": "libs/shinkai-tools-runner",
-        "command": "cargo clippy"
-      },
-      "configurations": {
-        "development": {},
-        "production": {}
+        "command": "cargo clippy -- -D warnings"
       }
     },
     "publish": {
