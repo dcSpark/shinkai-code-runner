@@ -74,5 +74,6 @@ jobs:
         env:
           CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           EMBEDDING_API_URL : debug
+          TEMP_DIR: ${{ runner.temp }}
         run: |
           npx nx run-many -t test --parallel=false --skip-nx-cache
