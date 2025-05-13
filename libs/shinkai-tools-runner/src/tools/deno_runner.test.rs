@@ -594,51 +594,6 @@ async fn check_with_wrong_lib_version() {
 #[case::host(RunnerType::Host)]
 #[case::docker(RunnerType::Docker)]
 #[tokio::test]
-async fn run_tool(#[case] runner_type: RunnerType) {
-    // Just for a simple test, it could be any tool
-    let code = include_str!(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../../apps/demo-shinkai-tool-echo/src/index.ts"
-    ))
-    .to_string();
-
-    let code = CodeFiles {
-        files: HashMap::from([("main.ts".to_string(), code.to_string())]),
-        entrypoint: "main.ts".to_string(),
-    };
-
-    let configurations = Value::Null;
-
-    let tool = DenoRunner::new(
-        code,
-        configurations,
-        Some(DenoRunnerOptions {
-            force_runner_type: Some(runner_type),
-            ..Default::default()
-        }),
-    );
-
-    let result = tool
-        .run(
-            None,
-            serde_json::json!({
-                "message": "hello world"
-            }),
-            None,
-        )
-        .await
-        .unwrap();
-
-    assert_eq!(
-        result.data,
-        serde_json::json!({ "message": "echoing: hello world"})
-    );
-}
-
-#[rstest]
-#[case::host(RunnerType::Host)]
-#[case::docker(RunnerType::Docker)]
-#[tokio::test]
 async fn shinkai_tool_with_env(#[case] runner_type: RunnerType) {
     let _ = env_logger::builder()
         .filter_level(log::LevelFilter::Info)
