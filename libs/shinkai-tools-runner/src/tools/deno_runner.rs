@@ -6,8 +6,11 @@ use tokio::{
 };
 
 use crate::tools::{
-    check_utils::normalize_error_message, execution_storage::ExecutionStorage,
-    file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, runner_type::RunnerType,
+    check_utils::normalize_error_message,
+    execution_storage::ExecutionStorage,
+    file_name_utils::{adapt_paths_in_value, normalize_for_docker_path},
+    path_buf_ext::PathBufExt,
+    runner_type::{resolve_runner_type, RunnerType},
 };
 
 use super::{
@@ -15,7 +18,7 @@ use super::{
     execution_error::ExecutionError, run_result::RunResult,
 };
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     path::{self, PathBuf},
     sync::Arc,
     time::Duration,
@@ -121,6 +124,39 @@ impl DenoRunner {
         log::info!("configurations: {}", self.configurations.to_string());
         log::info!("parameters: {}", parameters.to_string());
 
+        let resolved_runner_type = resolve_runner_type(self.options.force_runner_type.clone());
+
+        let mut adapted_configurations = self.configurations.clone();
+        if !self.options.context.mount_files.is_empty()
+            && matches!(resolved_runner_type, RunnerType::Docker)
+        {
+            let mount_files = self
+                .options
+                .context
+                .mount_files
+                .iter()
+                .map(|p| path::absolute(p).unwrap().to_string_lossy().to_string())
+                .collect::<HashSet<String>>();
+
+            adapted_configurations = adapt_paths_in_value(&adapted_configurations, &mount_files);
+        }
+
+        let mut adapted_parameters = parameters.clone();
+        // Deep traverse adapted_parameters and normalize mount file paths
+        if !self.options.context.mount_files.is_empty()
+            && matches!(resolved_runner_type, RunnerType::Docker)
+        {
+            let mount_files = self
+                .options
+                .context
+                .mount_files
+                .iter()
+                .map(|p| path::absolute(p).unwrap().to_string_lossy().to_string())
+                .collect::<HashSet<String>>();
+
+            adapted_parameters = adapt_paths_in_value(&adapted_parameters, &mount_files);
+        }
+
         let mut code = self.code.clone();
         let entrypoint_code = code.files.get(&self.code.entrypoint.clone());
         if let Some(entrypoint_code) = entrypoint_code {
@@ -137,13 +173,13 @@ impl DenoRunner {
             console.log("</shinkai-code-result>");
         "#,
                 &entrypoint_code,
-                serde_json::to_string(&self.configurations)
+                serde_json::to_string(&adapted_configurations)
                     .unwrap()
                     .replace("\\", "\\\\")
                     .replace("'", "\\'")
                     .replace("\"", "\\\"")
                     .replace("`", "\\`"),
-                serde_json::to_string(&parameters)
+                serde_json::to_string(&adapted_parameters)
                     .unwrap()
                     .replace("\\", "\\\\")
                     .replace("'", "\\'")
@@ -154,16 +190,9 @@ impl DenoRunner {
                 .insert(self.code.entrypoint.clone(), adapted_entrypoint_code);
         }
 
-        let result = match self.options.force_runner_type {
-            Some(RunnerType::Host) => self.run_in_host(code, envs, max_execution_timeout).await,
-            Some(RunnerType::Docker) => self.run_in_docker(code, envs, max_execution_timeout).await,
-            _ => {
-                if super::container_utils::is_docker_available() == DockerStatus::Running {
-                    self.run_in_docker(code, envs, max_execution_timeout).await
-                } else {
-                    self.run_in_host(code, envs, max_execution_timeout).await
-                }
-            }
+        let result = match resolved_runner_type {
+            RunnerType::Host => self.run_in_host(code, envs, max_execution_timeout).await,
+            RunnerType::Docker => self.run_in_docker(code, envs, max_execution_timeout).await,
         }
         .map_err(|e| ExecutionError::new(e.to_string(), None))?;
 
@@ -358,7 +387,11 @@ impl DenoRunner {
 
         log::info!("spawning docker command");
         let mut child = command.spawn().map_err(|e| {
-            let error_msg = format!("failed to spawn command: {:?}, error: {}", command, e.to_string());
+            let error_msg = format!(
+                "failed to spawn command: {:?}, error: {}",
+                command,
+                e.to_string()
+            );
             log::error!("{}", error_msg);
             anyhow::anyhow!("{}", error_msg)
         })?;
@@ -535,7 +568,11 @@ impl DenoRunner {
         }
         log::info!("prepared command with arguments: {:?}", command);
         let mut child = command.spawn().map_err(|e| {
-            let error_msg = format!("failed to spawn command: {:?} error: {}", command, e.to_string());
+            let error_msg = format!(
+                "failed to spawn command: {:?} error: {}",
+                command,
+                e.to_string()
+            );
             log::error!("{}", error_msg);
             anyhow::anyhow!("{}", error_msg)
         })?;

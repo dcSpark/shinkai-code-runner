@@ -1,6 +1,6 @@
 use serde_json::Value;
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     path::{self, PathBuf},
     sync::Arc,
     time::Duration,
@@ -12,8 +12,12 @@ use tokio::{
 use toml_edit::DocumentMut;
 
 use crate::tools::{
-    check_utils::normalize_error_message, execution_error::ExecutionError,
-    file_name_utils::normalize_for_docker_path, path_buf_ext::PathBufExt, run_result::RunResult,
+    check_utils::normalize_error_message,
+    execution_error::ExecutionError,
+    file_name_utils::{adapt_paths_in_value, normalize_for_docker_path},
+    path_buf_ext::PathBufExt,
+    run_result::RunResult,
+    runner_type::resolve_runner_type,
 };
 
 use super::{
@@ -320,8 +324,8 @@ requires-python = ">=3.10"
         command
             .args([
                 "run",
+                "python",
                 "-m",
-                "--active",
                 "pyright",
                 "--level=error",
                 execution_storage
@@ -332,6 +336,14 @@ requires-python = ">=3.10"
             ])
             .env(
                 "VIRTUAL_ENV",
+                execution_storage
+                    .python_check_venv_folder_path()
+                    .to_string_lossy()
+                    .to_string()
+                    .as_str(),
+            )
+            .env(
+                "UV_PROJECT_ENVIRONMENT",
                 execution_storage
                     .python_check_venv_folder_path()
                     .to_string_lossy()
@@ -354,18 +366,17 @@ requires-python = ">=3.10"
                 }
             },
             Err(e) => {
-                let error_msg = format!(
-                    "failed to spawn command: {:?} error: {}",
-                    command,
-                    e
-                );
+                let error_msg = format!("failed to spawn command: {:?} error: {}", command, e);
                 log::error!("{}", error_msg);
                 return Err(anyhow::anyhow!("{}", error_msg));
             }
         };
         log::info!("pyright check finished");
-
         if !output.status.success() {
+            println!(
+                "pyright check failed error: {}",
+                String::from_utf8_lossy(&output.stderr)
+            );
             let lint_message = String::from_utf8(output.stdout)?;
             let lint_message_lines: Vec<String> =
                 lint_message.lines().map(|s| s.to_string()).collect();
@@ -397,7 +408,7 @@ requires-python = ">=3.10"
                 None,
             ));
         }
-
+        let resolved_runner_type = resolve_runner_type(self.options.force_runner_type.clone());
         let mut code = Self::extend_with_pyproject_toml(self.code.clone()).map_err(|e| {
             ExecutionError::new(format!("failed to create pyproject.toml: {}", e), None)
         })?;
@@ -415,8 +426,38 @@ requires-python = ">=3.10"
                 Value::String("__main__.CONFIG".to_string()),
             );
         }
+        // Deep traverse adapted_parameters and normalize mount file paths
+        if !self.options.context.mount_files.is_empty()
+            && matches!(resolved_runner_type, RunnerType::Docker)
+        {
+            let mount_files = self
+                .options
+                .context
+                .mount_files
+                .iter()
+                .map(|p| path::absolute(p).unwrap().to_string_lossy().to_string())
+                .collect::<HashSet<String>>();
+
+            adapted_configurations = adapt_paths_in_value(&adapted_configurations, &mount_files);
+        }
 
         let mut adapted_parameters = parameters.clone();
+
+        // Deep traverse adapted_parameters and normalize mount file paths
+        if !self.options.context.mount_files.is_empty()
+            && matches!(resolved_runner_type, RunnerType::Docker)
+        {
+            let mount_files = self
+                .options
+                .context
+                .mount_files
+                .iter()
+                .map(|p| path::absolute(p).unwrap().to_string_lossy().to_string())
+                .collect::<HashSet<String>>();
+
+            adapted_parameters = adapt_paths_in_value(&adapted_parameters, &mount_files);
+        }
+
         if let Some(object) = adapted_parameters.as_object_mut() {
             object.insert(
                 "py/object".to_string(),
@@ -487,16 +528,9 @@ print("</shinkai-code-result>")
         code.files
             .insert(self.code.entrypoint.clone(), adapted_entrypoint_code);
 
-        let result = match self.options.force_runner_type {
-            Some(RunnerType::Host) => self.run_in_host(code, envs, max_execution_timeout).await,
-            Some(RunnerType::Docker) => self.run_in_docker(code, envs, max_execution_timeout).await,
-            _ => {
-                if super::container_utils::is_docker_available() == DockerStatus::Running {
-                    self.run_in_docker(code, envs, max_execution_timeout).await
-                } else {
-                    self.run_in_host(code, envs, max_execution_timeout).await
-                }
-            }
+        let result = match resolved_runner_type {
+            RunnerType::Host => self.run_in_host(code, envs, max_execution_timeout).await,
+            RunnerType::Docker => self.run_in_docker(code, envs, max_execution_timeout).await,
         }
         .map_err(|e| ExecutionError::new(e.to_string(), None))?;
 
@@ -545,6 +579,21 @@ print("</shinkai-code-result>")
             (
                 execution_storage.home_folder_path.as_normalized_string(),
                 execution_storage.relative_to_root(execution_storage.home_folder_path.clone()),
+            ),
+            (
+                execution_storage
+                    .python_run_docker_venv_folder_path()
+                    .as_normalized_string(),
+                execution_storage
+                    .relative_to_root(execution_storage.python_run_docker_venv_folder_path()),
+            ),
+            (
+                execution_storage
+                    .python_run_docker_uv_cache_folder_path()
+                    .as_normalized_string(),
+                execution_storage.relative_to_global_cache(
+                    execution_storage.python_run_docker_uv_cache_folder_path(),
+                ),
             ),
         ];
         for (dir, relative_path) in mount_dirs {
@@ -607,6 +656,25 @@ print("</shinkai-code-result>")
         container_envs.push(format!(
             "SHINKAI_EXECUTION_ID={}",
             self.options.context.execution_id
+        ));
+        container_envs.push(String::from("-e"));
+        container_envs.push(format!(
+            "VIRTUAL_ENV=/app/{}",
+            execution_storage
+                .relative_to_root(execution_storage.python_run_docker_venv_folder_path())
+        ));
+        container_envs.push(String::from("-e"));
+        container_envs.push(format!(
+            "UV_PROJECT_ENVIRONMENT=/app/{}",
+            execution_storage
+                .relative_to_root(execution_storage.python_run_docker_venv_folder_path())
+        ));
+        container_envs.push(String::from("-e"));
+        container_envs.push(format!(
+            "UV_CACHE_DIR=/app/{}",
+            execution_storage.relative_to_global_cache(
+                execution_storage.python_run_docker_uv_cache_folder_path()
+            )
         ));
 
         if let Some(envs) = envs {
@@ -770,6 +838,23 @@ print("</shinkai-code-result>")
             .stdout(std::process::Stdio::piped())
             .stderr(std::process::Stdio::piped())
             .kill_on_drop(true);
+
+        command.env(
+            "VIRTUAL_ENV",
+            execution_storage
+                .python_run_host_venv_folder_path()
+                .to_string_lossy()
+                .to_string()
+                .as_str(),
+        );
+        command.env(
+            "UV_PROJECT_ENVIRONMENT",
+            execution_storage
+                .python_run_host_venv_folder_path()
+                .to_string_lossy()
+                .to_string()
+                .as_str(),
+        );
 
         command.env(
             "SHINKAI_NODE_LOCATION",

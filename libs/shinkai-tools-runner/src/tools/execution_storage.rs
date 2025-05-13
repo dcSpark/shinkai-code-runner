@@ -153,8 +153,17 @@ impl ExecutionStorage {
             self.root_folder_path.display(),
             path.display()
         );
-        let path = path.strip_prefix(&self.root_folder_path).unwrap();
-        path.to_path_buf().as_normalized_string()
+        let path = match path.strip_prefix(&self.root_folder_path) {
+            Ok(p) => p,
+            Err(e) => {
+                log::error!("failed to strip prefix: {}", e);
+                return String::new();
+            }
+        };
+        log::debug!("relative path: {:?}", path);
+        let result = path.to_path_buf().as_normalized_string();
+        log::debug!("normalized path: {}", result);
+        result
     }
 
     pub fn relative_to_global_cache(&self, path: PathBuf) -> String {

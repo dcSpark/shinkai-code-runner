@@ -1391,3 +1391,108 @@ async fn run_with_wrong_binary_error_message(#[case] runner_type: RunnerType) {
     assert!(result.is_err());
     assert!(result.unwrap_err().message().contains("denopotato"));
 }
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::host(RunnerType::Docker)]
+#[tokio::test]
+async fn run_reading_external_file(#[case] runner_type: RunnerType) {
+    use std::io::Write;
+
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.ts".to_string(),
+            r#"
+interface Config {
+    configurations_file_path: string;
+}
+
+interface Inputs {
+    parameters_file_path: string;
+}
+
+interface Output {
+    text_content_configurations: string;
+    text_content_parameters: string;
+}
+
+export async function run(config: Config, inputs: Inputs): Promise<Output> {
+    try {
+        const text_content_configurations = await Deno.readTextFile(config.configurations_file_path);
+        const text_content_parameters = await Deno.readTextFile(inputs.parameters_file_path);
+        
+        return {
+            text_content_configurations,
+            text_content_parameters
+        };
+    } catch (error) {
+        if (error instanceof Deno.errors.NotFound) {
+            throw new Error(`File not found: ${error.message}`);
+        }
+        throw error;
+    }
+}
+            "#
+            .to_string(),
+        )]),
+        entrypoint: "main.ts".to_string(),
+    };
+
+    let temp_dir = tempfile::tempdir().unwrap();
+
+    let temp_file_path_configurations = temp_dir.path().join("test_file_configurations.txt");
+    let mut temp_file_configurations =
+        std::fs::File::create(&temp_file_path_configurations).unwrap();
+    write!(temp_file_configurations, "Hello, world configurations!").unwrap();
+    temp_file_configurations.flush().unwrap();
+
+    let temp_file_path_parameters = temp_dir.path().join("test_file_parameters.txt");
+    let mut temp_file_parameters = std::fs::File::create(&temp_file_path_parameters).unwrap();
+    write!(temp_file_parameters, "Hello, world parameters!").unwrap();
+    temp_file_parameters.flush().unwrap();
+
+    let deno_runner = DenoRunner::new(
+        code_files,
+        json!({
+            "configurations_file_path": temp_file_path_configurations.to_string_lossy().to_string(),
+        }),
+        Some(DenoRunnerOptions {
+            force_runner_type: Some(runner_type),
+            context: ExecutionContext {
+                mount_files: vec![
+                    temp_file_path_configurations.to_path_buf(),
+                    temp_file_path_parameters.to_path_buf(),
+                ],
+                ..Default::default()
+            },
+            ..Default::default()
+        }),
+    );
+
+    let result = deno_runner
+        .run(
+            None,
+            json!(
+                {
+                    "parameters_file_path": temp_file_path_parameters.to_string_lossy().to_string()
+                }
+            ),
+            None,
+        )
+        .await;
+    assert!(result.is_ok());
+    let result_data = result.unwrap().data;
+    assert!(result_data["text_content_configurations"]
+        .as_str()
+        .unwrap()
+        .contains("Hello, world configurations!"));
+    assert!(result_data["text_content_parameters"]
+        .as_str()
+        .unwrap()
+        .contains("Hello, world parameters!"));
+}
