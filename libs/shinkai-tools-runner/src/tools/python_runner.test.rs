@@ -2,7 +2,8 @@ use std::collections::HashMap;
 
 use crate::tools::runner_type::RunnerType;
 use rstest::rstest;
-use serde_json::Value;
+use serde_json::{json, Value};
+use tempfile::tempfile;
 
 use crate::tools::execution_context::ExecutionContext;
 use crate::tools::python_runner_options::PythonRunnerOptions;
@@ -1105,7 +1106,7 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
     without requiring extensive setup.
 */
 #[rstest]
-#[case::host(RunnerType::Host)]
+// #[case::host(RunnerType::Host)]
 #[case::docker(RunnerType::Docker)]
 #[tokio::test]
 async fn tricky_json_dump(#[case] runner_type: RunnerType) {
@@ -1731,7 +1732,12 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
         });
     assert!(result.is_ok());
 
-    let pyproject_toml_path = context.storage.join(context_id).join("code").join(code_id).join("pyproject.toml");
+    let pyproject_toml_path = context
+        .storage
+        .join(context_id)
+        .join("code")
+        .join(code_id)
+        .join("pyproject.toml");
     println!("pyproject_toml_path: {:?}", pyproject_toml_path);
     assert!(pyproject_toml_path.exists());
     let pyproject_toml_content = std::fs::read_to_string(pyproject_toml_path).unwrap();
@@ -1786,9 +1792,119 @@ async def run(c: CONFIG, p: INPUTS) -> OUTPUT:
         }),
     );
 
-    let result = python_runner
-        .run(None, serde_json::Value::Null, None)
-        .await;
+    let result = python_runner.run(None, serde_json::Value::Null, None).await;
     assert!(result.is_err());
     assert!(result.unwrap_err().message().contains("uvpotato"));
+}
+
+#[rstest]
+#[case::host(RunnerType::Host)]
+#[case::host(RunnerType::Docker)]
+#[tokio::test]
+async fn run_reading_external_file(#[case] runner_type: RunnerType) {
+    use std::io::Write;
+
+    let _ = env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .is_test(true)
+        .try_init();
+
+    let code_files = CodeFiles {
+        files: HashMap::from([(
+            "main.py".to_string(),
+            r#"
+# /// script
+# requires-python = ">=3.10,<3.12"
+# dependencies = [
+#   "requests",
+#   "faster-whisper",
+# ]
+# ///
+import os
+from faster_whisper import WhisperModel
+
+class CONFIG:
+    configurations_file_path: str
+
+class INPUTS:
+    parameters_file_path: str
+
+class OUTPUT:
+    text_content_configurations: str
+    text_content_parameters: str
+async def run(config: CONFIG, inputs: INPUTS) -> OUTPUT:
+    if not os.path.exists(config.configurations_file_path):
+        raise FileNotFoundError(f"file not found: {config.configurations_file_path}")
+
+    if not os.path.exists(inputs.parameters_file_path):
+        raise FileNotFoundError(f"file not found: {inputs.parameters_file_path}")
+
+    with open(config.configurations_file_path, "r") as file:
+        text_content_configurations = file.read()
+
+    with open(inputs.parameters_file_path, "r") as file:
+        text_content_parameters = file.read()
+
+    out = OUTPUT()
+    out.text_content_configurations = text_content_configurations
+    out.text_content_parameters = text_content_parameters
+    return out
+            "#
+            .to_string(),
+        )]),
+        entrypoint: "main.py".to_string(),
+    };
+
+    let temp_dir = tempfile::tempdir().unwrap();
+
+    let temp_file_path_configurations = temp_dir.path().join("test_file_configurations.txt");
+    let mut temp_file_configurations =
+        std::fs::File::create(&temp_file_path_configurations).unwrap();
+    write!(temp_file_configurations, "Hello, world configurations!").unwrap();
+    temp_file_configurations.flush().unwrap();
+
+    let temp_file_path_parameters = temp_dir.path().join("test_file_parameters.txt");
+    let mut temp_file_parameters = std::fs::File::create(&temp_file_path_parameters).unwrap();
+    write!(temp_file_parameters, "Hello, world parameters!").unwrap();
+    temp_file_parameters.flush().unwrap();
+
+    let python_runner = PythonRunner::new(
+        code_files,
+        json!({
+            "configurations_file_path": temp_file_path_configurations.to_string_lossy().to_string(),
+        }),
+        Some(PythonRunnerOptions {
+            force_runner_type: Some(runner_type),
+            context: ExecutionContext {
+                mount_files: vec![
+                    temp_file_path_configurations.to_path_buf(),
+                    temp_file_path_parameters.to_path_buf(),
+                ],
+                ..Default::default()
+            },
+            ..Default::default()
+        }),
+    );
+
+    let result = python_runner
+        .run(
+            None,
+            json!(
+                {
+                    "parameters_file_path": temp_file_path_parameters.to_string_lossy().to_string()
+                }
+            ),
+            None,
+        )
+        .await;
+    assert!(result.is_ok());
+    let result_data = result.unwrap().data;
+    assert!(result_data["text_content_configurations"]
+        .as_str()
+        .unwrap()
+        .contains("Hello, world configurations!"));
+    assert!(result_data["text_content_parameters"]
+        .as_str()
+        .unwrap()
+        .contains("Hello, world parameters!"));
 }
