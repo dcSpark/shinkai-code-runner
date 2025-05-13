@@ -3,7 +3,6 @@ use std::collections::HashMap;
 use crate::tools::runner_type::RunnerType;
 use rstest::rstest;
 use serde_json::{json, Value};
-use tempfile::tempfile;
 
 use crate::tools::execution_context::ExecutionContext;
 use crate::tools::python_runner_options::PythonRunnerOptions;
@@ -1816,12 +1815,10 @@ async fn run_reading_external_file(#[case] runner_type: RunnerType) {
 # /// script
 # requires-python = ">=3.10,<3.12"
 # dependencies = [
-#   "requests",
-#   "faster-whisper",
+#   "requests"
 # ]
 # ///
 import os
-from faster_whisper import WhisperModel
 
 class CONFIG:
     configurations_file_path: str
