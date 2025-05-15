@@ -57,16 +57,34 @@ pub fn get_target_path() -> PathBuf {
 
 pub fn download_deno_zip(version: String, target_path: PathBuf) -> Result<(), std::io::Error> {
     let arch = if cfg!(target_os = "linux") {
-        "x86_64-unknown-linux-gnu"
+        if cfg!(target_arch = "x86_64") {
+            "x86_64-unknown-linux-gnu"
+        } else if cfg!(target_arch = "aarch64") {
+            "aarch64-unknown-linux-gnu"
+        } else {
+            panic!("unsupported Linux architecture");
+        }
     } else if cfg!(target_os = "macos") {
-        "aarch64-apple-darwin"
+        if cfg!(target_arch = "x86_64") {
+            "x86_64-apple-darwin"
+        } else if cfg!(target_arch = "aarch64") {
+            "aarch64-apple-darwin"
+        } else {
+            panic!("unsupported macOS architecture");
+        }
     } else if cfg!(target_os = "windows") {
-        "x86_64-pc-windows-msvc"
+        if cfg!(target_arch = "x86_64") {
+            "x86_64-pc-windows-msvc"
+        } else if cfg!(target_arch = "aarch64") {
+            "aarch64-pc-windows-msvc"
+        } else {
+            panic!("unsupported Windows architecture");
+        }
     } else {
         panic!("unsupported target OS");
     };
 
-    let deno_binary_url = format!("https://dl.deno.land/release/{}/deno-{}.zip", version, arch);
+    let deno_binary_url = format!("https://github.com/denoland/deno/releases/download/{}/deno-{}.zip", version, arch);
 
     let client = reqwest::blocking::Client::new();
 
@@ -211,19 +229,41 @@ pub fn copy_uv(
     if !uv_binary_source_path.exists() {
         println!("UV binary does not exist, downloading...");
         let url = if cfg!(windows) {
+            let arch = if cfg!(target_arch = "x86_64") {
+                "x86_64-pc-windows-msvc"
+            } else if cfg!(target_arch = "aarch64") {
+                "aarch64-pc-windows-msvc"
+            } else {
+                panic!("unsupported Windows architecture");
+            };
             format!(
-                "https://github.com/astral-sh/uv/releases/download/{}/uv-x86_64-pc-windows-msvc.zip",
-                version
+                "https://github.com/astral-sh/uv/releases/download/{}/uv-{}.zip",
+                version, arch
             )
         } else if cfg!(target_os = "macos") {
+            let arch = if cfg!(target_arch = "x86_64") {
+                "x86_64-apple-darwin"
+            } else if cfg!(target_arch = "aarch64") {
+                "aarch64-apple-darwin"
+            } else {
+                panic!("unsupported macOS architecture");
+            };
             format!(
-                "https://github.com/astral-sh/uv/releases/download/{}/uv-aarch64-apple-darwin.tar.gz",
-                version
+                "https://github.com/astral-sh/uv/releases/download/{}/uv-{}.tar.gz",
+                version, arch
             )
         } else {
+            // Linux - detect architecture
+            let arch = if cfg!(target_arch = "x86_64") {
+                "x86_64-unknown-linux-gnu"
+            } else if cfg!(target_arch = "aarch64") {
+                "aarch64-unknown-linux-gnu"
+            } else {
+                panic!("unsupported Linux architecture");
+            };
             format!(
-                "https://github.com/astral-sh/uv/releases/download/{}/uv-x86_64-unknown-linux-gnu.tar.gz",
-                version
+                "https://github.com/astral-sh/uv/releases/download/{}/uv-{}.tar.gz",
+                version, arch
             )
         };
 
