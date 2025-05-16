@@ -869,9 +869,7 @@ async fn mount_and_edit_file_in_mount(#[case] runner_type: RunnerType) {
         .is_test(true)
         .try_init();
 
-    // Create a temporary directory first to ensure we have write permissions
-    let temp_dir = tempfile::tempdir().unwrap();
-    let test_file_path = temp_dir.path().join("test_file.txt");
+    let test_file_path = tempfile::NamedTempFile::new().unwrap().into_temp_path();
     println!("test file path: {:?}", test_file_path);
     std::fs::write(&test_file_path, "1").unwrap();
 
