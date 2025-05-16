@@ -301,9 +301,15 @@ pub fn copy_uv(
             // Move binary from extracted folder to source path
             if !cfg!(windows) {
                 let extracted_folder = if cfg!(target_os = "macos") {
-                    source_path.join("uv-aarch64-apple-darwin")
-                } else {
+                    if cfg!(target_arch = "x86_64") {
+                        source_path.join("uv-x86_64-apple-darwin")
+                    } else {
+                        source_path.join("uv-aarch64-apple-darwin")
+                    }
+                } else if cfg!(target_arch = "x86_64") {
                     source_path.join("uv-x86_64-unknown-linux-gnu")
+                } else {
+                    source_path.join("uv-aarch64-unknown-linux-gnu")
                 };
 
                 let extracted_binary = extracted_folder.join("uv");
