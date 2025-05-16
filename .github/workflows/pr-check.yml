@@ -76,5 +76,4 @@ jobs:
           EMBEDDING_API_URL : debug
           TMPDIR: ${{ runner.temp }}
         run: |
-          sudo chmod -R a+rwx /home/runner/work/_temp
           npx nx run-many -t test --parallel=false --skip-nx-cache
