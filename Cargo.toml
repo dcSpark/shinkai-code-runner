@@ -3,7 +3,7 @@ members = ["libs/shinkai-tools-runner"]
 resolver = "2"
 
 [workspace.package]
-version = "0.9.14"
+version = "0.9.15"
 repository = "https://github.com/dcSpark/shinkai-code-runner"
 keywords = ["shinkai", "tools", "safe", "ai"]
 license-file = "LICENSE"
