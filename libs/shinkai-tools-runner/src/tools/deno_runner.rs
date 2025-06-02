@@ -171,6 +171,7 @@ impl DenoRunner {
             console.log("<shinkai-code-result>");
             console.log(JSON.stringify(adaptedResult));
             console.log("</shinkai-code-result>");
+            Deno.exit(0);
         "#,
                 &entrypoint_code,
                 serde_json::to_string(&adapted_configurations)
